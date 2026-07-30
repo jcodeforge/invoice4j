@@ -115,12 +115,4 @@ public class LicenseConstants {
     public final static int productKeyPartsNumberOfLicenses = 4;
     public final static int productKeyPartsNumberOfVehicles = 5;
     public final static int productKeyPartsIssueDate = 6;
-
-    public static final String LICENSE_CERTIFICATE_EMAIL_MESSAGE = """
-                        Fuhrpark Software GmbH Produktzertifikat
-                        WICHTIG:
-                        Diese Nachricht dient zur Zertifizierung und zum ordnungsgemäßen Gebrauch
-                        von Fuhrpark Software Produkten.
-                        Bitte speichern Sie diese Nachricht als Referenz für die zukünftige Verwendung.
-                        """;
 }
