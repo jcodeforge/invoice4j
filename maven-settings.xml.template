@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Real environment variables file.
+#
+DO NOT DEFINE PRODUCTION SECRETS IN THIS FILE NOR IN ANY OTHER COMMITTED FILES.
+#
+Within this `maven-settings.xml.template` all the secrets are defined in that `maven-settings.xml` file,
+which is meant to be used for maven.
+#
+Run `mvn clean package -Pdev -s maven-settings.xml` to use this file for dev environment
+and `mvn clean deploy -Pprod -s maven-settings.xml` for prod environment.
+#
+To use this file,.
+-->
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+    <servers>
+        <server>
+            <id>1and1-data.host</id>
+            <username>1and1-data.host username</username>
+            <password>1and1-data.host password</password>
+        </server>
+    </servers>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <sign.cert>your path to the stored certificate</sign.cert>
+                <sign.cert.password>your-secret-password</sign.cert.password>
+            </properties>
+        </profile>
+    </profiles>
+    
+</settings>

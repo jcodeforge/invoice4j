@@ -1,0 +1,25 @@
+Wiki2Html:
+    stage: test
+    rules:
+        - if: '$CI_PIPELINE_SOURCE == "schedule" && $OPERATION == "wiki2html"'
+
+    variables:
+        GITLAB_SCHEME: "https"
+        GITLAB_DOMAIN: "gitlab.com"
+        SEPARATOR: "@"
+        
+    before_script:
+        - apt upgrade -y
+        - apt update -y
+        - apt install curl -y
+        - apt install nodejs -y
+        - apt install npm -y
+        - npm install -g github-wikito-converter -y
+    script:
+        - git clone $GITLAB_SCHEME://gitlab-ci-token:${CI_JOB_TOKEN}@$GITLAB_DOMAIN/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME.wiki.git
+        - cp -r $CI_PROJECT_NAME.wiki/uploads/. /uploads
+        - gwtc -f html -t "Dokumentation ${CI_PROJECT_NAME^}" --file-name "Doku_$CI_PROJECT_NAME" -v ./$CI_PROJECT_NAME.wiki
+    artifacts:
+        paths:
+            - Doku_$CI_PROJECT_NAME.html
+        expire_in: 1 week

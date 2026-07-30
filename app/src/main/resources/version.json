@@ -1,0 +1,6 @@
+{
+  "latest_version": "@git.total.commit.count@",
+  "commit_id": "@git.commit.id.abbrev@",
+  "build_timestamp": "@maven.build.timestamp@",
+  "hash": "@zip.sha256@"
+}

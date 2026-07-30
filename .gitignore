@@ -1,0 +1,14 @@
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+*.db
+
+target
+prod.log
+dependency-reduced-pom.xml
+
+### Application secret management
+maven-settings.xml
+!maven-settings.xml.template
