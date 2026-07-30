@@ -1,0 +1,30 @@
+package io.github.jcodeforge.core.localcachedata;
+
+import java.util.Collections;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
+public abstract class BaseObservable<LISTENER_CLASS> {
+
+    /**
+     * Base class for observable entities in the application
+     */
+    // thread-safe set of listeners
+    private Set<LISTENER_CLASS> mListeners = Collections.newSetFromMap(
+            new ConcurrentHashMap<>(1));
+
+    public void registerListener(LISTENER_CLASS listener) {
+        mListeners.add(listener);
+    }
+
+    public void unregisterListener(LISTENER_CLASS listener) {
+        mListeners.remove(listener);
+    }
+
+    /**
+     * Get a reference to the unmodifiable set containing all the registered listeners.
+     */
+    protected Set<LISTENER_CLASS> getListeners() {
+        return mListeners;
+    }
+}

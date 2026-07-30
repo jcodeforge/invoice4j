@@ -1,10 +1,10 @@
 package encryption;
 
 import static org.junit.Assert.*;
-import io.github.licensing.encryption.KeyFileUtils;
-import io.github.licensing.encryption.PasswordProvider;
-import io.github.licensing.encryption.PrivateKeyPasswordProvider;
-import io.github.licensing.encryption.RSAKeyPairGenerator;
+import io.github.jcodeforge.licensing.encryption.KeyFileUtils;
+import io.github.jcodeforge.licensing.encryption.PasswordProvider;
+import io.github.jcodeforge.licensing.encryption.PrivateKeyPasswordProvider;
+import io.github.jcodeforge.licensing.encryption.RSAKeyPairGenerator;
 import org.apache.commons.io.FileUtils;
 import org.junit.*;
 import java.io.*;
