@@ -5,21 +5,8 @@ import java.io.File;
 
 public class Constants {
 
-    public static final String URL_WEBSITE_CONTACT = "https://www.fuhrpark-software.de/kontakt";
-    public static final String URL_WEBSITE_DOWNLOAD_CENTER = "https://www.fuhrpark-software.de/download-center";
-
     public static final String APP_USER_DIR = System.getProperty("user.home") + File.separator +
-            ".fpsoft" + File.separator;
-
-    public static final String APP_CONTACT_INFO = """
-            Kontakt:
-            Fuhrpark-Software GmbH
-            Stollberger Str. 4, 09353 Oberlungwitz
-            Telefon: +49 (0) 3723 769 3210
-            Fax: +49 (0) 3723 769 3239
-            Homepage: https://www.fuhrpark-software.de
-            Email: post@fuhrpark-software.de
-            """;
+            ".codeforge" + File.separator;
 
     /**
      * Names of database tables
@@ -157,20 +144,6 @@ public class Constants {
     }
 
     /**
-     * Desktop client names
-     */
-    public static final String DESKTOP_CLIENT_NAME_WINCON = "WinCon";
-    public static final String DESKTOP_CLIENT_NAME_WINFUHR = "Winfuhr";
-    public static final String DESKTOP_CLIENT_NAME_WINFUHR_SQL = "WinfuhrSQL";
-    public static final String DESKTOP_CLIENT_NAME_FPKFZUL = "FPKFZul";
-    public static final String DESKTOP_CLIENT_NAME_WINWAAGE = "WinWaage";
-
-    public static final String[] DESKTOP_CLIENT_NAMES = {
-            DESKTOP_CLIENT_NAME_WINCON, DESKTOP_CLIENT_NAME_WINFUHR, DESKTOP_CLIENT_NAME_WINFUHR_SQL,
-            DESKTOP_CLIENT_NAME_FPKFZUL, DESKTOP_CLIENT_NAME_WINWAAGE
-    };
-
-    /**
      * Issue categories, labels and defaults
      */
     public static final String ISSUE_CATEGORY_OPEN = "Offen";
@@ -191,15 +164,6 @@ public class Constants {
     public static final String[] ISSUE_LABELS = {
             ISSUE_LABEL_OFFER, ISSUE_LABEL_MAILING, ISSUE_LABEL_PHONE_CALL, ISSUE_LABEL_POTENTIAL_BUYER
     };
-
-    /**
-     * Client types
-     */
-    public static final int CLIENT_TYPE_WINCON = 1;
-    public static final int CLIENT_TYPE_WINFUHR = 2;
-    public static final int CLIENT_TYPE_WINFUHR_SQL = 3;
-    public static final int CLIENT_TYPE_FPKFZUL = 4;
-    public static final int CLIENT_TYPE_WINWAAGE = 5;
 
     /**
      * Activity names, categories and defaults
