@@ -24,33 +24,30 @@ The project provides a shared invoice domain model and support for multiple e-in
 
 ---
 
-## Modules
-
-| Module | Description |
-|---------|-------------|
-| `core` | Shared utilities and infrastructure. |
-| `invoice4j-base` | Common invoice domain model and value objects. |
-| `invoice4j-zugferd` | ZUGFeRD / Factur-X support. |
-| `invoice4j-xrechnung` | XRechnung support. |
+## Supported Standards
+- UN/CEFACT CII
+- ZUGFeRD
+- XRechnung
+- UBL (planned)
+- PEPPOL (planned)
 
 ---
 
 ## Installation
 
-### Maven
-
-```xml
-<dependency>
-    <groupId>io.github.scholzalex</groupId>
-    <artifactId>invoice4j-zugferd</artifactId>
-    <version>1.0.0</version>
-</dependency>
-```
+*todo*
 
 ---
 
-## Example
+## Quick Start
 
+*todo*
+
+---
+
+## Examples
+
+*todo*
 ```
 Invoice invoice = Invoice.builder()
         .seller(...)
@@ -64,15 +61,31 @@ ZugferdWriter.write(invoice, outputFile);
 
 ## Roadmap
 
-- [x] Shared invoice domain model
-- [ ] ZUGFeRD reader
-- [ ] ZUGFeRD writer
-- [ ] XRechnung support
-- [ ] PEPPOL BIS support
-- [ ] Validation framework
-- [ ] XML mapping
-- [ ] Extensive documentation
-- [ ] Maven Central release
+| Version   | Milestone | Status |
+|-----------|-----------|--------|
+| v0.1.0    | Core Model | In Progress |
+| v0.2.0    | CII XML | Planned |
+| v0.3.0    | ZUGFeRD | Planned |
+| v0.4.0    | XRechnung | Planned |
+| v1.0.0    | Public Release | Planned |
+| v1.1.0    | PEPPOL Support | Planned |
+| v1.2.0    | Additional European e-Invoice Formats | Planned |
+| v1.3.0    | Streaming APIs | Planned |
+| v1.4.0    | Digital Signatures (XAdES/PAdES) | Planned |
+
+See the **GitHub Milestones** for the detailed implementation plan and progress.
+
+---
+
+### Maven
+
+```xml
+<dependency>
+    <groupId>io.github.scholzalex</groupId>
+    <artifactId>invoice4j-zugferd</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
 
 ---
 
