@@ -18,9 +18,6 @@ To use this file,.
 
     <servers>
         <server>
-            <id>1and1-data.host</id>
-            <username>1and1-data.host username</username>
-            <password>1and1-data.host password</password>
         </server>
     </servers>
 
@@ -33,8 +30,6 @@ To use this file,.
         <profile>
             <id>prod</id>
             <properties>
-                <sign.cert>your path to the stored certificate</sign.cert>
-                <sign.cert.password>your-secret-password</sign.cert.password>
             </properties>
         </profile>
     </profiles>
