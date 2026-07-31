@@ -64,7 +64,7 @@ ZugferdWriter.write(invoice, outputFile);
 
 ## Roadmap
 
-- [ ] Shared invoice domain model
+- [x] Shared invoice domain model
 - [ ] ZUGFeRD reader
 - [ ] ZUGFeRD writer
 - [ ] XRechnung support
