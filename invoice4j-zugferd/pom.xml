@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.github.scholzalex</groupId>
+        <artifactId>jcodeforge</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>invoice4j-zugferd</artifactId>
+    <packaging>jar</packaging>
+
+    <name>invoice4j ZUGFeRD</name>
+    <description>ZUGFeRD/Factur-X support for invoice4j, including reading, writing,
+        and validation of electronic invoices.</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.github.scholzalex</groupId>
+            <artifactId>invoice4j-base</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>
