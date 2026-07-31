@@ -6,7 +6,7 @@
 
     <groupId>io.github.scholzalex</groupId>
     <artifactId>jcodeforge</artifactId>
-    <version>${project.version}</version>
+    <version>1.0.0</version>
 
     <description>A modular Java library for creating, reading, validating, and converting electronic
         invoices (ZUGFeRD, XRechnung, PEPPOL, and more).</description>
