@@ -88,6 +88,8 @@ If you would like to contribute, please open an issue.
 
 This project is licensed under the Apache License 2.0. See the `LICENSE` file for details.
 
+---
+
 ## Support
 
 If **invoice4j** is useful to you, consider supporting its development.
