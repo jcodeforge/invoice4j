@@ -8,6 +8,9 @@ import java.util.List;
 
 public class Invoice {
 
+    private Invoice() {
+    }
+
     /**
      * BT-1
      */
