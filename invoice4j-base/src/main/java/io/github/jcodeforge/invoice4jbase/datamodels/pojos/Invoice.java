@@ -474,4 +474,239 @@ public class Invoice {
     public void addLine(InvoiceLine line) {
         this.lines.add(line);
     }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private final Invoice invoice;
+
+        private Builder() {
+            this.invoice = new Invoice();
+        }
+
+        public Builder invoiceNumber(String invoiceNumber) {
+            invoice.setInvoiceNumber(invoiceNumber);
+            return this;
+        }
+
+        public Builder issueDate(LocalDate issueDate) {
+            invoice.setIssueDate(issueDate);
+            return this;
+        }
+
+        public Builder documentTypeCode(DocumentTypeCode documentTypeCode) {
+            invoice.setDocumentTypeCode(documentTypeCode);
+            return this;
+        }
+
+        public Builder currency(CurrencyCode currency) {
+            invoice.setCurrency(currency);
+            return this;
+        }
+
+        public Builder taxCurrency(CurrencyCode taxCurrency) {
+            invoice.setTaxCurrency(taxCurrency);
+            return this;
+        }
+
+        public Builder taxPointDate(LocalDate taxPointDate) {
+            invoice.setTaxPointDate(taxPointDate);
+            return this;
+        }
+
+        public Builder taxPointDateCode(String taxPointDateCode) {
+            invoice.setTaxPointDateCode(taxPointDateCode);
+            return this;
+        }
+
+        public Builder dueDate(LocalDate dueDate) {
+            invoice.setDueDate(dueDate);
+            return this;
+        }
+
+        public Builder buyerReference(String buyerReference) {
+            invoice.setBuyerReference(buyerReference);
+            return this;
+        }
+
+        public Builder projectReference(String projectReference) {
+            invoice.setProjectReference(projectReference);
+            return this;
+        }
+
+        public Builder contractReference(String contractReference) {
+            invoice.setContractReference(contractReference);
+            return this;
+        }
+
+        public Builder purchaseOrderReference(String purchaseOrderReference) {
+            invoice.setPurchaseOrderReference(purchaseOrderReference);
+            return this;
+        }
+
+        public Builder salesOrderReference(String salesOrderReference) {
+            invoice.setSalesOrderReference(salesOrderReference);
+            return this;
+        }
+
+        public Builder invoicePeriod(InvoicePeriod invoicePeriod) {
+            invoice.setInvoicePeriod(invoicePeriod);
+            return this;
+        }
+
+        public Builder tenderReference(String tenderReference) {
+            invoice.setTenderReference(tenderReference);
+            return this;
+        }
+
+        public Builder objectIdentifier(String objectIdentifier) {
+            invoice.setObjectIdentifier(objectIdentifier);
+            return this;
+        }
+
+        public Builder buyerAccountingReference(String buyerAccountingReference) {
+            invoice.setBuyerAccountingReference(buyerAccountingReference);
+            return this;
+        }
+
+        public Builder profileIdentifier(String profileIdentifier) {
+            invoice.setProfileIdentifier(profileIdentifier);
+            return this;
+        }
+
+        public Builder customizationIdentifier(String customizationIdentifier) {
+            invoice.setCustomizationIdentifier(customizationIdentifier);
+            return this;
+        }
+
+        public Builder businessProcessIdentifier(String businessProcessIdentifier) {
+            invoice.setBusinessProcessIdentifier(businessProcessIdentifier);
+            return this;
+        }
+
+        public Builder notes(List<Note> notes) {
+            invoice.setNotes(notes);
+            return this;
+        }
+
+        public Builder addNote(Note note) {
+            if (invoice.getNotes() == null) {
+                invoice.setNotes(new ArrayList<>());
+            }
+            invoice.addNote(note);
+            return this;
+        }
+
+        public Builder billingReferences(List<DocumentReference> billingReferences) {
+            invoice.setBillingReferences(billingReferences);
+            return this;
+        }
+
+        public Builder addBillingReference(DocumentReference reference) {
+            if (invoice.getBillingReferences() == null) {
+                invoice.setBillingReferences(new ArrayList<>());
+            }
+            invoice.addBillingReference(reference);
+            return this;
+        }
+
+        public Builder seller(Seller seller) {
+            invoice.setSeller(seller);
+            return this;
+        }
+
+        public Builder buyer(Buyer buyer) {
+            invoice.setBuyer(buyer);
+            return this;
+        }
+
+        public Builder payee(Payee payee) {
+            invoice.setPayee(payee);
+            return this;
+        }
+
+        public Builder shipTo(ShipTo shipTo) {
+            invoice.setShipTo(shipTo);
+            return this;
+        }
+
+        public Builder delivery(Delivery delivery) {
+            invoice.setDelivery(delivery);
+            return this;
+        }
+
+        public Builder payment(Payment payment) {
+            invoice.setPayment(payment);
+            return this;
+        }
+
+        public Builder paymentTerms(PaymentTerms paymentTerms) {
+            invoice.setPaymentTerms(paymentTerms);
+            return this;
+        }
+
+        public Builder allowanceCharges(List<AllowanceCharge> allowanceCharges) {
+            invoice.setAllowanceCharges(allowanceCharges);
+            return this;
+        }
+
+        public Builder addAllowanceCharge(AllowanceCharge allowanceCharge) {
+            if (invoice.getAllowanceCharges() == null) {
+                invoice.setAllowanceCharges(new ArrayList<>());
+            }
+            invoice.addAllowanceCharge(allowanceCharge);
+            return this;
+        }
+
+        public Builder monetarySummation(MonetarySummation monetarySummation) {
+            invoice.setMonetarySummation(monetarySummation);
+            return this;
+        }
+
+        public Builder taxes(List<Tax> taxes) {
+            invoice.setTaxes(taxes);
+            return this;
+        }
+
+        public Builder addTax(Tax tax) {
+            if (invoice.getTaxes() == null) {
+                invoice.setTaxes(new ArrayList<>());
+            }
+            invoice.addTax(tax);
+            return this;
+        }
+
+        public Builder additionalDocuments(List<DocumentReference> additionalDocuments) {
+            invoice.setAdditionalDocuments(additionalDocuments);
+            return this;
+        }
+
+        public Builder addAdditionalDocument(DocumentReference document) {
+            if (invoice.getAdditionalDocuments() == null) {
+                invoice.setAdditionalDocuments(new ArrayList<>());
+            }
+            invoice.addAdditionalDocument(document);
+            return this;
+        }
+
+        public Builder lines(List<InvoiceLine> lines) {
+            invoice.setLines(lines);
+            return this;
+        }
+
+        public Builder addLine(InvoiceLine line) {
+            if (invoice.getLines() == null) {
+                invoice.setLines(new ArrayList<>());
+            }
+            invoice.addLine(line);
+            return this;
+        }
+
+        public Invoice build() {
+            return invoice;
+        }
+    }
 }
