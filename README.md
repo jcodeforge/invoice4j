@@ -87,3 +87,13 @@ If you would like to contribute, please open an issue.
 ## License
 
 This project is licensed under the Apache License 2.0. See the `LICENSE` file for details.
+
+## Support
+
+If **invoice4j** is useful to you, consider supporting its development.
+
+<a href="https://paypal.me/juniorscholle">
+  <img src="https://img.shields.io/badge/Donate-PayPal-00457C?logo=paypal&logoColor=white" alt="Donate with PayPal">
+</a>
+
+**PayPal:** https://paypal.me/juniorscholle
