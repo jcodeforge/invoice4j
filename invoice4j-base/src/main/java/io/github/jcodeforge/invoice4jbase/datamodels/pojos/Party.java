@@ -22,14 +22,9 @@ public class Party {
     private String tradingName;
 
     /**
-     * Electronic address (Endpoint ID).
+     * Electronic address.
      */
-    private String electronicAddress;
-
-    /**
-     * Electronic address scheme identifier.
-     */
-    private String electronicAddressScheme;
+    private ElectronicAddress electronicAddress;
 
     /**
      * Postal address.
@@ -57,20 +52,12 @@ public class Party {
         this.tradingName = tradingName;
     }
 
-    public String getElectronicAddress() {
+    public ElectronicAddress getElectronicAddress() {
         return electronicAddress;
     }
 
-    public void setElectronicAddress(String electronicAddress) {
+    public void setElectronicAddress(ElectronicAddress electronicAddress) {
         this.electronicAddress = electronicAddress;
-    }
-
-    public String getElectronicAddressScheme() {
-        return electronicAddressScheme;
-    }
-
-    public void setElectronicAddressScheme(String electronicAddressScheme) {
-        this.electronicAddressScheme = electronicAddressScheme;
     }
 
     public Address getAddress() {
