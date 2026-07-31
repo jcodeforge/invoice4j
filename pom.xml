@@ -6,19 +6,22 @@
 
     <groupId>io.github.scholzalex</groupId>
     <artifactId>jcodeforge</artifactId>
-    <version>0.1.0</version>
+    <version>${project.version}</version>
 
-    <description>Java utilities and developer tools</description>
+    <description>A modular Java library for creating, reading, validating, and converting electronic
+        invoices (ZUGFeRD, XRechnung, PEPPOL, and more).</description>
     <inceptionYear>2026</inceptionYear>
     <packaging>pom</packaging>
 
     <modules>
-        <module>app</module>
         <module>core</module>
-        <module>license</module>
+        <module>invoice4j-base</module>
+        <module>invoice4j-zugferd</module>
+        <module>invoice4j-xr</module>
     </modules>
 
     <properties>
+        <project.version>1.0.0</project.version>
         <java.version>23</java.version>
         <maven.compiler.source>23</maven.compiler.source>
         <maven.compiler.target>23</maven.compiler.target>
