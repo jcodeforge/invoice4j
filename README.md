@@ -1,44 +1,89 @@
-# POV
+# invoice4j
 
-Dieses Projekt enthält eine Sammlung mehrerer, oft unabhängiger voneinander
-entwickelten Projekte, mit einer gemeinsamen Java-Codebasis. 
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+[![Java](https://img.shields.io/badge/Java-23%2B-orange.svg)]()
 
-Für weitere Deails siehe: https://www.miragon.io/blog/was-ist-ein-monorepo/
+**invoice4j** is a modular, open-source Java library for creating, reading, validating, and converting electronic invoices.
 
-### Dokumenten und Ressourcen
+The project provides a shared invoice domain model and support for multiple e-invoicing standards, including **ZUGFeRD**, **Factur-X**, **XRechnung**, and **PEPPOL BIS**.
 
-- [Installation](https://gitlab.com/FP_Group/winfuhrhub/-/blob/master/doc/INSTALLATION.md?ref_type=heads)
-- [Lizenzierung](https://gitlab.com/FP_Group/winfuhrhub/-/blob/master/doc/LICENSING.md?ref_type=heads)
-- [Tests](https://gitlab.com/FP_Group/winfuhrhub/-/blob/master/doc/TESTING.md?ref_type=heads)
+> **Status:** Early development
 
-## Lokale Build-Einrichtung (Maven Settings)
+---
 
-Um sensible API-Keys und Deployment-Passwörter lokal zu schützen, nutzt dieses Projekt eine entkoppelte Einstellungsdatei.
+## Features
 
-1. Kopieren Sie die Datei `maven-settings.xml.template` im Hauptverzeichnis.
-2. Benennen Sie die Kopie um in `maven-settings.xml`.
-3. Öffnen Sie die neue Datei und tragen Sie Ihre SFTP-Zugangsdaten sowie die API-Keys für `dev` und `prod` ein.  
+- Common invoice domain model
+- Read electronic invoices
+- Generate electronic invoices
+- Validate invoice documents
+- Convert between invoice formats
+- Modular architecture
+- Pure Java
+- Maven Central distribution
 
-### Build ausführen
-Übergeben Sie beim Maven-Aufruf die lokale Einstellungsdatei mit dem `-s` Parameter:
+---
 
-* **Dev-Build:** `mvn clean package -Pdev -s maven-settings.xml`
-* **Prod-Deployment:** `mvn clean deploy -Pprod -s maven-settings.xml`
+## Modules
 
-### Integration in IntelliJ IDEA
-Damit Sie den `-s`-Parameter nicht manuell eintippen müssen:
-1. Öffnen Sie **Settings** (`Strg + Alt + S`) -> **Build, Execution, Deployment** -> **Build Tools** -> **Maven**.
-2. Aktivieren Sie bei **User settings file** die Option **Override**.
-3. Wählen Sie den Pfad zur neu erstellten `maven-settings.xml` in Ihrem Projektordner aus.
+| Module | Description |
+|---------|-------------|
+| `core` | Shared utilities and infrastructure. |
+| `invoice4j-base` | Common invoice domain model and value objects. |
+| `invoice4j-zugferd` | ZUGFeRD / Factur-X support. |
+| `invoice4j-xrechnung` | XRechnung support. |
 
-## Lokale Build-Einrichtung (Windows)
+---
 
-Maven erstellt im Rahmen des Build-Prozesses ein MSI-Installationspaket, das anschließend an Endanwender verteilt
-werden kann. Für eine vertrauenswürdige Installation unter Windows ist es erforderlich, das erzeugte MSI digital zu signieren.  
-Dies erfolgt mit dem Tool `signtool.exe`, das Bestandteil des Windows SDK ist.  
+## Installation
 
-Das Tool `signtool.exe` ist mit dem Windows SDK vorinstalliert und befindet sich typischerweise unter:
-`C:\Program Files (x86)\Windows Kits\10\bin\<SDK-Version>\x64`.  
-Damit `signtool.exe` systemweit verfügbar ist, sollte man dieses Verzeichnis als PATH-Umgebungsvariable bereitstellen.  
-Dadurch kann das Tool ohne vollständige Pfadangabe aus Build-Systemen wie Maven aufrufen.
+### Maven
 
+```xml
+<dependency>
+    <groupId>io.github.scholzalex</groupId>
+    <artifactId>invoice4j-zugferd</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+---
+
+## Example
+
+```
+Invoice invoice = Invoice.builder()
+        .seller(...)
+        .buyer(...)
+        .build();
+
+ZugferdWriter.write(invoice, outputFile);
+```
+
+---
+
+## Roadmap
+
+- [ ] Shared invoice domain model
+- [ ] ZUGFeRD reader
+- [ ] ZUGFeRD writer
+- [ ] XRechnung support
+- [ ] PEPPOL BIS support
+- [ ] Validation framework
+- [ ] XML mapping
+- [ ] Extensive documentation
+- [ ] Maven Central release
+
+---
+
+## Contributing
+
+Contributions, bug reports, feature requests, and discussions are welcome.
+
+If you would like to contribute, please open an issue.
+
+---
+
+## License
+
+This project is licensed under the Apache License 2.0. See the `LICENSE` file for details.
