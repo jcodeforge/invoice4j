@@ -71,68 +71,95 @@ public class AllowanceCharge {
      */
     private BigDecimal taxRate;
 
+    private AllowanceCharge() {
+    }
 
     public boolean isCharge() {
         return charge;
-    }
-
-    public void setCharge(boolean charge) {
-        this.charge = charge;
     }
 
     public String getReasonCode() {
         return reasonCode;
     }
 
-    public void setReasonCode(String reasonCode) {
-        this.reasonCode = reasonCode;
-    }
-
     public String getReason() {
         return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
     }
 
     public BigDecimal getPercentage() {
         return percentage;
     }
 
-    public void setPercentage(BigDecimal percentage) {
-        this.percentage = percentage;
-    }
-
     public BigDecimal getBaseAmount() {
         return baseAmount;
-    }
-
-    public void setBaseAmount(BigDecimal baseAmount) {
-        this.baseAmount = baseAmount;
     }
 
     public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
     public TaxCategoryCode getTaxCategory() {
         return taxCategory;
-    }
-
-    public void setTaxCategory(TaxCategoryCode taxCategory) {
-        this.taxCategory = taxCategory;
     }
 
     public BigDecimal getTaxRate() {
         return taxRate;
     }
 
-    public void setTaxRate(BigDecimal taxRate) {
-        this.taxRate = taxRate;
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private final AllowanceCharge allowanceCharge;
+
+        private Builder() {
+            this.allowanceCharge = new AllowanceCharge();
+        }
+
+        public Builder charge(boolean charge) {
+            allowanceCharge.charge = charge;
+            return this;
+        }
+
+        public Builder reasonCode(String reasonCode) {
+            allowanceCharge.reasonCode = reasonCode;
+            return this;
+        }
+
+        public Builder reason(String reason) {
+            allowanceCharge.reason = reason;
+            return this;
+        }
+
+        public Builder percentage(BigDecimal percentage) {
+            allowanceCharge.percentage = percentage;
+            return this;
+        }
+
+        public Builder baseAmount(BigDecimal baseAmount) {
+            allowanceCharge.baseAmount = baseAmount;
+            return this;
+        }
+
+        public Builder amount(BigDecimal amount) {
+            allowanceCharge.amount = amount;
+            return this;
+        }
+
+        public Builder taxCategory(TaxCategoryCode taxCategory) {
+            allowanceCharge.taxCategory = taxCategory;
+            return this;
+        }
+
+        public Builder taxRate(BigDecimal taxRate) {
+            allowanceCharge.taxRate = taxRate;
+            return this;
+        }
+
+        public AllowanceCharge build() {
+            return allowanceCharge;
+        }
     }
 }

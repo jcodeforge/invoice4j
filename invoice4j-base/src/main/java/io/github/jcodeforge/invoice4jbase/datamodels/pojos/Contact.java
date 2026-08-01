@@ -38,48 +38,68 @@ public class Contact {
      */
     private String note;
 
+    private Contact() {
+    }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-
     public String getTelephone() {
         return telephone;
     }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-
     public String getDepartment() {
         return department;
     }
-
-    public void setDepartment(String department) {
-        this.department = department;
-    }
-
 
     public String getNote() {
         return note;
     }
 
-    public void setNote(String note) {
-        this.note = note;
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private final Contact contact;
+
+        private Builder() {
+            this.contact = new Contact();
+        }
+
+        public Builder name(String name) {
+            contact.name = name;
+            return this;
+        }
+
+        public Builder telephone(String telephone) {
+            contact.telephone = telephone;
+            return this;
+        }
+
+        public Builder email(String email) {
+            contact.email = email;
+            return this;
+        }
+
+        public Builder department(String department) {
+            contact.department = department;
+            return this;
+        }
+
+        public Builder note(String note) {
+            contact.note = note;
+            return this;
+        }
+
+        public Contact build() {
+            return contact;
+        }
     }
 }

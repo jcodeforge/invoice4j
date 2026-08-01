@@ -20,28 +20,50 @@ public class BankAccount {
      */
     private String accountName;
 
+    private BankAccount() {
+    }
 
     public String getIban() {
         return iban;
-    }
-
-    public void setIban(String iban) {
-        this.iban = iban;
     }
 
     public String getBic() {
         return bic;
     }
 
-    public void setBic(String bic) {
-        this.bic = bic;
-    }
-
     public String getAccountName() {
         return accountName;
     }
 
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private final BankAccount bankAccount;
+
+        private Builder() {
+            this.bankAccount = new BankAccount();
+        }
+
+        public Builder iban(String iban) {
+            bankAccount.iban = iban;
+            return this;
+        }
+
+        public Builder bic(String bic) {
+            bankAccount.bic = bic;
+            return this;
+        }
+
+        public Builder accountName(String accountName) {
+            bankAccount.accountName = accountName;
+            return this;
+        }
+
+        public BankAccount build() {
+            return bankAccount;
+        }
     }
 }

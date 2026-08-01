@@ -53,54 +53,77 @@ public class Address {
      */
     private CountryCode countryCode;
 
+    private Address() {
+    }
 
     public String getStreet() {
         return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
     }
 
     public String getAdditionalStreet() {
         return additionalStreet;
     }
 
-    public void setAdditionalStreet(String additionalStreet) {
-        this.additionalStreet = additionalStreet;
-    }
-
     public String getCity() {
         return city;
     }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
 
     public String getPostcode() {
         return postcode;
     }
 
-    public void setPostcode(String postcode) {
-        this.postcode = postcode;
-    }
-
-
     public String getCountrySubdivision() {
         return countrySubdivision;
-    }
-
-    public void setCountrySubdivision(String countrySubdivision) {
-        this.countrySubdivision = countrySubdivision;
     }
 
     public CountryCode getCountryCode() {
         return countryCode;
     }
 
-    public void setCountryCode(CountryCode countryCode) {
-        this.countryCode = countryCode;
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private final Address address;
+
+        private Builder() {
+            this.address = new Address();
+        }
+
+        public Builder street(String street) {
+            address.street = street;
+            return this;
+        }
+
+        public Builder additionalStreet(String additionalStreet) {
+            address.additionalStreet = additionalStreet;
+            return this;
+        }
+
+        public Builder city(String city) {
+            address.city = city;
+            return this;
+        }
+
+        public Builder postcode(String postcode) {
+            address.postcode = postcode;
+            return this;
+        }
+
+        public Builder countrySubdivision(String countrySubdivision) {
+            address.countrySubdivision = countrySubdivision;
+            return this;
+        }
+
+        public Builder countryCode(CountryCode countryCode) {
+            address.countryCode = countryCode;
+            return this;
+        }
+
+        public Address build() {
+            return address;
+        }
     }
 }

@@ -22,15 +22,37 @@ public class ElectronicAddress {
         return value;
     }
 
-    public void setValue(String value) {
-        this.value = value;
-    }
-
     public String getScheme() {
         return scheme;
     }
 
-    public void setScheme(String scheme) {
-        this.scheme = scheme;
+    private ElectronicAddress() {
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private final ElectronicAddress electronicAddress;
+
+        private Builder() {
+            this.electronicAddress = new ElectronicAddress();
+        }
+
+        public Builder value(String value) {
+            electronicAddress.value = value;
+            return this;
+        }
+
+        public Builder scheme(String scheme) {
+            electronicAddress.scheme = scheme;
+            return this;
+        }
+
+        public ElectronicAddress build() {
+            return electronicAddress;
+        }
     }
 }

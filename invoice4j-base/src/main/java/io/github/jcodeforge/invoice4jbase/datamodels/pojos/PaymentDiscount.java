@@ -15,35 +15,57 @@ public class PaymentDiscount {
     /**
      * Discount amount.
      */
-    private BigDecimal amount;
+    private MonetaryAmount amount;
 
     /**
      * Number of days for discount payment.
      */
     private Integer paymentDays;
 
+    private PaymentDiscount() {
+    }
 
     public BigDecimal getPercentage() {
         return percentage;
     }
 
-    public void setPercentage(BigDecimal percentage) {
-        this.percentage = percentage;
-    }
-
-    public BigDecimal getAmount() {
+    public MonetaryAmount getAmount() {
         return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
     }
 
     public Integer getPaymentDays() {
         return paymentDays;
     }
 
-    public void setPaymentDays(Integer paymentDays) {
-        this.paymentDays = paymentDays;
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private final PaymentDiscount paymentDiscount;
+
+        private Builder() {
+            this.paymentDiscount = new PaymentDiscount();
+        }
+
+        public Builder percentage(BigDecimal percentage) {
+            paymentDiscount.percentage = percentage;
+            return this;
+        }
+
+        public Builder amount(MonetaryAmount amount) {
+            paymentDiscount.amount = amount;
+            return this;
+        }
+
+        public Builder paymentDays(Integer paymentDays) {
+            paymentDiscount.paymentDays = paymentDays;
+            return this;
+        }
+
+        public PaymentDiscount build() {
+            return paymentDiscount;
+        }
     }
 }

@@ -67,76 +67,104 @@ public class MonetarySummation {
      */
     private MonetaryAmount payableAmount;
 
+    private MonetarySummation() {
+    }
 
     public MonetaryAmount getLineExtensionAmount() {
         return lineExtensionAmount;
-    }
-
-    public void setLineExtensionAmount(MonetaryAmount lineExtensionAmount) {
-        this.lineExtensionAmount = lineExtensionAmount;
     }
 
     public BigDecimal getAllowanceTotalAmount() {
         return allowanceTotalAmount;
     }
 
-    public void setAllowanceTotalAmount(BigDecimal allowanceTotalAmount) {
-        this.allowanceTotalAmount = allowanceTotalAmount;
-    }
-
     public BigDecimal getChargeTotalAmount() {
         return chargeTotalAmount;
-    }
-
-    public void setChargeTotalAmount(BigDecimal chargeTotalAmount) {
-        this.chargeTotalAmount = chargeTotalAmount;
     }
 
     public BigDecimal getTaxExclusiveAmount() {
         return taxExclusiveAmount;
     }
 
-    public void setTaxExclusiveAmount(BigDecimal taxExclusiveAmount) {
-        this.taxExclusiveAmount = taxExclusiveAmount;
-    }
-
     public MonetaryAmount getTaxAmount() {
         return taxAmount;
-    }
-
-    public void setTaxAmount(MonetaryAmount taxAmount) {
-        this.taxAmount = taxAmount;
     }
 
     public BigDecimal getTaxInclusiveAmount() {
         return taxInclusiveAmount;
     }
 
-    public void setTaxInclusiveAmount(BigDecimal taxInclusiveAmount) {
-        this.taxInclusiveAmount = taxInclusiveAmount;
-    }
-
     public BigDecimal getPrepaidAmount() {
         return prepaidAmount;
-    }
-
-    public void setPrepaidAmount(BigDecimal prepaidAmount) {
-        this.prepaidAmount = prepaidAmount;
     }
 
     public BigDecimal getRoundingAmount() {
         return roundingAmount;
     }
 
-    public void setRoundingAmount(BigDecimal roundingAmount) {
-        this.roundingAmount = roundingAmount;
-    }
-
     public MonetaryAmount getPayableAmount() {
         return payableAmount;
     }
 
-    public void setPayableAmount(MonetaryAmount payableAmount) {
-        this.payableAmount = payableAmount;
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private final MonetarySummation monetarySummation;
+
+        private Builder() {
+            this.monetarySummation = new MonetarySummation();
+        }
+
+        public Builder lineExtensionAmount(MonetaryAmount lineExtensionAmount) {
+            monetarySummation.lineExtensionAmount = lineExtensionAmount;
+            return this;
+        }
+
+        public Builder allowanceTotalAmount(BigDecimal allowanceTotalAmount) {
+            monetarySummation.allowanceTotalAmount = allowanceTotalAmount;
+            return this;
+        }
+
+        public Builder chargeTotalAmount(BigDecimal chargeTotalAmount) {
+            monetarySummation.chargeTotalAmount = chargeTotalAmount;
+            return this;
+        }
+
+        public Builder taxExclusiveAmount(BigDecimal taxExclusiveAmount) {
+            monetarySummation.taxExclusiveAmount = taxExclusiveAmount;
+            return this;
+        }
+
+        public Builder taxAmount(MonetaryAmount taxAmount) {
+            monetarySummation.taxAmount = taxAmount;
+            return this;
+        }
+
+        public Builder taxInclusiveAmount(BigDecimal taxInclusiveAmount) {
+            monetarySummation.taxInclusiveAmount = taxInclusiveAmount;
+            return this;
+        }
+
+        public Builder prepaidAmount(BigDecimal prepaidAmount) {
+            monetarySummation.prepaidAmount = prepaidAmount;
+            return this;
+        }
+
+        public Builder roundingAmount(BigDecimal roundingAmount) {
+            monetarySummation.roundingAmount = roundingAmount;
+            return this;
+        }
+
+        public Builder payableAmount(MonetaryAmount payableAmount) {
+            monetarySummation.payableAmount = payableAmount;
+            return this;
+        }
+
+        public MonetarySummation build() {
+            return monetarySummation;
+        }
     }
 }

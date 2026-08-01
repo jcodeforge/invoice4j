@@ -30,28 +30,50 @@ public class PaymentTerms {
      */
     private PaymentDiscount discount;
 
+    private PaymentTerms() {
+    }
 
     public LocalDate getDueDate() {
         return dueDate;
-    }
-
-    public void setDueDate(LocalDate dueDate) {
-        this.dueDate = dueDate;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public PaymentDiscount getDiscount() {
         return discount;
     }
 
-    public void setDiscount(PaymentDiscount discount) {
-        this.discount = discount;
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private final PaymentTerms paymentTerms;
+
+        private Builder() {
+            this.paymentTerms = new PaymentTerms();
+        }
+
+        public Builder dueDate(LocalDate dueDate) {
+            paymentTerms.dueDate = dueDate;
+            return this;
+        }
+
+        public Builder description(String description) {
+            paymentTerms.description = description;
+            return this;
+        }
+
+        public Builder discount(PaymentDiscount discount) {
+            paymentTerms.discount = discount;
+            return this;
+        }
+
+        public PaymentTerms build() {
+            return paymentTerms;
+        }
     }
 }

@@ -14,65 +14,49 @@ public class Party {
     /**
      * Party name.
      */
-    private String name;
+    protected String name;
 
     /**
      * Trading or business name.
      */
-    private String tradingName;
+    protected String tradingName;
 
     /**
      * Electronic address.
      */
-    private ElectronicAddress electronicAddress;
+    protected ElectronicAddress electronicAddress;
 
     /**
      * Postal address.
      */
-    private Address address;
+    protected Address address;
 
     /**
      * Contact information.
      */
-    private Contact contact;
+    protected Contact contact;
+
+    protected Party() {
+    }
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getTradingName() {
         return tradingName;
     }
 
-    public void setTradingName(String tradingName) {
-        this.tradingName = tradingName;
-    }
-
     public ElectronicAddress getElectronicAddress() {
         return electronicAddress;
     }
 
-    public void setElectronicAddress(ElectronicAddress electronicAddress) {
-        this.electronicAddress = electronicAddress;
-    }
 
     public Address getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
     public Contact getContact() {
         return contact;
-    }
-
-    public void setContact(Contact contact) {
-        this.contact = contact;
     }
 }

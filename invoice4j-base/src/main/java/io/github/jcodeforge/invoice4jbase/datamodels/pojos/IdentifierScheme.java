@@ -28,31 +28,40 @@ public class IdentifierScheme {
      */
     private String name;
 
-    public IdentifierScheme() {
-    }
-
-    public IdentifierScheme(String identifier) {
-        this.identifier = identifier;
-    }
-
-    public IdentifierScheme(String identifier, String name) {
-        this.identifier = identifier;
-        this.name = name;
+    private IdentifierScheme() {
     }
 
     public String getIdentifier() {
         return identifier;
     }
 
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
-
     public String getName() {
         return name;
     }
+    public static Builder builder() {
+        return new Builder();
+    }
 
-    public void setName(String name) {
-        this.name = name;
+    public static class Builder {
+
+        private final IdentifierScheme identifierScheme;
+
+        private Builder() {
+            this.identifierScheme = new IdentifierScheme();
+        }
+
+        public Builder value(String value) {
+            identifierScheme.identifier = value;
+            return this;
+        }
+
+        public Builder name(String name) {
+            identifierScheme.name = name;
+            return this;
+        }
+
+        public IdentifierScheme build() {
+            return identifierScheme;
+        }
     }
 }

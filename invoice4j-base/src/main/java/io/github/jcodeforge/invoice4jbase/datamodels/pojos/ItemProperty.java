@@ -29,21 +29,41 @@ public class ItemProperty {
      */
     private String value;
 
+    private ItemProperty() {
+    }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-
     public String getValue() {
         return value;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private final ItemProperty itemProperty;
+
+        private Builder() {
+            this.itemProperty = new ItemProperty();
+        }
+
+        public Builder name(String name) {
+            itemProperty.name = name;
+            return this;
+        }
+
+        public Builder value(String value) {
+            itemProperty.value = value;
+            return this;
+        }
+
+        public ItemProperty build() {
+            return itemProperty;
+        }
     }
 }

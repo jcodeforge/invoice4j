@@ -43,51 +43,77 @@ public class Delivery {
      */
     private String deliveryNoteReference;
 
-    public LocalDate getActualDeliveryDate() {
-        return actualDeliveryDate;
+    private Delivery() {
     }
 
-    public void setActualDeliveryDate(LocalDate actualDeliveryDate) {
-        this.actualDeliveryDate = actualDeliveryDate;
+    public LocalDate getActualDeliveryDate() {
+        return actualDeliveryDate;
     }
 
     public LocalDate getDeliveryPeriodStartDate() {
         return deliveryPeriodStartDate;
     }
 
-    public void setDeliveryPeriodStartDate(LocalDate deliveryPeriodStartDate) {
-        this.deliveryPeriodStartDate = deliveryPeriodStartDate;
-    }
-
     public LocalDate getDeliveryPeriodEndDate() {
         return deliveryPeriodEndDate;
-    }
-
-    public void setDeliveryPeriodEndDate(LocalDate deliveryPeriodEndDate) {
-        this.deliveryPeriodEndDate = deliveryPeriodEndDate;
     }
 
     public ShipTo getShipTo() {
         return shipTo;
     }
 
-    public void setShipTo(ShipTo shipTo) {
-        this.shipTo = shipTo;
-    }
-
     public Address getAddress() {
         return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
     }
 
     public String getDeliveryNoteReference() {
         return deliveryNoteReference;
     }
 
-    public void setDeliveryNoteReference(String deliveryNoteReference) {
-        this.deliveryNoteReference = deliveryNoteReference;
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private final Delivery delivery;
+
+        private Builder() {
+            this.delivery = new Delivery();
+        }
+
+        public Builder actualDeliveryDate(LocalDate actualDeliveryDate) {
+            delivery.actualDeliveryDate = actualDeliveryDate;
+            return this;
+        }
+
+        public Builder deliveryPeriodStartDate(LocalDate deliveryPeriodStartDate) {
+            delivery.deliveryPeriodStartDate = deliveryPeriodStartDate;
+            return this;
+        }
+
+        public Builder deliveryPeriodEndDate(LocalDate deliveryPeriodEndDate) {
+            delivery.deliveryPeriodEndDate = deliveryPeriodEndDate;
+            return this;
+        }
+
+        public Builder shipTo(ShipTo shipTo) {
+            delivery.shipTo = shipTo;
+            return this;
+        }
+
+        public Builder address(Address address) {
+            delivery.address = address;
+            return this;
+        }
+
+        public Builder deliveryNoteReference(String deliveryNoteReference) {
+            delivery.deliveryNoteReference = deliveryNoteReference;
+            return this;
+        }
+
+        public Delivery build() {
+            return delivery;
+        }
     }
 }

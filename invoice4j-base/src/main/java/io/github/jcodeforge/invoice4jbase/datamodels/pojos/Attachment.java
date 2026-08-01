@@ -23,35 +23,59 @@ public class Attachment {
      */
     private URI uri;
 
-    public String getFileName() {
-        return fileName;
+    private Attachment() {
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public String getFileName() {
+        return fileName;
     }
 
     public MimeType getMimeType() {
         return mimeType;
     }
 
-    public void setMimeType(MimeType mimeType) {
-        this.mimeType = mimeType;
-    }
-
     public byte[] getContent() {
         return content;
-    }
-
-    public void setContent(byte[] content) {
-        this.content = content;
     }
 
     public URI getUri() {
         return uri;
     }
 
-    public void setUri(URI uri) {
-        this.uri = uri;
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private final Attachment attachment;
+
+        private Builder() {
+            this.attachment = new Attachment();
+        }
+
+        public Builder fileName(String fileName) {
+            attachment.fileName = fileName;
+            return this;
+        }
+
+        public Builder mimeType(MimeType mimeType) {
+            attachment.mimeType = mimeType;
+            return this;
+        }
+
+        public Builder content(byte[] content) {
+            attachment.content = content;
+            return this;
+        }
+
+        public Builder uri(URI uri) {
+            attachment.uri = uri;
+            return this;
+        }
+
+        public Attachment build() {
+            return attachment;
+        }
     }
 }

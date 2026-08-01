@@ -123,156 +123,204 @@ public class InvoiceLine {
      */
     private List<ItemProperty> properties = new ArrayList<>();
 
+    private InvoiceLine() {
+    }
 
     public String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getObjectIdentifier() {
         return objectIdentifier;
     }
 
-    public void setObjectIdentifier(String objectIdentifier) {
-        this.objectIdentifier = objectIdentifier;
-    }
-
     public String getBuyerAccountingReference() {
         return buyerAccountingReference;
-    }
-
-    public void setBuyerAccountingReference(String buyerAccountingReference) {
-        this.buyerAccountingReference = buyerAccountingReference;
     }
 
     public String getItemName() {
         return itemName;
     }
 
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getSellerItemIdentifier() {
         return sellerItemIdentifier;
     }
 
-    public void setSellerItemIdentifier(String sellerItemIdentifier) {
-        this.sellerItemIdentifier = sellerItemIdentifier;
-    }
-
     public String getBuyerItemIdentifier() {
         return buyerItemIdentifier;
-    }
-
-    public void setBuyerItemIdentifier(String buyerItemIdentifier) {
-        this.buyerItemIdentifier = buyerItemIdentifier;
     }
 
     public String getStandardItemIdentifier() {
         return standardItemIdentifier;
     }
 
-    public void setStandardItemIdentifier(String standardItemIdentifier) {
-        this.standardItemIdentifier = standardItemIdentifier;
-    }
-
     public BigDecimal getQuantity() {
         return quantity;
-    }
-
-    public void setQuantity(BigDecimal quantity) {
-        this.quantity = quantity;
     }
 
     public UnitCode getUnitCode() {
         return unitCode;
     }
 
-    public void setUnitCode(UnitCode unitCode) {
-        this.unitCode = unitCode;
-    }
-
     public MonetaryAmount getUnitPrice() {
         return unitPrice;
-    }
-
-    public void setUnitPrice(MonetaryAmount unitPrice) {
-        this.unitPrice = unitPrice;
     }
 
     public BigDecimal getPriceDiscount() {
         return priceDiscount;
     }
 
-    public void setPriceDiscount(BigDecimal priceDiscount) {
-        this.priceDiscount = priceDiscount;
-    }
-
     public BigDecimal getPriceDiscountPercentage() {
         return priceDiscountPercentage;
-    }
-
-    public void setPriceDiscountPercentage(BigDecimal priceDiscountPercentage) {
-        this.priceDiscountPercentage = priceDiscountPercentage;
     }
 
     public BigDecimal getBaseQuantity() {
         return baseQuantity;
     }
 
-    public void setBaseQuantity(BigDecimal baseQuantity) {
-        this.baseQuantity = baseQuantity;
-    }
-
     public MonetaryAmount getLineExtensionAmount() {
         return lineExtensionAmount;
-    }
-
-    public void setLineExtensionAmount(MonetaryAmount lineExtensionAmount) {
-        this.lineExtensionAmount = lineExtensionAmount;
     }
 
     public TaxCategoryCode getTaxCategory() {
         return taxCategory;
     }
 
-    public void setTaxCategory(TaxCategoryCode taxCategory) {
-        this.taxCategory = taxCategory;
-    }
-
     public BigDecimal getTaxRate() {
         return taxRate;
-    }
-
-    public void setTaxRate(BigDecimal taxRate) {
-        this.taxRate = taxRate;
     }
 
     public List<AllowanceCharge> getAllowanceCharges() {
         return allowanceCharges;
     }
 
-    public void addAllowanceCharge(AllowanceCharge allowanceCharge) {
-        this.allowanceCharges.add(allowanceCharge);
-    }
-
     public List<ItemProperty> getProperties() {
         return properties;
     }
 
-    public void addProperty(ItemProperty property) {
-        this.properties.add(property);
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private final InvoiceLine line;
+
+        private Builder() {
+            this.line = new InvoiceLine();
+        }
+
+        public Builder id(String id) {
+            line.id = id;
+            return this;
+        }
+
+        public Builder objectIdentifier(String objectIdentifier) {
+            line.objectIdentifier = objectIdentifier;
+            return this;
+        }
+
+        public Builder buyerAccountingReference(String buyerAccountingReference) {
+            line.buyerAccountingReference = buyerAccountingReference;
+            return this;
+        }
+
+        public Builder itemName(String itemName) {
+            line.itemName = itemName;
+            return this;
+        }
+
+        public Builder description(String description) {
+            line.description = description;
+            return this;
+        }
+
+        public Builder sellerItemIdentifier(String sellerItemIdentifier) {
+            line.sellerItemIdentifier = sellerItemIdentifier;
+            return this;
+        }
+
+        public Builder buyerItemIdentifier(String buyerItemIdentifier) {
+            line.buyerItemIdentifier = buyerItemIdentifier;
+            return this;
+        }
+
+        public Builder standardItemIdentifier(String standardItemIdentifier) {
+            line.standardItemIdentifier = standardItemIdentifier;
+            return this;
+        }
+
+        public Builder quantity(BigDecimal quantity) {
+            line.quantity = quantity;
+            return this;
+        }
+
+        public Builder unitCode(UnitCode unitCode) {
+            line.unitCode = unitCode;
+            return this;
+        }
+
+        public Builder unitPrice(MonetaryAmount unitPrice) {
+            line.unitPrice = unitPrice;
+            return this;
+        }
+
+        public Builder priceDiscount(BigDecimal priceDiscount) {
+            line.priceDiscount = priceDiscount;
+            return this;
+        }
+
+        public Builder priceDiscountPercentage(BigDecimal priceDiscountPercentage) {
+            line.priceDiscountPercentage = priceDiscountPercentage;
+            return this;
+        }
+
+        public Builder baseQuantity(BigDecimal baseQuantity) {
+            line.baseQuantity = baseQuantity;
+            return this;
+        }
+
+        public Builder lineExtensionAmount(MonetaryAmount amount) {
+            line.lineExtensionAmount = amount;
+            return this;
+        }
+
+        public Builder taxCategory(TaxCategoryCode taxCategory) {
+            line.taxCategory = taxCategory;
+            return this;
+        }
+
+        public Builder taxRate(BigDecimal taxRate) {
+            line.taxRate = taxRate;
+            return this;
+        }
+
+        public Builder addAllowanceCharge(AllowanceCharge allowanceCharge) {
+            line.allowanceCharges.add(allowanceCharge);
+            return this;
+        }
+
+        public Builder allowanceCharges(List<AllowanceCharge> allowanceCharges) {
+            line.allowanceCharges = new ArrayList<>(allowanceCharges);
+            return this;
+        }
+
+        public Builder addProperty(ItemProperty property) {
+            line.properties.add(property);
+            return this;
+        }
+
+        public Builder properties(List<ItemProperty> properties) {
+            line.properties = new ArrayList<>(properties);
+            return this;
+        }
+
+        public InvoiceLine build() {
+            return line;
+        }
     }
 }

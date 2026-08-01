@@ -52,59 +52,86 @@ public class DocumentReference {
      */
     private Attachment attachment;
 
-    public String getId() {
-        return id;
+    private DocumentReference() {
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getId() {
+        return id;
     }
 
     public DocumentTypeCode getTypeCode() {
         return typeCode;
     }
 
-    public void setTypeCode(DocumentTypeCode typeCode) {
-        this.typeCode = typeCode;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public LocalDate getIssueDate() {
         return issueDate;
-    }
-
-    public void setIssueDate(LocalDate issueDate) {
-        this.issueDate = issueDate;
     }
 
     public URI getUri() {
         return uri;
     }
 
-    public void setUri(URI uri) {
-        this.uri = uri;
-    }
-
     public Attachment getAttachment() {
         return attachment;
     }
 
-    public void setAttachment(Attachment attachment) {
-        this.attachment = attachment;
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private final DocumentReference documentReference;
+
+        private Builder() {
+            this.documentReference = new DocumentReference();
+        }
+
+        public Builder id(String id) {
+            documentReference.id = id;
+            return this;
+        }
+
+        public Builder typeCode(DocumentTypeCode typeCode) {
+            documentReference.typeCode = typeCode;
+            return this;
+        }
+
+        public Builder name(String name) {
+            documentReference.name = name;
+            return this;
+        }
+
+        public Builder description(String description) {
+            documentReference.description = description;
+            return this;
+        }
+
+        public Builder issueDate(LocalDate issueDate) {
+            documentReference.issueDate = issueDate;
+            return this;
+        }
+
+        public Builder uri(URI uri) {
+            documentReference.uri = uri;
+            return this;
+        }
+
+        public Builder attachment(Attachment attachment) {
+            documentReference.attachment = attachment;
+            return this;
+        }
+
+        public DocumentReference build() {
+            return documentReference;
+        }
     }
 }

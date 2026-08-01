@@ -23,27 +23,104 @@ public class Buyer extends Party {
      */
     private String buyerReference;
 
-    public TaxIdentifier getVatIdentifier() {
-        return vatIdentifier;
+    private Buyer() {
+        super();
     }
 
-    public void setVatIdentifier(TaxIdentifier vatIdentifier) {
-        this.vatIdentifier = vatIdentifier;
+    public TaxIdentifier getVatIdentifier() {
+        return vatIdentifier;
     }
 
     public String getLegalRegistrationIdentifier() {
         return legalRegistrationIdentifier;
     }
 
-    public void setLegalRegistrationIdentifier(String legalRegistrationIdentifier) {
-        this.legalRegistrationIdentifier = legalRegistrationIdentifier;
-    }
 
     public String getBuyerReference() {
         return buyerReference;
     }
 
-    public void setBuyerReference(String buyerReference) {
-        this.buyerReference = buyerReference;
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private final Buyer buyer;
+
+        private Builder() {
+            this.buyer = new Buyer();
+        }
+
+        /**
+         * BT-48
+         * Buyer's VAT identifier.
+         */
+        public Builder vatIdentifier(TaxIdentifier vatIdentifier) {
+            buyer.vatIdentifier = vatIdentifier;
+            return this;
+        }
+
+        /**
+         * BT-49
+         * Buyer's legal registration identifier.
+         */
+        public Builder legalRegistrationIdentifier(String legalRegistrationIdentifier) {
+            buyer.legalRegistrationIdentifier = legalRegistrationIdentifier;
+            return this;
+        }
+
+        /**
+         * BT-10
+         * Buyer reference.
+         */
+        public Builder buyerReference(String buyerReference) {
+            buyer.buyerReference = buyerReference;
+            return this;
+        }
+
+        /**
+         * Party name.
+         */
+        public Builder name(String name) {
+            buyer.name = name;
+            return this;
+        }
+
+        /**
+         * Trading name.
+         */
+        public Builder tradingName(String tradingName) {
+            buyer.tradingName = tradingName;
+            return this;
+        }
+
+        /**
+         * Electronic address.
+         */
+        public Builder electronicAddress(ElectronicAddress electronicAddress) {
+            buyer.electronicAddress = electronicAddress;
+            return this;
+        }
+
+        /**
+         * Postal address.
+         */
+        public Builder address(Address address) {
+            buyer.address = address;
+            return this;
+        }
+
+        /**
+         * Contact information.
+         */
+        public Builder contact(Contact contact) {
+            buyer.contact = contact;
+            return this;
+        }
+
+        public Buyer build() {
+            return buyer;
+        }
     }
 }

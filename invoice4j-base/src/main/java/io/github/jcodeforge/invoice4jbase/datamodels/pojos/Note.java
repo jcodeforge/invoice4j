@@ -32,27 +32,50 @@ public class Note {
      */
     private LanguageCode languageCode;
 
-    public String getText() {
-        return text;
+    private Note() {
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public String getText() {
+        return text;
     }
 
     public String getSubjectCode() {
         return subjectCode;
     }
 
-    public void setSubjectCode(String subjectCode) {
-        this.subjectCode = subjectCode;
-    }
-
     public LanguageCode getLanguageCode() {
         return languageCode;
     }
 
-    public void setLanguageCode(LanguageCode languageCode) {
-        this.languageCode = languageCode;
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private final Note note;
+
+        private Builder() {
+            this.note = new Note();
+        }
+
+        public Builder text(String text) {
+            note.text = text;
+            return this;
+        }
+
+        public Builder subjectCode(String subjectCode) {
+            note.subjectCode = subjectCode;
+            return this;
+        }
+
+        public Builder languageCode(LanguageCode languageCode) {
+            note.languageCode = languageCode;
+            return this;
+        }
+
+        public Note build() {
+            return note;
+        }
     }
 }

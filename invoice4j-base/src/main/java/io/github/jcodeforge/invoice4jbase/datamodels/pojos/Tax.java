@@ -48,52 +48,77 @@ public class Tax {
      */
     private String exemptionReason;
 
+    private Tax() {
+    }
 
     public TaxCategoryCode getCategoryCode() {
         return categoryCode;
-    }
-
-    public void setCategoryCode(TaxCategoryCode categoryCode) {
-        this.categoryCode = categoryCode;
     }
 
     public BigDecimal getRate() {
         return rate;
     }
 
-    public void setRate(BigDecimal rate) {
-        this.rate = rate;
-    }
-
     public MonetaryAmount getTaxableAmount() {
         return taxableAmount;
-    }
-
-    public void setTaxableAmount(MonetaryAmount taxableAmount) {
-        this.taxableAmount = taxableAmount;
     }
 
     public MonetaryAmount getTaxAmount() {
         return taxAmount;
     }
 
-    public void setTaxAmount(MonetaryAmount taxAmount) {
-        this.taxAmount = taxAmount;
-    }
-
     public String getExemptionReasonCode() {
         return exemptionReasonCode;
-    }
-
-    public void setExemptionReasonCode(String exemptionReasonCode) {
-        this.exemptionReasonCode = exemptionReasonCode;
     }
 
     public String getExemptionReason() {
         return exemptionReason;
     }
 
-    public void setExemptionReason(String exemptionReason) {
-        this.exemptionReason = exemptionReason;
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private final Tax tax;
+
+        private Builder() {
+            this.tax = new Tax();
+        }
+
+        public Builder categoryCode(TaxCategoryCode categoryCode) {
+            tax.categoryCode = categoryCode;
+            return this;
+        }
+
+        public Builder rate(BigDecimal rate) {
+            tax.rate = rate;
+            return this;
+        }
+
+        public Builder taxableAmount(MonetaryAmount taxableAmount) {
+            tax.taxableAmount = taxableAmount;
+            return this;
+        }
+
+        public Builder taxAmount(MonetaryAmount taxAmount) {
+            tax.taxAmount = taxAmount;
+            return this;
+        }
+
+        public Builder exemptionReasonCode(String exemptionReasonCode) {
+            tax.exemptionReasonCode = exemptionReasonCode;
+            return this;
+        }
+
+        public Builder exemptionReason(String exemptionReason) {
+            tax.exemptionReason = exemptionReason;
+            return this;
+        }
+
+        public Tax build() {
+            return tax;
+        }
     }
 }

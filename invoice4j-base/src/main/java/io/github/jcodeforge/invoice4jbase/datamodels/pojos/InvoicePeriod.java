@@ -15,20 +15,15 @@ public class InvoicePeriod {
      */
     private LocalDate endDate;
 
+    private InvoicePeriod() {
+    }
+
     public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
     public LocalDate getEndDate() {
         return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
     }
 
     /**
@@ -47,5 +42,32 @@ public class InvoicePeriod {
         }
 
         return !date.isBefore(startDate) && !date.isAfter(endDate);
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private final InvoicePeriod period;
+
+        private Builder() {
+            this.period = new InvoicePeriod();
+        }
+
+        public Builder startDate(LocalDate startDate) {
+            period.startDate = startDate;
+            return this;
+        }
+
+        public Builder endDate(LocalDate endDate) {
+            period.endDate = endDate;
+            return this;
+        }
+
+        public InvoicePeriod build() {
+            return period;
+        }
     }
 }

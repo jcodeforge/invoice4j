@@ -88,84 +88,113 @@ public class Payment {
      */
     private BankAccount bankAccount;
 
+    private Payment() {
+    }
 
     public PaymentMeansCode getMeansCode() {
         return meansCode;
-    }
-
-    public void setMeansCode(PaymentMeansCode meansCode) {
-        this.meansCode = meansCode;
     }
 
     public String getMeansDescription() {
         return meansDescription;
     }
 
-    public void setMeansDescription(String meansDescription) {
-        this.meansDescription = meansDescription;
-    }
-
     public String getRemittanceInformation() {
         return remittanceInformation;
-    }
-
-    public void setRemittanceInformation(String remittanceInformation) {
-        this.remittanceInformation = remittanceInformation;
     }
 
     public String getAccountIdentifier() {
         return accountIdentifier;
     }
 
-    public void setAccountIdentifier(String accountIdentifier) {
-        this.accountIdentifier = accountIdentifier;
-    }
-
     public String getAccountName() {
         return accountName;
-    }
-
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
     }
 
     public String getServiceProviderIdentifier() {
         return serviceProviderIdentifier;
     }
 
-    public void setServiceProviderIdentifier(String serviceProviderIdentifier) {
-        this.serviceProviderIdentifier = serviceProviderIdentifier;
-    }
-
     public String getPaymentCardIdentifier() {
         return paymentCardIdentifier;
-    }
-
-    public void setPaymentCardIdentifier(String paymentCardIdentifier) {
-        this.paymentCardIdentifier = paymentCardIdentifier;
     }
 
     public String getPaymentCardHolderName() {
         return paymentCardHolderName;
     }
 
-    public void setPaymentCardHolderName(String paymentCardHolderName) {
-        this.paymentCardHolderName = paymentCardHolderName;
-    }
-
     public String getMandateReference() {
         return mandateReference;
-    }
-
-    public void setMandateReference(String mandateReference) {
-        this.mandateReference = mandateReference;
     }
 
     public BankAccount getBankAccount() {
         return bankAccount;
     }
 
-    public void setBankAccount(BankAccount bankAccount) {
-        this.bankAccount = bankAccount;
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private final Payment payment;
+
+        private Builder() {
+            this.payment = new Payment();
+        }
+
+        public Builder meansCode(PaymentMeansCode meansCode) {
+            payment.meansCode = meansCode;
+            return this;
+        }
+
+        public Builder meansDescription(String meansDescription) {
+            payment.meansDescription = meansDescription;
+            return this;
+        }
+
+        public Builder remittanceInformation(String remittanceInformation) {
+            payment.remittanceInformation = remittanceInformation;
+            return this;
+        }
+
+        public Builder accountIdentifier(String accountIdentifier) {
+            payment.accountIdentifier = accountIdentifier;
+            return this;
+        }
+
+        public Builder accountName(String accountName) {
+            payment.accountName = accountName;
+            return this;
+        }
+
+        public Builder serviceProviderIdentifier(String serviceProviderIdentifier) {
+            payment.serviceProviderIdentifier = serviceProviderIdentifier;
+            return this;
+        }
+
+        public Builder paymentCardIdentifier(String paymentCardIdentifier) {
+            payment.paymentCardIdentifier = paymentCardIdentifier;
+            return this;
+        }
+
+        public Builder paymentCardHolderName(String paymentCardHolderName) {
+            payment.paymentCardHolderName = paymentCardHolderName;
+            return this;
+        }
+
+        public Builder mandateReference(String mandateReference) {
+            payment.mandateReference = mandateReference;
+            return this;
+        }
+
+        public Builder bankAccount(BankAccount bankAccount) {
+            payment.bankAccount = bankAccount;
+            return this;
+        }
+
+        public Payment build() {
+            return payment;
+        }
     }
 }

@@ -31,19 +31,41 @@ public class PartyIdentifier {
      */
     private IdentifierScheme scheme;
 
-    public String getValue() {
-        return value;
+    private PartyIdentifier() {
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public String getValue() {
+        return value;
     }
 
     public IdentifierScheme getScheme() {
         return scheme;
     }
 
-    public void setScheme(IdentifierScheme scheme) {
-        this.scheme = scheme;
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private final PartyIdentifier partyIdentifier;
+
+        private Builder() {
+            this.partyIdentifier = new PartyIdentifier();
+        }
+
+        public Builder value(String value) {
+            partyIdentifier.value = value;
+            return this;
+        }
+
+        public Builder scheme(IdentifierScheme scheme) {
+            partyIdentifier.scheme = scheme;
+            return this;
+        }
+
+        public PartyIdentifier build() {
+            return partyIdentifier;
+        }
     }
 }
