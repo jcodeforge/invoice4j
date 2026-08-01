@@ -105,10 +105,38 @@ This project is licensed under the Apache License 2.0. See the `LICENSE` file fo
 
 ## Support
 
-If **invoice4j** is useful to you, consider supporting its development.
+If **invoice4j** is useful to you, consider supporting its development.  
+
+Development of invoice4j requires time for implementing new features, improving documentation, maintaining standards compatibility, and providing support.
+
 
 <a href="https://paypal.me/juniorscholle">
   <img src="https://img.shields.io/badge/Donate-PayPal-00457C?logo=paypal&logoColor=white" alt="Donate with PayPal">
 </a>
 
-**PayPal:** https://paypal.me/juniorscholle
+**PayPal:** https://paypal.me/juniorscholle  
+
+## Early Development Notice
+
+invoice4j is currently in an early development stage.
+
+The project is published at this stage to gather feedback from developers and users working with electronic invoices such as ZUGFeRD and XRechnung.
+
+The goal is to find out whether invoice4j solves real-world problems and whether the architecture, API design, and supported standards meet the needs of the community.  
+
+At this stage:
+- The API may still change.
+- Some features are not implemented yet.
+- Documentation is actively being improved.
+- Production usage is not recommended until a stable release is available
+
+Feedback is highly appreciated:
+- Feature requests
+- Missing invoice fields or standards
+- API design suggestions
+- Real-world use cases
+- Bug reports
+
+If you work with electronic invoices and have requirements or suggestions, please open an issue or start a discussion.
+
+Thank you for helping shape **invoice4j**.
