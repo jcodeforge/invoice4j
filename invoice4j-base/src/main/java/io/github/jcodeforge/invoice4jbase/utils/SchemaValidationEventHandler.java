@@ -1,6 +1,6 @@
 package io.github.jcodeforge.invoice4jbase.utils;
 
-import io.github.jcodeforge.invoice4jbase.exceptions.SchemaValidationException;
+import io.github.jcodeforge.invoice4jbase.exceptions.InvoiceValidationException;
 import jakarta.xml.bind.ValidationEvent;
 import jakarta.xml.bind.ValidationEventHandler;
 import jakarta.xml.bind.ValidationEventLocator;
@@ -13,7 +13,7 @@ public class SchemaValidationEventHandler extends DefaultValidationEventHandler
     public boolean handleEvent(ValidationEvent event) {
         ValidationEventLocator locator = event.getLocator();
         if (locator != null) {
-            throw new SchemaValidationException("Schema validation error: \nLine: " +
+            throw new InvoiceValidationException("Schema validation error: \nLine: " +
                     locator.getLineNumber() + ", " + event.getMessage());
         }
 
