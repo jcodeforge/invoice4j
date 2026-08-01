@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Invoice {
+public final class Invoice {
 
     /**
      * BT-1
