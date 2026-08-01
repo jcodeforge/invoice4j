@@ -50,11 +50,13 @@ The project provides a shared invoice domain model and support for multiple e-in
 *todo*
 ```
 Invoice invoice = Invoice.builder()
-        .seller(...)
-        .buyer(...)
+        .invoiceNumber("INV-2026-001")
+        .issueDate(LocalDate.now())
+        .currency(CurrencyCode.EUR)
+        .seller(seller)
+        .buyer(buyer)
+        .addLine(line)
         .build();
-
-ZugferdWriter.write(invoice, outputFile);
 ```
 
 ---
