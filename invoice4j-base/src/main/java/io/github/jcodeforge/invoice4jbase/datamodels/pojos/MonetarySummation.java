@@ -13,7 +13,7 @@ public class MonetarySummation {
      * BT-106
      * Sum of invoice line net amounts.
      */
-    private BigDecimal lineExtensionAmount;
+    private MonetaryAmount lineExtensionAmount;
 
     /**
      * BT-107
@@ -65,14 +65,14 @@ public class MonetarySummation {
      * BT-115
      * Amount due for payment.
      */
-    private BigDecimal payableAmount;
+    private MonetaryAmount payableAmount;
 
 
-    public BigDecimal getLineExtensionAmount() {
+    public MonetaryAmount getLineExtensionAmount() {
         return lineExtensionAmount;
     }
 
-    public void setLineExtensionAmount(BigDecimal lineExtensionAmount) {
+    public void setLineExtensionAmount(MonetaryAmount lineExtensionAmount) {
         this.lineExtensionAmount = lineExtensionAmount;
     }
 
@@ -132,11 +132,11 @@ public class MonetarySummation {
         this.roundingAmount = roundingAmount;
     }
 
-    public BigDecimal getPayableAmount() {
+    public MonetaryAmount getPayableAmount() {
         return payableAmount;
     }
 
-    public void setPayableAmount(BigDecimal payableAmount) {
+    public void setPayableAmount(MonetaryAmount payableAmount) {
         this.payableAmount = payableAmount;
     }
 }

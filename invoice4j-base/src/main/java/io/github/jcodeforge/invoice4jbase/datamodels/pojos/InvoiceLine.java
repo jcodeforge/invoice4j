@@ -77,7 +77,7 @@ public class InvoiceLine {
      * BT-146
      * Item net price.
      */
-    private BigDecimal unitPrice;
+    private MonetaryAmount unitPrice;
 
     /**
      * BT-147
@@ -101,7 +101,7 @@ public class InvoiceLine {
      * BT-131
      * Line net amount.
      */
-    private BigDecimal lineExtensionAmount;
+    private MonetaryAmount lineExtensionAmount;
 
     /**
      * VAT category.
@@ -204,11 +204,11 @@ public class InvoiceLine {
         this.unitCode = unitCode;
     }
 
-    public BigDecimal getUnitPrice() {
+    public MonetaryAmount getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(BigDecimal unitPrice) {
+    public void setUnitPrice(MonetaryAmount unitPrice) {
         this.unitPrice = unitPrice;
     }
 
@@ -236,11 +236,11 @@ public class InvoiceLine {
         this.baseQuantity = baseQuantity;
     }
 
-    public BigDecimal getLineExtensionAmount() {
+    public MonetaryAmount getLineExtensionAmount() {
         return lineExtensionAmount;
     }
 
-    public void setLineExtensionAmount(BigDecimal lineExtensionAmount) {
+    public void setLineExtensionAmount(MonetaryAmount lineExtensionAmount) {
         this.lineExtensionAmount = lineExtensionAmount;
     }
 

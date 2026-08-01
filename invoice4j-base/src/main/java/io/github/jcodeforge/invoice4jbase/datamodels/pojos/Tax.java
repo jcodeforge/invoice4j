@@ -1,7 +1,6 @@
 package io.github.jcodeforge.invoice4jbase.datamodels.pojos;
 
 import io.github.jcodeforge.invoice4jbase.datamodels.enums.TaxCategoryCode;
-
 import java.math.BigDecimal;
 
 /**
@@ -27,7 +26,7 @@ public class Tax {
      * BT-116
      * VAT taxable amount.
      */
-    private BigDecimal taxableAmount;
+    private MonetaryAmount taxableAmount;
 
     /**
      * BT-117
@@ -66,11 +65,11 @@ public class Tax {
         this.rate = rate;
     }
 
-    public BigDecimal getTaxableAmount() {
+    public MonetaryAmount getTaxableAmount() {
         return taxableAmount;
     }
 
-    public void setTaxableAmount(BigDecimal taxableAmount) {
+    public void setTaxableAmount(MonetaryAmount taxableAmount) {
         this.taxableAmount = taxableAmount;
     }
 
