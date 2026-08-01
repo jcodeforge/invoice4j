@@ -18,13 +18,13 @@ public class ShipTo extends Party {
      * - Warehouse identifier
      * - Internal location code
      */
-    private String locationIdentifier;
+    private PartyIdentifier locationIdentifier;
 
-    public String getLocationIdentifier() {
+    public PartyIdentifier getLocationIdentifier() {
         return locationIdentifier;
     }
 
-    public void setLocationIdentifier(String locationIdentifier) {
+    public void setLocationIdentifier(PartyIdentifier locationIdentifier) {
         this.locationIdentifier = locationIdentifier;
     }
 }

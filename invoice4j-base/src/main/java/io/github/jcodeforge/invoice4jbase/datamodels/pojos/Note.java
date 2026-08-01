@@ -1,5 +1,7 @@
 package io.github.jcodeforge.invoice4jbase.datamodels.pojos;
 
+import io.github.jcodeforge.invoice4jbase.datamodels.enums.LanguageCode;
+
 /**
  * BG-1
  * Invoice note.
@@ -28,7 +30,7 @@ public class Note {
      * Example:
      * en, de
      */
-    private String languageCode;
+    private LanguageCode languageCode;
 
     public String getText() {
         return text;
@@ -46,11 +48,11 @@ public class Note {
         this.subjectCode = subjectCode;
     }
 
-    public String getLanguageCode() {
+    public LanguageCode getLanguageCode() {
         return languageCode;
     }
 
-    public void setLanguageCode(String languageCode) {
+    public void setLanguageCode(LanguageCode languageCode) {
         this.languageCode = languageCode;
     }
 }

@@ -1,6 +1,22 @@
 package io.github.jcodeforge.invoice4jbase.datamodels.pojos;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Seller extends Party {
+
+    /**
+     * BT-29
+     *
+     * Seller identifier.
+     *
+     * Identifier assigned to the seller.
+     * Examples:
+     * - Customer number
+     * - GLN
+     * - Company identifier
+     */
+    private List<PartyIdentifier> identifiers = new ArrayList<>();
 
     /**
      * BT-30
@@ -25,6 +41,14 @@ public class Seller extends Party {
      * Seller additional legal information.
      */
     private String legalInformation;
+
+    public List<PartyIdentifier> getIdentifiers() {
+        return identifiers;
+    }
+
+    public void setIdentifiers(List<PartyIdentifier> identifiers) {
+        this.identifiers = identifiers;
+    }
 
     public String getLegalRegistrationIdentifier() {
         return legalRegistrationIdentifier;
