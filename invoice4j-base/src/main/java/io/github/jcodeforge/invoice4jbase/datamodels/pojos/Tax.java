@@ -33,7 +33,7 @@ public class Tax {
      * BT-117
      * VAT amount.
      */
-    private BigDecimal taxAmount;
+    private MonetaryAmount taxAmount;
 
     /**
      * VAT exemption reason code.
@@ -74,11 +74,11 @@ public class Tax {
         this.taxableAmount = taxableAmount;
     }
 
-    public BigDecimal getTaxAmount() {
+    public MonetaryAmount getTaxAmount() {
         return taxAmount;
     }
 
-    public void setTaxAmount(BigDecimal taxAmount) {
+    public void setTaxAmount(MonetaryAmount taxAmount) {
         this.taxAmount = taxAmount;
     }
 

@@ -12,7 +12,7 @@ public class Seller extends Party {
      * BT-31
      * Seller VAT identifier.
      */
-    private String vatIdentifier;
+    private TaxIdentifier vatIdentifier;
 
     /**
      * BT-32
@@ -34,11 +34,11 @@ public class Seller extends Party {
         this.legalRegistrationIdentifier = legalRegistrationIdentifier;
     }
 
-    public String getVatIdentifier() {
+    public TaxIdentifier getVatIdentifier() {
         return vatIdentifier;
     }
 
-    public void setVatIdentifier(String vatIdentifier) {
+    public void setVatIdentifier(TaxIdentifier vatIdentifier) {
         this.vatIdentifier = vatIdentifier;
     }
 

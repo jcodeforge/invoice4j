@@ -6,7 +6,7 @@ public class Buyer extends Party {
      * BT-48
      * Buyer's VAT identifier.
      */
-    private String vatIdentifier;
+    private TaxIdentifier vatIdentifier;
 
     /**
      * BT-49
@@ -23,11 +23,11 @@ public class Buyer extends Party {
      */
     private String buyerReference;
 
-    public String getVatIdentifier() {
+    public TaxIdentifier getVatIdentifier() {
         return vatIdentifier;
     }
 
-    public void setVatIdentifier(String vatIdentifier) {
+    public void setVatIdentifier(TaxIdentifier vatIdentifier) {
         this.vatIdentifier = vatIdentifier;
     }
 

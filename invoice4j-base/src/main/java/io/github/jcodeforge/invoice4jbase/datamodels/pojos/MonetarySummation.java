@@ -39,7 +39,7 @@ public class MonetarySummation {
      * BT-110
      * Total VAT amount.
      */
-    private BigDecimal taxAmount;
+    private MonetaryAmount taxAmount;
 
     /**
      * BT-111
@@ -100,11 +100,11 @@ public class MonetarySummation {
         this.taxExclusiveAmount = taxExclusiveAmount;
     }
 
-    public BigDecimal getTaxAmount() {
+    public MonetaryAmount getTaxAmount() {
         return taxAmount;
     }
 
-    public void setTaxAmount(BigDecimal taxAmount) {
+    public void setTaxAmount(MonetaryAmount taxAmount) {
         this.taxAmount = taxAmount;
     }
 
