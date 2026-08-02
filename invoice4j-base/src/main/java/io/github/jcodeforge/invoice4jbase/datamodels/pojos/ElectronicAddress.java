@@ -1,5 +1,7 @@
 package io.github.jcodeforge.invoice4jbase.datamodels.pojos;
 
+import io.github.jcodeforge.invoice4jbase.exceptions.InvoiceValidationException;
+
 public class ElectronicAddress {
 
     /**
@@ -52,6 +54,12 @@ public class ElectronicAddress {
         }
 
         public ElectronicAddress build() {
+            if (electronicAddress.value == null || electronicAddress.value.isBlank()) {
+                throw new InvoiceValidationException("Electronic address value must not be null or blank.");
+            }
+            if (electronicAddress.scheme == null || electronicAddress.scheme.isBlank()) {
+                throw new InvoiceValidationException("Electronic address scheme must not be null or blank.");
+            }
             return electronicAddress;
         }
     }

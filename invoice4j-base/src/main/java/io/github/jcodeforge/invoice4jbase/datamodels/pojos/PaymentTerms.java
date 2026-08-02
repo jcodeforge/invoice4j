@@ -1,5 +1,6 @@
 package io.github.jcodeforge.invoice4jbase.datamodels.pojos;
 
+import io.github.jcodeforge.invoice4jbase.exceptions.InvoiceValidationException;
 import java.time.LocalDate;
 
 /**
@@ -63,16 +64,28 @@ public class PaymentTerms {
         }
 
         public Builder description(String description) {
+            if (description != null && description.isBlank()) {
+                throw new InvoiceValidationException("BT-20 Payment terms description must not be blank.");
+            }
             paymentTerms.description = description;
             return this;
         }
 
         public Builder discount(PaymentDiscount discount) {
+            if (discount == null) {
+                throw new InvoiceValidationException("Payment discount must not be null.");
+            }
             paymentTerms.discount = discount;
             return this;
         }
 
         public PaymentTerms build() {
+            if (paymentTerms.description != null && paymentTerms.description.isBlank()) {
+                throw new InvoiceValidationException("BT-20 Payment terms description must not be blank.");
+            }
+            if (paymentTerms.dueDate == null && paymentTerms.description == null && paymentTerms.discount == null) {
+                throw new InvoiceValidationException("Payment terms must contain at least one payment instruction.");
+            }
             return paymentTerms;
         }
     }

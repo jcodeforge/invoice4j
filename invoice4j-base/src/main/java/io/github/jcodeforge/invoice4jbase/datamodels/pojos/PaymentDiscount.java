@@ -1,5 +1,6 @@
 package io.github.jcodeforge.invoice4jbase.datamodels.pojos;
 
+import io.github.jcodeforge.invoice4jbase.exceptions.InvoiceValidationException;
 import java.math.BigDecimal;
 
 /**
@@ -65,6 +66,24 @@ public class PaymentDiscount {
         }
 
         public PaymentDiscount build() {
+            if (paymentDiscount.percentage == null && paymentDiscount.amount == null) {
+                throw new InvoiceValidationException("A discount percentage or amount must be specified.");
+            }
+            if (paymentDiscount.percentage != null) {
+                if (paymentDiscount.percentage.compareTo(BigDecimal.ZERO) <= 0) {
+                    throw new InvoiceValidationException("Discount percentage must be greater than zero.");
+                }
+                if (paymentDiscount.percentage.compareTo(BigDecimal.valueOf(100)) > 0) {
+                    throw new InvoiceValidationException("Discount percentage must not exceed 100%.");
+                }
+            }
+            if (paymentDiscount.amount != null && paymentDiscount.amount.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+                throw new InvoiceValidationException("Discount amount must be greater than zero.");
+            }
+            if (paymentDiscount.paymentDays == null || paymentDiscount.paymentDays <= 0) {
+                throw new InvoiceValidationException("Payment days must be greater than zero.");
+            }
+
             return paymentDiscount;
         }
     }

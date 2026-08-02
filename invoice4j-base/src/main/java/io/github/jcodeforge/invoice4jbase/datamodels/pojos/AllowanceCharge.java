@@ -1,7 +1,7 @@
 package io.github.jcodeforge.invoice4jbase.datamodels.pojos;
 
 import io.github.jcodeforge.invoice4jbase.datamodels.enums.TaxCategoryCode;
-
+import io.github.jcodeforge.invoice4jbase.exceptions.InvoiceValidationException;
 import java.math.BigDecimal;
 
 /**
@@ -51,7 +51,7 @@ public class AllowanceCharge {
      * BT-93 (allowance)
      * BT-142 (charge)
      */
-    private BigDecimal baseAmount;
+    private MonetaryAmount baseAmount;
 
     /**
      * Amount of allowance/charge.
@@ -59,7 +59,7 @@ public class AllowanceCharge {
      * BT-92 (allowance)
      * BT-99 (charge)
      */
-    private BigDecimal amount;
+    private MonetaryAmount amount;
 
     /**
      * VAT category.
@@ -90,11 +90,11 @@ public class AllowanceCharge {
         return percentage;
     }
 
-    public BigDecimal getBaseAmount() {
+    public MonetaryAmount getBaseAmount() {
         return baseAmount;
     }
 
-    public BigDecimal getAmount() {
+    public MonetaryAmount getAmount() {
         return amount;
     }
 
@@ -124,12 +124,12 @@ public class AllowanceCharge {
         }
 
         public Builder reasonCode(String reasonCode) {
-            allowanceCharge.reasonCode = reasonCode;
+            allowanceCharge.reasonCode = reasonCode == null ? null : reasonCode.trim();
             return this;
         }
 
         public Builder reason(String reason) {
-            allowanceCharge.reason = reason;
+            allowanceCharge.reason = reason == null ? null : reason.trim();
             return this;
         }
 
@@ -138,12 +138,12 @@ public class AllowanceCharge {
             return this;
         }
 
-        public Builder baseAmount(BigDecimal baseAmount) {
+        public Builder baseAmount(MonetaryAmount baseAmount) {
             allowanceCharge.baseAmount = baseAmount;
             return this;
         }
 
-        public Builder amount(BigDecimal amount) {
+        public Builder amount(MonetaryAmount amount) {
             allowanceCharge.amount = amount;
             return this;
         }
@@ -159,6 +159,53 @@ public class AllowanceCharge {
         }
 
         public AllowanceCharge build() {
+            if (allowanceCharge.amount == null) {
+                throw new InvoiceValidationException((allowanceCharge.charge ? "BT-99" : "BT-92")
+                        + " Allowance/charge amount is required.");
+            }
+            if (allowanceCharge.amount.getAmount().compareTo(BigDecimal.ZERO) < 0) {
+                throw new InvoiceValidationException(
+                        (allowanceCharge.charge ? "BT-99" : "BT-92") + " Allowance/charge amount must not be negative.");
+            }
+            if (allowanceCharge.reasonCode != null && allowanceCharge.reasonCode.isBlank()) {
+                throw new InvoiceValidationException((allowanceCharge.charge ? "BT-151" : "BT-95")
+                        + " Reason code must not be blank.");
+            }
+            if (allowanceCharge.reason != null && allowanceCharge.reason.isBlank()) {
+                throw new InvoiceValidationException((allowanceCharge.charge ? "BT-104" : "BT-97") + " Reason must not be blank.");
+            }
+            if (allowanceCharge.percentage != null) {
+                if (allowanceCharge.percentage.compareTo(BigDecimal.ZERO) < 0) {
+                    throw new InvoiceValidationException("Percentage must not be negative.");
+                }
+                if (allowanceCharge.percentage.compareTo(BigDecimal.valueOf(100)) > 0) {
+                    throw new InvoiceValidationException("Percentage must not exceed 100.");
+                }
+                if (allowanceCharge.baseAmount == null) {
+                    throw new InvoiceValidationException("Base amount is required when percentage is specified.");
+                }
+            }
+            if (allowanceCharge.baseAmount != null && allowanceCharge.baseAmount.getAmount().compareTo(BigDecimal.ZERO) < 0) {
+                throw new InvoiceValidationException("Base amount must not be negative.");
+            }
+            if (allowanceCharge.taxCategory == null) {
+                throw new InvoiceValidationException("VAT category is required.");
+            }
+            if (allowanceCharge.taxRate == null) {
+                throw new InvoiceValidationException("VAT rate is required.");
+            }
+
+            if (allowanceCharge.taxRate.compareTo(BigDecimal.ZERO) < 0) {
+                throw new InvoiceValidationException("VAT rate must not be negative.");
+            }
+            if (allowanceCharge.taxRate.compareTo(BigDecimal.valueOf(100)) > 0) {
+                throw new InvoiceValidationException("VAT rate must not exceed 100.");
+            }
+            if (allowanceCharge.baseAmount != null
+                    && !allowanceCharge.baseAmount.getCurrency().equals(allowanceCharge.amount.getCurrency())) {
+                throw new InvoiceValidationException("Base amount and allowance/charge amount must use the same currency.");
+            }
+
             return allowanceCharge;
         }
     }

@@ -1,6 +1,21 @@
 package io.github.jcodeforge.invoice4jbase.datamodels.pojos;
 
+import io.github.jcodeforge.invoice4jbase.exceptions.InvoiceValidationException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Buyer extends Party {
+
+    /**
+     * BT-45 Buyer identifier
+     *
+     * Identifier assigned to the seller.
+     * Examples:
+     * - Customer number
+     * - GLN
+     * - Company identifier
+     */
+    private List<PartyIdentifier> identifiers = new ArrayList<>();
 
     /**
      * BT-48
@@ -9,7 +24,7 @@ public class Buyer extends Party {
     private TaxIdentifier vatIdentifier;
 
     /**
-     * BT-49
+     * BT-47
      * Buyer's legal registration identifier.
      */
     private String legalRegistrationIdentifier;
@@ -25,6 +40,10 @@ public class Buyer extends Party {
 
     private Buyer() {
         super();
+    }
+
+    public List<PartyIdentifier> getIdentifiers() {
+        return identifiers;
     }
 
     public TaxIdentifier getVatIdentifier() {
@@ -52,11 +71,29 @@ public class Buyer extends Party {
             this.buyer = new Buyer();
         }
 
+        public Builder addIdentifier(PartyIdentifier identifier) {
+            if (identifier == null) {
+                throw new InvoiceValidationException("BT-45 Buyer identifier must not be null.");
+            }
+
+            for (PartyIdentifier existing : buyer.identifiers) {
+                if (existing.getScheme().equals(identifier.getScheme())) {
+                    throw new InvoiceValidationException("BT-45 Duplicate buyer identifier scheme: " + existing.getScheme());
+                }
+            }
+
+            buyer.identifiers.add(identifier);
+            return this;
+        }
+
         /**
          * BT-48
          * Buyer's VAT identifier.
          */
         public Builder vatIdentifier(TaxIdentifier vatIdentifier) {
+            if (vatIdentifier == null) {
+                throw new InvoiceValidationException("BT-48 Buyer VAT identifier must not be null.");
+            }
             buyer.vatIdentifier = vatIdentifier;
             return this;
         }
@@ -120,6 +157,21 @@ public class Buyer extends Party {
         }
 
         public Buyer build() {
+            if (buyer.name == null || buyer.name.isBlank()) {
+                throw new InvoiceValidationException("BT-44 Buyer name is required.");
+            }
+            if (buyer.address == null) {
+                throw new InvoiceValidationException("BG-8 Buyer postal address is required.");
+            }
+            if (buyer.legalRegistrationIdentifier != null && buyer.legalRegistrationIdentifier.isBlank()) {
+                throw new InvoiceValidationException("BT-47 Buyer legal registration identifier must not be blank.");
+            }
+            if (buyer.tradingName != null && buyer.tradingName.isBlank()) {
+                throw new InvoiceValidationException("Buyer trading name must not be blank.");
+            }
+            if (buyer.buyerReference != null && buyer.buyerReference.isBlank()) {
+                throw new InvoiceValidationException("BT-10 Buyer reference must not be blank.");
+            }
             return buyer;
         }
     }

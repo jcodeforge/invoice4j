@@ -2,6 +2,7 @@ package io.github.jcodeforge.invoice4jbase.datamodels.pojos;
 
 import io.github.jcodeforge.invoice4jbase.datamodels.enums.TaxCategoryCode;
 import io.github.jcodeforge.invoice4jbase.datamodels.enums.UnitCode;
+import io.github.jcodeforge.invoice4jbase.exceptions.InvoiceValidationException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,10 +57,10 @@ public class InvoiceLine {
     private String buyerItemIdentifier;
 
     /**
-     * BT-157
+     * BT-158
      * Standard item classification identifier.
      */
-    private String standardItemIdentifier;
+    private String itemClassificationIdentifier;
 
     /**
      * BT-153
@@ -67,10 +68,6 @@ public class InvoiceLine {
      */
     private BigDecimal quantity;
 
-    /**
-     * BT-130
-     * Unit of measure.
-     */
     private UnitCode unitCode;
 
     /**
@@ -99,7 +96,7 @@ public class InvoiceLine {
 
     /**
      * BT-131
-     * Line net amount.
+     * Invoice line net amount.
      */
     private MonetaryAmount lineExtensionAmount;
 
@@ -154,8 +151,8 @@ public class InvoiceLine {
         return buyerItemIdentifier;
     }
 
-    public String getStandardItemIdentifier() {
-        return standardItemIdentifier;
+    public String getItemClassificationIdentifier() {
+        return itemClassificationIdentifier;
     }
 
     public BigDecimal getQuantity() {
@@ -195,11 +192,11 @@ public class InvoiceLine {
     }
 
     public List<AllowanceCharge> getAllowanceCharges() {
-        return allowanceCharges;
+        return List.copyOf(allowanceCharges);
     }
 
     public List<ItemProperty> getProperties() {
-        return properties;
+        return List.copyOf(properties);
     }
 
     public static Builder builder() {
@@ -249,8 +246,8 @@ public class InvoiceLine {
             return this;
         }
 
-        public Builder standardItemIdentifier(String standardItemIdentifier) {
-            line.standardItemIdentifier = standardItemIdentifier;
+        public Builder itemClassificationIdentifier(String identifier) {
+            line.itemClassificationIdentifier = identifier;
             return this;
         }
 
@@ -304,8 +301,8 @@ public class InvoiceLine {
             return this;
         }
 
-        public Builder allowanceCharges(List<AllowanceCharge> allowanceCharges) {
-            line.allowanceCharges = new ArrayList<>(allowanceCharges);
+        public Builder allowanceCharges(List<AllowanceCharge> charges) {
+            line.allowanceCharges = new ArrayList<>(charges);
             return this;
         }
 
@@ -320,6 +317,99 @@ public class InvoiceLine {
         }
 
         public InvoiceLine build() {
+            if (line.id == null || line.id.isBlank()) {
+                throw new InvoiceValidationException("BT-126 Invoice line identifier is required.");
+            }
+            if (line.itemName == null || line.itemName.isBlank()) {
+                throw new InvoiceValidationException("BT-128 Item name is required.");
+            }
+            if (line.quantity == null) {
+                throw new InvoiceValidationException("BT-153 Invoiced quantity is required.");
+            }
+            if (line.unitCode == null) {
+                throw new InvoiceValidationException("BT-130 Unit code is required.");
+            }
+            if (line.unitPrice == null) {
+                throw new InvoiceValidationException("BT-146 Item net price is required.");
+            }
+            if (line.unitPrice.getAmount().compareTo(BigDecimal.ZERO) < 0) {
+                throw new InvoiceValidationException("BT-146 Item net price must not be negative.");
+            }
+            if (line.lineExtensionAmount == null) {
+                throw new InvoiceValidationException("BT-131 Line extension amount is required.");
+            }
+            if (line.taxCategory == null) {
+                throw new InvoiceValidationException("Invoice line VAT category is required.");
+            }
+            if (line.taxRate == null) {
+                throw new InvoiceValidationException("Invoice line VAT rate is required.");
+            }
+            if (line.taxRate.compareTo(BigDecimal.ZERO) < 0) {
+                throw new InvoiceValidationException("VAT rate must not be negative.");
+            }
+            if (line.taxRate.compareTo(new BigDecimal("100")) > 0) {
+                throw new InvoiceValidationException("VAT rate must not exceed 100."
+                );
+            }
+            if (line.objectIdentifier != null && line.objectIdentifier.isBlank()) {
+                throw new InvoiceValidationException("BT-127 Object identifier must not be blank.");
+            }
+            if (line.buyerAccountingReference != null && line.buyerAccountingReference.isBlank()) {
+                throw new InvoiceValidationException("BT-155 Buyer accounting reference must not be blank.");
+            }
+            if (line.description != null && line.description.isBlank()) {
+                throw new InvoiceValidationException("BT-129 Item description must not be blank.");
+            }
+            if (line.sellerItemIdentifier != null && line.sellerItemIdentifier.isBlank()) {
+                throw new InvoiceValidationException("Seller item identifier must not be blank.");
+            }
+            if (line.buyerItemIdentifier != null && line.buyerItemIdentifier.isBlank()) {
+                throw new InvoiceValidationException("Buyer item identifier must not be blank.");
+            }
+            if (line.itemClassificationIdentifier != null && line.itemClassificationIdentifier.isBlank()) {
+                throw new InvoiceValidationException("Standard item identifier must not be blank.");
+            }
+            if (line.priceDiscount != null && line.priceDiscount.compareTo(BigDecimal.ZERO) < 0) {
+                throw new InvoiceValidationException("Price discount must not be negative.");
+            }
+            if (line.priceDiscountPercentage != null) {
+                if (line.priceDiscountPercentage.compareTo(BigDecimal.ZERO) < 0) {
+                    throw new InvoiceValidationException("Price discount percentage must not be negative.");
+                }
+                if (line.priceDiscountPercentage.compareTo(new BigDecimal("100")) > 0) {
+                    throw new InvoiceValidationException("Price discount percentage must not exceed 100.");
+                }
+            }
+            if (line.baseQuantity != null && line.baseQuantity.compareTo(BigDecimal.ZERO) <= 0) {
+                throw new InvoiceValidationException("BT-149 Base quantity must be greater than zero.");
+            }
+            if (line.priceDiscountPercentage != null && line.baseQuantity == null) {
+                throw new InvoiceValidationException(
+                        "BT-149 Base quantity is required when a discount percentage is specified.");
+            }
+            if (line.priceDiscount != null && line.unitPrice == null) {
+                throw new InvoiceValidationException("Unit price is required when a discount amount is specified.");
+            }
+            if (line.lineExtensionAmount.getAmount().compareTo(BigDecimal.ZERO) < 0) {
+                throw new InvoiceValidationException("Line extension amount must not be negative.");
+            }
+            if (line.quantity.compareTo(BigDecimal.ZERO) <= 0) {
+                throw new InvoiceValidationException("BT-153 Quantity must be greater than zero."
+                );
+            }
+
+            for (AllowanceCharge allowanceCharge : line.allowanceCharges) {
+                if (allowanceCharge == null) {
+                    throw new InvoiceValidationException("Invoice line contains a null allowance/charge.");
+                }
+            }
+
+            for (ItemProperty property : line.properties) {
+                if (property == null) {
+                    throw new InvoiceValidationException("Invoice line contains a null item property.");
+                }
+            }
+
             return line;
         }
     }

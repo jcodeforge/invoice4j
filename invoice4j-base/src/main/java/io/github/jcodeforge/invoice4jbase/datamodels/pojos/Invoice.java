@@ -400,33 +400,21 @@ public final class Invoice {
         }
 
         public Builder invoiceNumber(String invoiceNumber) {
-            if (invoiceNumber == null || invoiceNumber.isBlank()) {
-                throw new InvoiceValidationException("BT-1 Invoice identifier must not be null or blank.");
-            }
             this.invoiceNumber = invoiceNumber;
             return this;
         }
 
         public Builder issueDate(LocalDate issueDate) {
-            if (issueDate == null) {
-                throw new InvoiceValidationException("BT-2 Issue date must not be null.");
-            }
             this.issueDate = issueDate;
             return this;
         }
 
         public Builder documentTypeCode(DocumentTypeCode documentTypeCode) {
-            if (documentTypeCode == null) {
-                throw new InvoiceValidationException("BT-3 Invoice type code must not be null.");
-            }
             this.documentTypeCode = documentTypeCode;
             return this;
         }
 
         public Builder currency(CurrencyCode currency) {
-            if (currency == null) {
-                throw new InvoiceValidationException("BT-5 Invoice currency code must not be null.");
-            }
             this.currency = currency;
             return this;
         }
@@ -437,28 +425,16 @@ public final class Invoice {
         }
 
         public Builder taxPointDate(LocalDate taxPointDate) {
-            if (taxPointDate != null && taxPointDateCode != null) {
-                throw new InvoiceValidationException("BT-7 and BT-8 cannot both be specified.");
-            }
             this.taxPointDate = taxPointDate;
             return this;
         }
 
         public Builder taxPointDateCode(String taxPointDateCode) {
-            if (taxPointDateCode != null && taxPointDate != null) {
-                throw new InvoiceValidationException("BT-7 and BT-8 cannot both be specified.");
-            }
             this.taxPointDateCode = taxPointDateCode;
             return this;
         }
 
         public Builder dueDate(LocalDate dueDate) {
-            if (dueDate == null) {
-                throw new InvoiceValidationException("BT-9 Payment due date must not be null.");
-            }
-            if (issueDate != null && dueDate.isBefore(issueDate)) {
-                throw new InvoiceValidationException("BT-9 Payment due date must not be before BT-2 issue date.");
-            }
             this.dueDate = dueDate;
             return this;
         }
@@ -489,15 +465,6 @@ public final class Invoice {
         }
 
         public Builder invoicePeriod(InvoicePeriod invoicePeriod) {
-            if (invoicePeriod == null) {
-                throw new InvoiceValidationException("Invoice period must not be null.");
-            }
-            if (invoicePeriod.getStartDate() == null || invoicePeriod.getEndDate() == null) {
-                throw new InvoiceValidationException("Invoice period start date and invoice period end date must not be null.");
-            }
-            if (invoicePeriod.getStartDate().isAfter(invoicePeriod.getEndDate())) {
-                throw new InvoiceValidationException("BT-73 Invoice period start date must not be after BT-74 invoice period end date.");
-            }
             this.invoicePeriod = invoicePeriod;
             return this;
         }
@@ -564,17 +531,11 @@ public final class Invoice {
         }
 
         public Builder seller(Seller seller) {
-            if (seller == null) {
-                throw new InvoiceValidationException("BG-4 Seller must not be null.");
-            }
             this.seller = seller;
             return this;
         }
 
         public Builder buyer(Buyer buyer) {
-            if (buyer == null) {
-                throw new InvoiceValidationException("BG-7 Buyer must not be null.");
-            }
             this.buyer = buyer;
             return this;
         }
@@ -590,22 +551,6 @@ public final class Invoice {
         }
 
         public Builder delivery(Delivery delivery) {
-            if (delivery == null) {
-                throw new InvoiceValidationException("BT-72 BT-75 Delivery should not be null.");
-            }
-            if (delivery.getActualDeliveryDate() == null || delivery.getDeliveryPeriodStartDate() == null ||
-                    delivery.getDeliveryPeriodEndDate() == null) {
-                throw new InvoiceValidationException("BT-72 BT-75 Actual delivery date, delivery period start and delivery period end date should not be null.");
-            }
-            if (delivery.getActualDeliveryDate().isBefore(delivery.getDeliveryPeriodStartDate())) {
-                throw new InvoiceValidationException("BT-72 Actual delivery date should not be before BT-75 delivery period start.");
-            }
-            if (delivery.getActualDeliveryDate().isAfter(delivery.getDeliveryPeriodEndDate())) {
-                throw new InvoiceValidationException("BT-72 Actual delivery date should not be after BT-76 delivery period end.");
-            }
-            if (delivery.getDeliveryPeriodStartDate().isAfter(delivery.getDeliveryPeriodEndDate())) {
-                throw new InvoiceValidationException("BT-75 Delivery period start date must not be after BT-76 delivery period end date.");
-            }
             this.delivery = delivery;
             return this;
         }
@@ -616,9 +561,6 @@ public final class Invoice {
         }
 
         public Builder paymentTerms(PaymentTerms paymentTerms) {
-            if (paymentTerms == null) {
-                throw new InvoiceValidationException("Payment terms should not be null.");
-            }
             this.paymentTerms = paymentTerms;
             return this;
         }
@@ -632,10 +574,6 @@ public final class Invoice {
         }
 
         public Builder monetarySummation(MonetarySummation monetarySummation) {
-            if (monetarySummation == null) {
-                throw new InvoiceValidationException("BG-22 Monetary summation must not be null.");
-            }
-
             this.monetarySummation = monetarySummation;
             return this;
         }
@@ -667,7 +605,7 @@ public final class Invoice {
                 throw new InvoiceValidationException("Invoice line must not be null.");
             }
             if (line.getQuantity() == null || line.getQuantity().signum() <= 0) {
-                throw new InvoiceValidationException("BT-129 Quantity must be greater than zero.");
+                throw new InvoiceValidationException("BT-153 Quantity must be greater than zero.");
             }
             if (line.getUnitPrice() == null) {
                 throw new InvoiceValidationException("BT-146 Unit price is required.");
@@ -692,11 +630,14 @@ public final class Invoice {
                     .filter(ac -> !ac.isCharge())
                     .map(AllowanceCharge::getAmount)
                     .filter(Objects::nonNull)
+                    .map(MonetaryAmount::getAmount)
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
 
             BigDecimal chargeTotal = allowanceCharges.stream()
                     .filter(AllowanceCharge::isCharge)
                     .map(AllowanceCharge::getAmount)
+                    .filter(Objects::nonNull)
+                    .map(MonetaryAmount::getAmount)
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
 
             BigDecimal taxExclusiveAmount = lineExtensionTotal
@@ -707,28 +648,50 @@ public final class Invoice {
                 throw new InvoiceValidationException("BT-106 Line extension amount mismatch.");
             }
 
-            if (allowanceTotal.compareTo(monetarySummation.getAllowanceTotalAmount()) != 0) {
+            if (allowanceTotal.compareTo(monetarySummation.getAllowanceTotalAmount().getAmount()) != 0) {
                 throw new InvoiceValidationException("BT-107 Allowance total amount mismatch.");
             }
 
-            if (chargeTotal.compareTo(monetarySummation.getChargeTotalAmount()) != 0) {
+            if (chargeTotal.compareTo(monetarySummation.getChargeTotalAmount().getAmount()) != 0) {
                 throw new InvoiceValidationException("BT-108 Charge total amount mismatch.");
             }
 
-            if (taxExclusiveAmount.compareTo(monetarySummation.getTaxExclusiveAmount()) != 0) {
+            if (taxExclusiveAmount.compareTo(monetarySummation.getTaxExclusiveAmount().getAmount()) != 0) {
                 throw new InvoiceValidationException("BT-109 Tax exclusive amount mismatch.");
             }
         }
 
         public Invoice build() {
-            if (invoiceNumber == null) {
-                throw new InvoiceValidationException("BT-1 Invoice number is required.");
+            if (invoiceNumber == null || invoiceNumber.isBlank()) {
+                throw new InvoiceValidationException("BT-1 Invoice identifier must not be null or blank.");
             }
             if (issueDate == null) {
-                throw new InvoiceValidationException("BT-2 Issue date is required.");
+                throw new InvoiceValidationException("BT-2 Issue date must not be null.");
             }
             if (documentTypeCode == null) {
-                throw new InvoiceValidationException("BT-3 Invoice type code is required.");
+                throw new InvoiceValidationException("BT-3 Invoice type code must not be null.");
+            }
+            if (taxPointDate != null && taxPointDateCode != null) {
+                throw new InvoiceValidationException("BT-7 and BT-8 cannot both be specified.");
+            }
+            if (delivery == null) {
+                throw new InvoiceValidationException("BT-72 BT-75 Delivery should not be null.");
+            }
+            if (delivery.getActualDeliveryDate() == null || delivery.getDeliveryPeriodStartDate() == null ||
+                    delivery.getDeliveryPeriodEndDate() == null) {
+                throw new InvoiceValidationException("BT-72 BT-75 Actual delivery date, delivery period start and delivery period end date should not be null.");
+            }
+            if (delivery.getActualDeliveryDate().isBefore(delivery.getDeliveryPeriodStartDate())) {
+                throw new InvoiceValidationException("BT-72 Actual delivery date should not be before BT-75 delivery period start.");
+            }
+            if (delivery.getActualDeliveryDate().isAfter(delivery.getDeliveryPeriodEndDate())) {
+                throw new InvoiceValidationException("BT-72 Actual delivery date should not be after BT-76 delivery period end.");
+            }
+            if (delivery.getDeliveryPeriodStartDate().isAfter(delivery.getDeliveryPeriodEndDate())) {
+                throw new InvoiceValidationException("BT-75 Delivery period start date must not be after BT-76 delivery period end date.");
+            }
+            if (dueDate != null && dueDate.isBefore(issueDate)) {
+                throw new InvoiceValidationException("BT-9 Payment due date must not be before BT-2 issue date.");
             }
             if (currency == null) {
                 throw new InvoiceValidationException("BT-5 Currency is required.");
@@ -747,6 +710,15 @@ public final class Invoice {
             }
             if (paymentTerms != null && paymentTerms.getDueDate() != null && paymentTerms.getDueDate().isBefore(issueDate)) {
                 throw new InvoiceValidationException("BT-9 Payment due date must not be before BT-2 Issue date.");
+            }
+            if (invoicePeriod == null) {
+                throw new InvoiceValidationException("Invoice period must not be null.");
+            }
+            if (invoicePeriod.getStartDate() == null || invoicePeriod.getEndDate() == null) {
+                throw new InvoiceValidationException("Invoice period start date and invoice period end date must not be null.");
+            }
+            if (invoicePeriod.getStartDate().isAfter(invoicePeriod.getEndDate())) {
+                throw new InvoiceValidationException("BT-73 Invoice period start date must not be after BT-74 invoice period end date.");
             }
 
             for (Tax tax : taxes) {

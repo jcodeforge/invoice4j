@@ -1,6 +1,7 @@
 package io.github.jcodeforge.invoice4jbase.datamodels.pojos;
 
 import io.github.jcodeforge.invoice4jbase.datamodels.enums.LanguageCode;
+import io.github.jcodeforge.invoice4jbase.exceptions.InvoiceValidationException;
 
 /**
  * BG-1
@@ -60,12 +61,12 @@ public class Note {
         }
 
         public Builder text(String text) {
-            note.text = text;
+            note.text = text == null ? null : text.trim();
             return this;
         }
 
         public Builder subjectCode(String subjectCode) {
-            note.subjectCode = subjectCode;
+            note.subjectCode = subjectCode == null ? null : subjectCode.trim();
             return this;
         }
 
@@ -75,6 +76,13 @@ public class Note {
         }
 
         public Note build() {
+            if (note.text == null || note.text.isBlank()) {
+                throw new InvoiceValidationException("BT-22 Invoice note text is required.");
+            }
+            if (note.subjectCode != null && note.subjectCode.isBlank()) {
+                throw new InvoiceValidationException("BT-21 Invoice note subject code must not be blank.");
+            }
+
             return note;
         }
     }

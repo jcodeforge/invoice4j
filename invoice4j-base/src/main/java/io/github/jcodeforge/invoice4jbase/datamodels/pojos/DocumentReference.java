@@ -1,6 +1,8 @@
 package io.github.jcodeforge.invoice4jbase.datamodels.pojos;
 
 import io.github.jcodeforge.invoice4jbase.datamodels.enums.DocumentTypeCode;
+import io.github.jcodeforge.invoice4jbase.exceptions.InvoiceValidationException;
+
 import java.net.URI;
 import java.time.LocalDate;
 
@@ -131,6 +133,31 @@ public class DocumentReference {
         }
 
         public DocumentReference build() {
+            if (documentReference.id == null || documentReference.id.isBlank()) {
+                throw new InvoiceValidationException("Document reference identifier is required.");
+            }
+            // Optional strings
+            if (documentReference.name != null && documentReference.name.isBlank()) {
+                throw new InvoiceValidationException("Document reference name must not be blank.");
+            }
+            if (documentReference.description != null && documentReference.description.isBlank()) {
+                throw new InvoiceValidationException("Document reference description must not be blank.");
+            }
+            if (documentReference.typeCode == null) {
+                throw new InvoiceValidationException("Document reference type code is required.");
+            }
+            if (documentReference.issueDate != null && documentReference.issueDate.isAfter(LocalDate.now())) {
+                throw new InvoiceValidationException("Document reference issue date must not be in the future.");
+            }
+            if (documentReference.uri != null) {
+                if (!documentReference.uri.isAbsolute()) {
+                    throw new InvoiceValidationException("Document reference URI must be absolute.");
+                }
+                if (documentReference.uri.getScheme() == null) {
+                    throw new InvoiceValidationException("Document reference URI scheme is required.");
+                }
+            }
+
             return documentReference;
         }
     }

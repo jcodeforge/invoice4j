@@ -1,6 +1,7 @@
 package io.github.jcodeforge.invoice4jbase.datamodels.pojos;
 
 import io.github.jcodeforge.invoice4jbase.datamodels.enums.PaymentMeansCode;
+import io.github.jcodeforge.invoice4jbase.exceptions.InvoiceValidationException;
 
 /**
  * BG-16
@@ -194,6 +195,67 @@ public class Payment {
         }
 
         public Payment build() {
+            if (payment.meansCode == null) {
+                throw new InvoiceValidationException("BT-81 Payment means type code is required.");
+            }
+            if (payment.meansDescription != null && payment.meansDescription.isBlank()) {
+                throw new InvoiceValidationException("BT-82 Payment means description must not be blank.");
+            }
+            if (payment.remittanceInformation != null && payment.remittanceInformation.isBlank()) {
+                throw new InvoiceValidationException("BT-83 Remittance information must not be blank.");
+            }
+            if (payment.accountIdentifier != null && payment.accountIdentifier.isBlank()) {
+                throw new InvoiceValidationException("BT-84 Payment account identifier must not be blank.");
+            }
+            if (payment.accountName != null && payment.accountName.isBlank()) {
+                throw new InvoiceValidationException("BT-85 Payment account name must not be blank.");
+            }
+            if (payment.serviceProviderIdentifier != null && payment.serviceProviderIdentifier.isBlank()) {
+                throw new InvoiceValidationException("BT-86 Payment service provider identifier must not be blank.");
+            }
+            if (payment.paymentCardIdentifier != null && payment.paymentCardIdentifier.isBlank()) {
+                throw new InvoiceValidationException("BT-87 Payment card identifier must not be blank.");
+            }
+            if (payment.paymentCardHolderName != null && payment.paymentCardHolderName.isBlank()) {
+                throw new InvoiceValidationException("BT-88 Payment card holder name must not be blank.");
+            }
+            if (payment.mandateReference != null && payment.mandateReference.isBlank()) {
+                throw new InvoiceValidationException("BT-89 Mandate reference must not be blank.");
+            }
+            // Credit transfer requires bank account
+            if ((payment.meansCode == PaymentMeansCode.CREDIT_TRANSFER
+                    || payment.meansCode == PaymentMeansCode.SEPA_CREDIT_TRANSFER) && payment.bankAccount == null) {
+                throw new InvoiceValidationException("A bank account is required for credit transfer payment.");
+            }
+            // Direct debit requires bank account and mandate reference
+            if (payment.meansCode == PaymentMeansCode.SEPA_DIRECT_DEBIT) {
+                if (payment.bankAccount == null) {
+                    throw new InvoiceValidationException("A bank account is required for SEPA direct debit.");
+                }
+                if (payment.mandateReference == null || payment.mandateReference.isBlank()) {
+                    throw new InvoiceValidationException("BT-89 Mandate reference is required for SEPA direct debit.");
+                }
+            }
+            // Card payment requires card identifier
+            if (payment.meansCode == PaymentMeansCode.BANK_CARD) {
+                if (payment.paymentCardIdentifier == null || payment.paymentCardIdentifier.isBlank()) {
+                    throw new InvoiceValidationException("BT-87 Payment card identifier is required for card payments.");
+                }
+            }
+            if (payment.meansCode == PaymentMeansCode.BANK_CARD && payment.bankAccount != null) {
+                throw new InvoiceValidationException("Bank account must not be specified for bank card payments.");
+            }
+            if (payment.meansCode == PaymentMeansCode.CASH && payment.bankAccount != null) {
+                throw new InvoiceValidationException("Bank account is not applicable for cash payments.");
+            }
+            if (payment.meansCode == PaymentMeansCode.CASH && payment.paymentCardIdentifier != null) {
+                throw new InvoiceValidationException("Payment card information is not applicable for cash payments.");
+            }
+            if (payment.meansCode == PaymentMeansCode.CREDIT_TRANSFER && payment.remittanceInformation != null
+                    && payment.remittanceInformation.length() > 140) {
+                throw new InvoiceValidationException("BT-83 Remittance information exceeds maximum length.");
+            }
+
             return payment;
         }
     }

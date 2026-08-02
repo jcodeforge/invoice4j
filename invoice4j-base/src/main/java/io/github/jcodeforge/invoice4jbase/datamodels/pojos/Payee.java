@@ -1,5 +1,9 @@
 package io.github.jcodeforge.invoice4jbase.datamodels.pojos;
 
+import io.github.jcodeforge.invoice4jbase.exceptions.InvoiceValidationException;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Payee party.
  *
@@ -11,16 +15,16 @@ public class Payee extends Party {
     /**
      * BT-60
      *
-     * Payee identifier.
+     * Payee identifiers.
      */
-    private PartyIdentifier identifier;
+    private List<PartyIdentifier> identifiers = new ArrayList<>();
 
     private Payee() {
         super();
     }
 
-    public PartyIdentifier getIdentifier() {
-        return identifier;
+    public List<PartyIdentifier> getIdentifiers() {
+        return identifiers;
     }
 
     public static Builder builder() {
@@ -40,8 +44,18 @@ public class Payee extends Party {
          *
          * Payee identifier.
          */
-        public Builder identifier(PartyIdentifier identifier) {
-            payee.identifier = identifier;
+        public Builder addIdentifier(PartyIdentifier identifier) {
+            if (identifier == null) {
+                throw new InvoiceValidationException("BT-60 Payee identifier must not be null.");
+            }
+
+            for (PartyIdentifier existing : payee.identifiers) {
+                if (existing.getScheme().equals(identifier.getScheme())) {
+                    throw new InvoiceValidationException("BT-60 Duplicate payee identifier scheme: " + existing.getScheme());
+                }
+            }
+
+            payee.identifiers.add(identifier);
             return this;
         }
 
@@ -86,6 +100,12 @@ public class Payee extends Party {
         }
 
         public Payee build() {
+            if (payee.name == null || payee.name.isBlank()) {
+                throw new InvoiceValidationException("BT-59 Payee name is required.");
+            }
+            if (payee.tradingName != null && payee.tradingName.isBlank()) {
+                throw new InvoiceValidationException("Payee trading name must not be blank.");
+            }
             return payee;
         }
     }

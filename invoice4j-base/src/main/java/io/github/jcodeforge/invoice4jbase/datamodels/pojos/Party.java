@@ -9,7 +9,7 @@ package io.github.jcodeforge.invoice4jbase.datamodels.pojos;
  * - Payee
  * - ShipTo
  */
-public class Party {
+public abstract class Party {
 
     /**
      * Party name.

@@ -1,6 +1,7 @@
 package io.github.jcodeforge.invoice4jbase.datamodels.pojos;
 
 import io.github.jcodeforge.invoice4jbase.datamodels.enums.TaxIdentifierType;
+import io.github.jcodeforge.invoice4jbase.exceptions.InvoiceValidationException;
 
 public class TaxIdentifier {
 
@@ -42,6 +43,12 @@ public class TaxIdentifier {
         }
 
         public TaxIdentifier build() {
+            if (taxIdentifier.value == null || taxIdentifier.value.isBlank()) {
+                throw new InvoiceValidationException("Tax identifier value must not be null or blank.");
+            }
+            if (taxIdentifier.type == null) {
+                throw new InvoiceValidationException("Tax identifier type must not be null.");
+            }
             return taxIdentifier;
         }
     }

@@ -1,6 +1,8 @@
 package io.github.jcodeforge.invoice4jbase.datamodels.pojos;
 
+import io.github.jcodeforge.invoice4jbase.exceptions.InvoiceValidationException;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public class InvoicePeriod {
     /**
@@ -31,6 +33,18 @@ public class InvoicePeriod {
      */
     public boolean isDefined() {
         return startDate != null && endDate != null;
+    }
+
+    public boolean isEmpty() {
+        return startDate == null && endDate == null;
+    }
+
+    public long lengthInDays() {
+        if (!isDefined()) {
+            return 0;
+        }
+
+        return ChronoUnit.DAYS.between(startDate, endDate) + 1;
     }
 
     /**
@@ -67,6 +81,15 @@ public class InvoicePeriod {
         }
 
         public InvoicePeriod build() {
+            if ((period.startDate == null) != (period.endDate == null)) {
+                throw new InvoiceValidationException("BT-73 and BT-74 must either both be specified or both be omitted.");
+            }
+            if (period.startDate != null) {
+                if (period.startDate.isAfter(period.endDate)) {
+                    throw new InvoiceValidationException("BT-73 Invoice period start date must not be after BT-74 invoice period end date.");
+                }
+            }
+
             return period;
         }
     }

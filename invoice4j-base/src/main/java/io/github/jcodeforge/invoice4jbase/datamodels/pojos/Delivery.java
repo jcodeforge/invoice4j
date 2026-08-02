@@ -1,5 +1,6 @@
 package io.github.jcodeforge.invoice4jbase.datamodels.pojos;
 
+import io.github.jcodeforge.invoice4jbase.exceptions.InvoiceValidationException;
 import java.time.LocalDate;
 
 /**
@@ -113,6 +114,34 @@ public class Delivery {
         }
 
         public Delivery build() {
+            if ((delivery.deliveryPeriodStartDate == null) != (delivery.deliveryPeriodEndDate == null)) {
+                throw new InvoiceValidationException("BT-73 and BT-74 must either both be present or both be absent.");
+            }
+            if (delivery.deliveryPeriodStartDate != null
+                    && delivery.deliveryPeriodStartDate.isAfter(delivery.deliveryPeriodEndDate)) {
+                throw new InvoiceValidationException("BT-73 Delivery period start date must not be after BT-74 Delivery period end date.");
+            }
+            if (delivery.actualDeliveryDate != null && delivery.deliveryPeriodStartDate != null) {
+                if (delivery.actualDeliveryDate.isBefore(delivery.deliveryPeriodStartDate)) {
+                    throw new InvoiceValidationException(
+                            "BT-72 Actual delivery date must not be before BT-73 Delivery period start.");
+                }
+                if (delivery.actualDeliveryDate.isAfter(delivery.deliveryPeriodEndDate)) {
+                    throw new InvoiceValidationException(
+                            "BT-72 Actual delivery date must not be after BT-74 Delivery period end.");
+                }
+            }
+            if (delivery.actualDeliveryDate == null && delivery.deliveryPeriodStartDate == null
+                    && delivery.deliveryPeriodEndDate == null) {
+                throw new InvoiceValidationException("BG-14 Delivery must contain at least one delivery date.");
+            }
+            if (delivery.deliveryNoteReference != null && delivery.deliveryNoteReference.isBlank()) {
+                throw new InvoiceValidationException("Delivery note reference must not be blank.");
+            }
+            if (delivery.shipTo == null && delivery.address == null) {
+                throw new InvoiceValidationException("Delivery must contain either Ship-to party or delivery address.");
+            }
+
             return delivery;
         }
     }

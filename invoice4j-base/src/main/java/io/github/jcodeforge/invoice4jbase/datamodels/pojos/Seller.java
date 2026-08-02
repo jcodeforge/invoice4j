@@ -1,5 +1,7 @@
 package io.github.jcodeforge.invoice4jbase.datamodels.pojos;
 
+import io.github.jcodeforge.invoice4jbase.exceptions.InvoiceValidationException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,12 +89,15 @@ public class Seller extends Party {
          * Seller identifier.
          */
         public Builder addIdentifier(PartyIdentifier identifier) {
+            if (identifier == null) {
+                throw new InvoiceValidationException("BT-29 Seller identifier must not be null");
+            }
+            for (PartyIdentifier existing : seller.identifiers) {
+                if (existing.getScheme().equals(identifier.getScheme())) {
+                    throw new InvoiceValidationException("BT-29 Duplicate seller identifier scheme: " + existing.getScheme());
+                }
+            }
             seller.identifiers.add(identifier);
-            return this;
-        }
-
-        public Builder identifiers(List<PartyIdentifier> identifiers) {
-            seller.identifiers = new ArrayList<>(identifiers);
             return this;
         }
 
@@ -110,6 +115,9 @@ public class Seller extends Party {
          * Seller VAT identifier.
          */
         public Builder vatIdentifier(TaxIdentifier vatIdentifier) {
+            if (vatIdentifier == null) {
+                throw new InvoiceValidationException("BT-31 Seller VAT identifier must not be null.");
+            }
             seller.vatIdentifier = vatIdentifier;
             return this;
         }
@@ -136,6 +144,9 @@ public class Seller extends Party {
          * Party name.
          */
         public Builder name(String name) {
+            if (name == null || name.isBlank()) {
+                throw new InvoiceValidationException("BT-27 Seller name is required.");
+            }
             seller.name = name;
             return this;
         }
@@ -160,6 +171,9 @@ public class Seller extends Party {
          * Postal address.
          */
         public Builder address(Address address) {
+            if (address == null) {
+                throw new InvoiceValidationException("BG-5 Seller postal address is required.");
+            }
             seller.address = address;
             return this;
         }
@@ -173,6 +187,21 @@ public class Seller extends Party {
         }
 
         public Seller build() {
+            if (seller.name == null || seller.name.isBlank()) {
+                throw new InvoiceValidationException("BT-27 Seller name is required.");
+            }
+            if (seller.address == null) {
+                throw new InvoiceValidationException("BG-5 Seller postal address is required.");
+            }
+            if (seller.taxRegistrationIdentifier != null && seller.taxRegistrationIdentifier.isBlank()) {
+                throw new InvoiceValidationException("BT-32 Tax registration identifier value must not be null or blank.");
+            }
+            if (seller.legalRegistrationIdentifier != null && seller.legalRegistrationIdentifier.isBlank()) {
+                throw new InvoiceValidationException("BT-30 Legal registration identifier value must not be null or blank.");
+            }
+            if (seller.legalInformation != null && seller.legalInformation.isBlank()) {
+                throw new InvoiceValidationException("BT-33 Legal information value must not be null or blank.");
+            }
             return seller;
         }
     }

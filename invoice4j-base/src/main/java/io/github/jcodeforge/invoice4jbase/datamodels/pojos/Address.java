@@ -1,6 +1,7 @@
 package io.github.jcodeforge.invoice4jbase.datamodels.pojos;
 
 import io.github.jcodeforge.invoice4jbase.datamodels.enums.CountryCode;
+import io.github.jcodeforge.invoice4jbase.exceptions.InvoiceValidationException;
 
 /**
  * Postal address.
@@ -123,6 +124,18 @@ public class Address {
         }
 
         public Address build() {
+            if (address.street == null || address.street.isBlank()) {
+                throw new InvoiceValidationException("BT-35 / BT-50 / BT-61 / BT-75 street is required.");
+            }
+            if (address.city == null || address.city.isBlank()) {
+                throw new InvoiceValidationException("BT-36 / BT-51 / BT-62 / BT-76 city is required.");
+            }
+            if (address.postcode == null || address.postcode.isBlank()) {
+                throw new InvoiceValidationException("BT-38 / BT-53 / BT-64 / BT-78 post code is required.");
+            }
+            if (address.countryCode == null) {
+                throw new InvoiceValidationException("BT-40 / BT-55 / BT-66 / BT-80 country code is required.");
+            }
             return address;
         }
     }

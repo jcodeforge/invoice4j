@@ -1,5 +1,7 @@
 package io.github.jcodeforge.invoice4jbase.datamodels.pojos;
 
+import io.github.jcodeforge.invoice4jbase.exceptions.InvoiceValidationException;
+
 /**
  * Identifier scheme.
  *
@@ -38,6 +40,7 @@ public class IdentifierScheme {
     public String getName() {
         return name;
     }
+
     public static Builder builder() {
         return new Builder();
     }
@@ -50,17 +53,32 @@ public class IdentifierScheme {
             this.identifierScheme = new IdentifierScheme();
         }
 
-        public Builder value(String value) {
-            identifierScheme.identifier = value;
+        public Builder value(String identifier) {
+            identifierScheme.identifier = identifier == null ? null : identifier.trim();
             return this;
         }
 
         public Builder name(String name) {
-            identifierScheme.name = name;
+            identifierScheme.name = name == null ? null : name.trim();
             return this;
         }
 
         public IdentifierScheme build() {
+            if (identifierScheme.identifier == null || identifierScheme.identifier.isBlank()) {
+                throw new InvoiceValidationException("Identifier scheme code is required.");
+            }
+            if (identifierScheme.identifier.length() > 64) {
+                throw new InvoiceValidationException("Identifier scheme code is too long.");
+            }
+            if (identifierScheme.name != null) {
+                if (identifierScheme.name.isBlank()) {
+                    throw new InvoiceValidationException("Identifier scheme name must not be blank.");
+                }
+                if (identifierScheme.name.length() > 256) {
+                    throw new InvoiceValidationException("Identifier scheme name is too long.");
+                }
+            }
+
             return identifierScheme;
         }
     }

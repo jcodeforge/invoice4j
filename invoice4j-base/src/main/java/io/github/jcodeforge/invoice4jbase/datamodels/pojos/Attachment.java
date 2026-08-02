@@ -1,7 +1,15 @@
 package io.github.jcodeforge.invoice4jbase.datamodels.pojos;
 
+import io.github.jcodeforge.invoice4jbase.exceptions.InvoiceValidationException;
 import java.net.URI;
 
+/**
+ * Embedded or externally referenced document attachment.
+ *
+ * Supports either:
+ * - embedded binary content
+ * - an external URI
+ */
 public class Attachment {
     /**
      * File name.
@@ -35,7 +43,7 @@ public class Attachment {
     }
 
     public byte[] getContent() {
-        return content;
+        return content == null ? null : content.clone();
     }
 
     public URI getUri() {
@@ -75,6 +83,30 @@ public class Attachment {
         }
 
         public Attachment build() {
+            if (attachment.fileName == null || attachment.fileName.isBlank()) {
+                throw new InvoiceValidationException("Attachment file name is required.");
+            }
+            if (attachment.mimeType == null) {
+                throw new InvoiceValidationException("Attachment MIME type is required.");
+            }
+            // Either embedded content or external URI
+            if (attachment.content == null && attachment.uri == null) {
+                throw new InvoiceValidationException("Either attachment content or a URI must be provided.");
+            }
+            // Not both
+            if (attachment.content != null && attachment.uri != null) {
+                throw new InvoiceValidationException("Attachment cannot contain both embedded content and a URI.");
+            }
+            // Embedded content
+            if (attachment.content != null && attachment.content.length == 0) {
+                throw new InvoiceValidationException("Attachment content must not be empty.");
+            }
+            if (attachment.uri != null) {
+                if (!attachment.uri.isAbsolute()) {
+                    throw new InvoiceValidationException("Attachment URI must be absolute.");
+                }
+            }
+
             return attachment;
         }
     }
