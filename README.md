@@ -13,14 +13,12 @@ The project provides a shared invoice domain model and support for multiple e-in
 
 ## Features
 
-- Common invoice domain model
-- Read electronic invoices
-- Generate electronic invoices
-- Validate invoice documents
-- Convert between invoice formats
-- Modular architecture
-- Pure Java
-- Maven Central distribution
+- EN 16931 compliant domain model
+- ZUGFeRD / Factur-X support
+- XRechnung support
+- Built-in invoice calculation engine
+- XML validation
+- Pure Java, no external services
 
 ---
 
@@ -30,6 +28,22 @@ The project provides a shared invoice domain model and support for multiple e-in
 - XRechnung
 - UBL (planned)
 - PEPPOL (planned)
+
+---
+
+## Invoice Calculation Engine
+
+`invoice4j` contains a built-in calculation engine that automatically derives invoice totals according to EN 16931.
+
+### Features
+
+- Calculates invoice line totals (BT-131)
+- Supports fixed and percentage discounts
+- Supports line and document level allowances/charges
+- Calculates VAT breakdowns (BG-23)
+- Calculates invoice monetary summation (BG-22)
+- Centralized monetary arithmetic and rounding
+- Validates calculation consistency
 
 ---
 
@@ -63,17 +77,17 @@ Invoice invoice = Invoice.builder()
 
 ## Roadmap
 
-| Version   | Milestone | Status |
-|-----------|-----------|--------|
-| v0.1.0    | Core Model | In Progress |
-| v0.2.0    | CII XML | Planned |
-| v0.3.0    | ZUGFeRD | Planned |
-| v0.4.0    | XRechnung | Planned |
-| v1.0.0    | Public Release | Planned |
-| v1.1.0    | PEPPOL Support | Planned |
-| v1.2.0    | Additional European e-Invoice Formats | Planned |
-| v1.3.0    | Streaming APIs | Planned |
-| v1.4.0    | Digital Signatures (XAdES/PAdES) | Planned |
+| Version   | Milestone                               | Status |
+|-----------|-----------------------------------------|--------|
+| v0.1.0    | Core Model - Invoice calculation engine | In Progress |
+| v0.2.0    | CII XML                                 | Planned |
+| v0.3.0    | ZUGFeRD                                 | Planned |
+| v0.4.0    | XRechnung                               | Planned |
+| v1.0.0    | Public Release                          | Planned |
+| v1.1.0    | PEPPOL Support                          | Planned |
+| v1.2.0    | Additional European e-Invoice Formats   | Planned |
+| v1.3.0    | Streaming APIs                          | Planned |
+| v1.4.0    | Digital Signatures (XAdES/PAdES)        | Planned |
 
 See the **GitHub Milestones** for the detailed implementation plan and progress.
 
