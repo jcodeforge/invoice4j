@@ -9,12 +9,28 @@ import java.util.Objects;
 /**
  * Calculates all derived values of a single invoice line.
  *
- * Computes:
- * - effective unit price
- * - BT-131 Line Extension Amount
+ * <p>The calculator computes values defined by EN 16931 that can be derived
+ * from the invoice line input data.</p>
+ *
+ * <p>The following values are calculated:</p>
+ * <ul>
+ *     <li>Effective unit price after applying price discounts.</li>
+ *     <li>BT-131 &ndash; Invoice line net amount (Line Extension Amount).</li>
+ * </ul>
+ *
+ * <p>The returned {@link InvoiceLine} is a new immutable instance containing
+ * the calculated values while preserving the remaining properties of the
+ * original invoice line.</p>
  */
 public final class InvoiceLineCalculator {
 
+    /**
+     * Calculates all derived values for the given invoice line.
+     *
+     * @param line the invoice line to calculate
+     * @return a new invoice line containing the calculated values
+     * @throws NullPointerException if {@code line} is {@code null}
+     */
     public InvoiceLine calculate(InvoiceLine line) {
         Objects.requireNonNull(line, "Invoice line must not be null.");
 
@@ -44,10 +60,27 @@ public final class InvoiceLineCalculator {
                 .build();
     }
 
+    /**
+     * Calculates the effective unit price after applying any configured
+     * fixed or percentage discount.
+     *
+     * @param line the invoice line
+     * @return the effective unit price
+     */
     private BigDecimal calculateEffectiveUnitPrice(InvoiceLine line) {
         return Money.subtract(line.getUnitPrice().getAmount(), calculateDiscount(line));
     }
 
+    /**
+     * Calculates the discount amount for the invoice line.
+     *
+     * <p>If both a fixed discount and a percentage discount are present,
+     * the fixed discount takes precedence.</p>
+     *
+     * @param line the invoice line
+     * @return the calculated discount amount, or {@link BigDecimal#ZERO}
+     * if no discount is specified
+     */
     private BigDecimal calculateDiscount(InvoiceLine line) {
         if (line.getPriceDiscount() != null) {
             return line.getPriceDiscount();
@@ -59,6 +92,16 @@ public final class InvoiceLineCalculator {
         return BigDecimal.ZERO;
     }
 
+    /**
+     * Calculates BT-131 (Invoice line net amount).
+     *
+     * <p>The calculation multiplies the effective unit price by the invoiced
+     * quantity and then applies all line-level allowances and charges.</p>
+     *
+     * @param line the invoice line
+     * @param effectiveUnitPrice the effective unit price after discounts
+     * @return the calculated line extension amount
+     */
     private BigDecimal calculateLineExtensionAmount(InvoiceLine line, BigDecimal effectiveUnitPrice) {
         BigDecimal lineAmount = Money.multiply(effectiveUnitPrice, line.getQuantity());
 
@@ -75,6 +118,13 @@ public final class InvoiceLineCalculator {
         return Money.round(lineAmount);
     }
 
+    /**
+     * Creates a monetary amount using the invoice line currency.
+     *
+     * @param amount the monetary value
+     * @param line the invoice line providing the currency
+     * @return a monetary amount with the specified value and currency
+     */
     private MonetaryAmount createMonetaryAmount(BigDecimal amount, InvoiceLine line) {
         return MonetaryAmount.builder()
                 .amount(amount)
