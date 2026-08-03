@@ -71,7 +71,32 @@ Invoice invoice = Invoice.builder()
         .buyer(buyer)
         .addLine(line)
         .build();
+        
 ```
+
+---
+
+## Running Tests
+
+Clone the repository and execute:
+
+```bash
+mvn test
+```
+
+To run the complete verification including integration tests:
+
+```bash
+mvn verify
+```
+
+The test suite covers:
+
+- Domain model validation
+- Invoice line calculations
+- VAT breakdown calculations
+- Monetary summation calculations
+- Complete invoice calculations
 
 ---
 
