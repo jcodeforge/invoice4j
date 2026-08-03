@@ -2,25 +2,23 @@ package io.github.jcodeforge.invoice4jbase.calculation;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Objects;
 
 public final class Money {
 
     public static BigDecimal round(BigDecimal value) {
-        Objects.requireNonNull(value);
         return value.setScale(2, RoundingMode.HALF_UP);
     }
 
     public static BigDecimal add(BigDecimal left, BigDecimal right) {
-        return round(left.add(right));
+        return left.add(right);
     }
 
     public static BigDecimal subtract(BigDecimal left, BigDecimal right) {
-        return round(left.subtract(right));
+        return left.subtract(right);
     }
 
     public static BigDecimal multiply(BigDecimal left, BigDecimal right) {
-        return round(left.multiply(right));
+        return left.multiply(right);
     }
 
     public static BigDecimal divide(BigDecimal left, BigDecimal right) {
@@ -32,7 +30,7 @@ public final class Money {
     }
 
     public static BigDecimal percentage(BigDecimal base, BigDecimal percentage) {
-        return round(base.multiply(percentage).divide(BigDecimal.valueOf(100), 8, RoundingMode.HALF_UP));
+        return base.multiply(percentage).divide(BigDecimal.valueOf(100), 8, RoundingMode.HALF_UP);
     }
 
     public static boolean isZero(BigDecimal value) {
