@@ -1,5 +1,6 @@
 package io.github.jcodeforge.invoice4jbase.datamodels.pojos;
 
+import io.github.jcodeforge.invoice4jbase.datamodels.enums.IdentifierScheme;
 import io.github.jcodeforge.invoice4jbase.exceptions.InvoiceValidationException;
 
 public class ElectronicAddress {
@@ -18,13 +19,13 @@ public class ElectronicAddress {
      * - 9930 = VAT number
      * - EM = Email
      */
-    private String scheme;
+    private IdentifierScheme scheme;
 
     public String getValue() {
         return value;
     }
 
-    public String getScheme() {
+    public IdentifierScheme getScheme() {
         return scheme;
     }
 
@@ -48,7 +49,7 @@ public class ElectronicAddress {
             return this;
         }
 
-        public Builder scheme(String scheme) {
+        public Builder scheme(IdentifierScheme scheme) {
             electronicAddress.scheme = scheme;
             return this;
         }
@@ -57,8 +58,8 @@ public class ElectronicAddress {
             if (electronicAddress.value == null || electronicAddress.value.isBlank()) {
                 throw new InvoiceValidationException("Electronic address value must not be null or blank.");
             }
-            if (electronicAddress.scheme == null || electronicAddress.scheme.isBlank()) {
-                throw new InvoiceValidationException("Electronic address scheme must not be null or blank.");
+            if (electronicAddress.scheme == null) {
+                throw new InvoiceValidationException("Electronic address scheme must not be null.");
             }
             return electronicAddress;
         }
