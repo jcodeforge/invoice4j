@@ -50,10 +50,6 @@ public class MonetaryAmount {
             if (monetaryAmount.currency == null) {
                 throw new InvoiceValidationException("Currency is required.");
             }
-            // Maximum of 2 fraction digits according to EN 16931
-            if (monetaryAmount.amount.scale() > 2) {
-                throw new InvoiceValidationException("Monetary amount must not contain more than two decimal places.");
-            }
 
             return monetaryAmount;
         }
