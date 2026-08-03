@@ -1,4 +1,4 @@
-package io.github.jcodeforge.invoice4jbase.calculations;
+package io.github.jcodeforge.invoice4jbase.calculation;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

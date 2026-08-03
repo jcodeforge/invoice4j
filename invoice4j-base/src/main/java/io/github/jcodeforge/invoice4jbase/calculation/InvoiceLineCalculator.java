@@ -1,4 +1,4 @@
-package io.github.jcodeforge.invoice4jbase.calculations;
+package io.github.jcodeforge.invoice4jbase.calculation;
 
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.AllowanceCharge;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.InvoiceLine;
