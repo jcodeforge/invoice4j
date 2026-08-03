@@ -4,6 +4,7 @@ import io.github.jcodeforge.invoice4jbase.datamodels.enums.*;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public final class CalculationUtils {
@@ -131,7 +132,7 @@ public final class CalculationUtils {
                 .build();
     }
 
-    private static MonetarySummation createMonetarySummation() {
+    public static MonetarySummation createMonetarySummation() {
         return MonetarySummation.builder()
                 .lineExtensionAmount(createMoney("100.00"))
                 .allowanceTotalAmount(createMoney("0.00"))
@@ -141,6 +142,20 @@ public final class CalculationUtils {
                 .taxInclusiveAmount(createMoney("119.00"))
                 .prepaidAmount(createMoney("0.00"))
                 .roundingAmount(createMoney("0.00"))
+                .payableAmount(createMoney("119.00"))
+                .build();
+    }
+
+    public static MonetarySummation createMonetarySummation(String prepaidAmount, String roundingAmount) {
+        return MonetarySummation.builder()
+                .lineExtensionAmount(createMoney("100.00"))
+                .allowanceTotalAmount(createMoney("0.00"))
+                .chargeTotalAmount(createMoney("0.00"))
+                .taxExclusiveAmount(createMoney("100.00"))
+                .taxAmount(createMoney("19.00"))
+                .taxInclusiveAmount(createMoney("119.00"))
+                .prepaidAmount(createMoney(prepaidAmount))
+                .roundingAmount(createMoney(roundingAmount))
                 .payableAmount(createMoney("119.00"))
                 .build();
     }
@@ -165,7 +180,7 @@ public final class CalculationUtils {
                 .build();
     }
 
-    public static Invoice.Builder createInvoice() {
+    public static Invoice.Builder createSimpleInvoice() {
         return Invoice.builder()
                 .currency(CurrencyCode.EUR)
                 .seller(createSeller())
@@ -179,10 +194,72 @@ public final class CalculationUtils {
                 .monetarySummation(createMonetarySummation());
     }
 
+    public static Invoice.Builder createCalculatedInvoice() {
+        return Invoice.builder()
+                .currency(CurrencyCode.EUR)
+                .seller(createSeller())
+                .buyer(createBuyer())
+                .issueDate(LocalDate.now())
+                .documentTypeCode(DocumentTypeCode.COMMERCIAL_INVOICE)
+                .invoiceNumber("INV-1")
+                .addLine(createInvoiceLine("100.00"))
+                .delivery(createDelivery())
+                .invoicePeriod(createInvoicePeriod())
+                .taxes(List.of(
+                        Tax.builder()
+                                .categoryCode(TaxCategoryCode.STANDARD)
+                                .rate(new BigDecimal("19"))
+                                .taxableAmount(createMoney("100.00"))
+                                .taxAmount(createMoney("19.00"))
+                                .build()
+                ))
+                .allowanceCharges(List.of())
+                .monetarySummation(
+                        MonetarySummation.builder()
+                                .lineExtensionAmount(createMoney("100.00"))
+                                .allowanceTotalAmount(createMoney("0.00"))
+                                .chargeTotalAmount(createMoney("0.00"))
+                                .taxExclusiveAmount(createMoney("100.00"))
+                                .taxAmount(createMoney("19.00"))
+                                .taxInclusiveAmount(createMoney("119.00"))
+                                .prepaidAmount(createMoney("0.00"))
+                                .roundingAmount(createMoney("0.00"))
+                                .payableAmount(createMoney("119.00"))
+                                .build()
+                );
+    }
+
     private static InvoicePeriod createInvoicePeriod() {
         return InvoicePeriod.builder()
                 .startDate(LocalDate.of(2026, 1, 15))
                 .endDate(LocalDate.of(2026, 1, 15))
+                .build();
+    }
+
+    public static Tax createStandardTax(String taxableAmount, String taxAmount) {
+        return Tax.builder()
+                .categoryCode(TaxCategoryCode.STANDARD)
+                .rate(new BigDecimal("19"))
+                .taxableAmount(createMoney(taxableAmount))
+                .taxAmount(createMoney(taxAmount))
+                .build();
+    }
+
+    public static Tax createReducedRateTax(String taxableAmount, String taxAmount) {
+        return Tax.builder()
+                .categoryCode(TaxCategoryCode.REDUCED_RATE)
+                .rate(new BigDecimal("7"))
+                .taxableAmount(createMoney(taxableAmount))
+                .taxAmount(createMoney(taxAmount))
+                .build();
+    }
+
+    public static Tax createZeroRatedTax(String taxableAmount) {
+        return Tax.builder()
+                .categoryCode(TaxCategoryCode.ZERO_RATED)
+                .rate(BigDecimal.ZERO)
+                .taxableAmount(createMoney(taxableAmount))
+                .taxAmount(createMoney("0.00"))
                 .build();
     }
 
