@@ -511,8 +511,12 @@ public final class Invoice {
             if (notes == null) {
                 throw new InvoiceValidationException("Invoice note must not be null.");
             }
+
             this.notes.clear();
-            this.notes.addAll(notes);
+            for (Note note: notes) {
+                addNote(note);
+            }
+
             return this;
         }
 
@@ -527,6 +531,19 @@ public final class Invoice {
             }
 
             this.billingReferences.add(reference);
+            return this;
+        }
+
+        public Builder billingReferences(List<DocumentReference> billingReferences) {
+            if (billingReferences == null) {
+                throw new InvoiceValidationException("Billing references must not be null.");
+            }
+
+            this.billingReferences.clear();
+            for (DocumentReference reference: billingReferences) {
+                addBillingReference(reference);
+            }
+
             return this;
         }
 
@@ -569,7 +586,21 @@ public final class Invoice {
             if (allowanceCharge == null) {
                 throw new InvoiceValidationException("Document level allowance or charge must not be null.");
             }
+
             this.allowanceCharges.add(allowanceCharge);
+            return this;
+        }
+
+        public Builder allowanceCharges(List<AllowanceCharge> allowanceCharges) {
+            if (allowanceCharges == null) {
+                throw new InvoiceValidationException("Allowance charges must not be null.");
+            }
+
+            this.allowanceCharges.clear();
+            for (AllowanceCharge allowanceCharge : allowanceCharges) {
+                addAllowanceCharge(allowanceCharge);
+            }
+
             return this;
         }
 
@@ -586,6 +617,19 @@ public final class Invoice {
             return this;
         }
 
+        public Builder taxes(List<Tax> taxes) {
+            if (taxes == null) {
+                throw new InvoiceValidationException("Taxes must not be null.");
+            }
+
+            this.taxes.clear();
+            for (Tax tax : taxes) {
+                addTax(tax);
+            }
+
+            return this;
+        }
+
         public Builder addAdditionalDocument(DocumentReference document) {
             if (document == null) {
                 throw new InvoiceValidationException("Billing references (BG-3) - Additional supporting documents (BG-24) must not be null.");
@@ -597,6 +641,19 @@ public final class Invoice {
             }
 
             this.additionalDocuments.add(document);
+            return this;
+        }
+
+        public Builder additionalDocuments(List<DocumentReference> documents) {
+            if (documents == null) {
+                throw new InvoiceValidationException("Referenced documents must not be null.");
+            }
+
+            this.additionalDocuments.clear();
+            for (DocumentReference reference : documents) {
+                addAdditionalDocument(reference);
+            }
+
             return this;
         }
 
@@ -621,7 +678,22 @@ public final class Invoice {
             return this;
         }
 
+        public Builder lines(List<InvoiceLine> lines) {
+            if (lines == null) {
+                throw new InvoiceValidationException("Invoice lines must not be null.");
+            }
+
+            this.lines.clear();
+            for (InvoiceLine line : lines) {
+                addLine(line);
+            }
+
+            return this;
+        }
+
         private void validateDocumentTotals() {
+            Objects.requireNonNull(monetarySummation);
+
             BigDecimal lineExtensionTotal = lines.stream()
                     .map(line -> line.getLineExtensionAmount().getAmount())
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -659,6 +731,49 @@ public final class Invoice {
             if (taxExclusiveAmount.compareTo(monetarySummation.getTaxExclusiveAmount().getAmount()) != 0) {
                 throw new InvoiceValidationException("BT-109 Tax exclusive amount mismatch.");
             }
+        }
+
+        public Builder from(Invoice invoice) {
+            if (invoice == null) {
+                throw new InvoiceValidationException("Invoice must not be null.");
+            }
+
+            invoiceNumber(invoice.getInvoiceNumber());
+            issueDate(invoice.getIssueDate());
+            documentTypeCode(invoice.getDocumentTypeCode());
+            currency(invoice.getCurrency());
+            taxCurrency(invoice.getTaxCurrency());
+            taxPointDate(invoice.getTaxPointDate());
+            taxPointDateCode(invoice.getTaxPointDateCode());
+            dueDate(invoice.getDueDate());
+            buyerReference(invoice.getBuyerReference());
+            projectReference(invoice.getProjectReference());
+            contractReference(invoice.getContractReference());
+            purchaseOrderReference(invoice.getPurchaseOrderReference());
+            salesOrderReference(invoice.getSalesOrderReference());
+            invoicePeriod(invoice.getInvoicePeriod());
+            tenderReference(invoice.getTenderReference());
+            objectIdentifier(invoice.getObjectIdentifier());
+            buyerAccountingReference(invoice.getBuyerAccountingReference());
+            profileIdentifier(invoice.getProfileIdentifier());
+            customizationIdentifier(invoice.getCustomizationIdentifier());
+            businessProcessIdentifier(invoice.getBusinessProcessIdentifier());
+            notes(invoice.getNotes());
+            billingReferences(invoice.getBillingReferences());
+            seller(invoice.getSeller());
+            buyer(invoice.getBuyer());
+            payee(invoice.getPayee());
+            shipTo(invoice.getShipTo());
+            delivery(invoice.getDelivery());
+            payment(invoice.getPayment());
+            paymentTerms(invoice.getPaymentTerms());
+            allowanceCharges(invoice.getAllowanceCharges());
+            monetarySummation(invoice.getMonetarySummation());
+            taxes(invoice.getTaxes());
+            additionalDocuments(invoice.getAdditionalDocuments());
+            lines(invoice.getLines());
+
+            return this;
         }
 
         public Invoice build() {
