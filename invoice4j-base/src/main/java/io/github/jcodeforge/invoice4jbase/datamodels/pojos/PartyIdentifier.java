@@ -1,5 +1,6 @@
 package io.github.jcodeforge.invoice4jbase.datamodels.pojos;
 
+import io.github.jcodeforge.invoice4jbase.datamodels.enums.IdentifierScheme;
 import io.github.jcodeforge.invoice4jbase.exceptions.InvoiceValidationException;
 
 /**

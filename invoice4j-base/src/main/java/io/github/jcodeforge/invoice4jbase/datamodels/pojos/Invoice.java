@@ -8,7 +8,6 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public final class Invoice {
 
@@ -150,7 +149,7 @@ public final class Invoice {
     /**
      * BG-16
      */
-    private final Payment payment;
+    private final PaymentMeans paymentMeans;
 
     /**
      * BG-19
@@ -210,7 +209,7 @@ public final class Invoice {
         this.payee = builder.payee;
         this.shipTo = builder.shipTo;
         this.delivery = builder.delivery;
-        this.payment = builder.payment;
+        this.paymentMeans = builder.paymentMeans;
         this.paymentTerms = builder.paymentTerms;
         this.allowanceCharges = List.copyOf(builder.allowanceCharges);
         this.monetarySummation = builder.monetarySummation;
@@ -327,8 +326,8 @@ public final class Invoice {
         return delivery;
     }
 
-    public Payment getPayment() {
-        return payment;
+    public PaymentMeans getPayment() {
+        return paymentMeans;
     }
 
     public PaymentTerms getPaymentTerms() {
@@ -388,7 +387,7 @@ public final class Invoice {
         private Payee payee;
         private ShipTo shipTo;
         private Delivery delivery;
-        private Payment payment;
+        private PaymentMeans paymentMeans;
         private PaymentTerms paymentTerms;
         private final List<AllowanceCharge> allowanceCharges = new ArrayList<>();
         private MonetarySummation monetarySummation;
@@ -572,8 +571,8 @@ public final class Invoice {
             return this;
         }
 
-        public Builder payment(Payment payment) {
-            this.payment = payment;
+        public Builder paymentMeans(PaymentMeans paymentMeans) {
+            this.paymentMeans = paymentMeans;
             return this;
         }
 
@@ -723,7 +722,7 @@ public final class Invoice {
             payee(invoice.getPayee());
             shipTo(invoice.getShipTo());
             delivery(invoice.getDelivery());
-            payment(invoice.getPayment());
+            paymentMeans(invoice.getPayment());
             paymentTerms(invoice.getPaymentTerms());
             allowanceCharges(invoice.getAllowanceCharges());
             monetarySummation(invoice.getMonetarySummation());
@@ -780,6 +779,12 @@ public final class Invoice {
             }
             if (monetarySummation == null) {
                 throw new InvoiceValidationException("BG-22 Monetary summation is required.");
+            }
+            if (paymentMeans == null) {
+                throw new InvoiceValidationException("BG-16 payment Means is required.");
+            }
+            if (paymentTerms == null) {
+                throw new InvoiceValidationException("BG-19 payment Terms is required.");
             }
             if (paymentTerms != null && paymentTerms.getDueDate() != null && paymentTerms.getDueDate().isBefore(issueDate)) {
                 throw new InvoiceValidationException("BT-9 Payment due date must not be before BT-2 Issue date.");

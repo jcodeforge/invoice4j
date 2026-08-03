@@ -27,7 +27,7 @@ public class InvoiceLineCalculatorTest {
                 .itemName("Notebook")
                 .quantity(new BigDecimal("2"))
                 .unitCode(UnitCode.ONE)
-                .unitPrice(CalculationUtils.createMoney("100.00"))
+                .unitPrice(CalculationUtils.createEUMoney("100.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
                 .build();
@@ -46,7 +46,7 @@ public class InvoiceLineCalculatorTest {
                 .itemName("Notebook")
                 .quantity(BigDecimal.ONE)
                 .unitCode(UnitCode.ONE)
-                .unitPrice(CalculationUtils.createMoney("100.00"))
+                .unitPrice(CalculationUtils.createEUMoney("100.00"))
                 .priceDiscount(new BigDecimal("15.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
@@ -64,7 +64,7 @@ public class InvoiceLineCalculatorTest {
                 .itemName("Notebook")
                 .quantity(BigDecimal.ONE)
                 .unitCode(UnitCode.ONE)
-                .unitPrice(CalculationUtils.createMoney("100.00"))
+                .unitPrice(CalculationUtils.createEUMoney("100.00"))
                 .priceDiscountPercentage(new BigDecimal("10"))
                 .baseQuantity(BigDecimal.ONE)
                 .taxCategory(TaxCategoryCode.STANDARD)
@@ -83,7 +83,7 @@ public class InvoiceLineCalculatorTest {
                 .itemName("Notebook")
                 .quantity(BigDecimal.ONE)
                 .unitCode(UnitCode.ONE)
-                .unitPrice(CalculationUtils.createMoney("100.00"))
+                .unitPrice(CalculationUtils.createEUMoney("100.00"))
                 .priceDiscount(new BigDecimal("20.00"))
                 .priceDiscountPercentage(new BigDecimal("10"))
                 .baseQuantity(BigDecimal.ONE)
@@ -101,7 +101,7 @@ public class InvoiceLineCalculatorTest {
     public void shouldCalculateLineWithLineAllowance() {
         AllowanceCharge allowance = AllowanceCharge.builder()
                 .charge(false)
-                .amount(CalculationUtils.createMoney("10.00"))
+                .amount(CalculationUtils.createEUMoney("10.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
                 .build();
@@ -111,7 +111,7 @@ public class InvoiceLineCalculatorTest {
                 .itemName("Notebook")
                 .quantity(BigDecimal.ONE)
                 .unitCode(UnitCode.ONE)
-                .unitPrice(CalculationUtils.createMoney("100.00"))
+                .unitPrice(CalculationUtils.createEUMoney("100.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
                 .addAllowanceCharge(allowance)
@@ -126,7 +126,7 @@ public class InvoiceLineCalculatorTest {
     public void shouldCalculateLineWithLineCharge() {
         AllowanceCharge charge = AllowanceCharge.builder()
                 .charge(true)
-                .amount(CalculationUtils.createMoney("10.00"))
+                .amount(CalculationUtils.createEUMoney("10.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
                 .build();
@@ -136,7 +136,7 @@ public class InvoiceLineCalculatorTest {
                 .itemName("Notebook")
                 .quantity(BigDecimal.ONE)
                 .unitCode(UnitCode.ONE)
-                .unitPrice(CalculationUtils.createMoney("100.00"))
+                .unitPrice(CalculationUtils.createEUMoney("100.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
                 .addAllowanceCharge(charge)
@@ -151,14 +151,14 @@ public class InvoiceLineCalculatorTest {
     public void shouldCalculateLineWithMultipleAllowances() {
         AllowanceCharge allowance1 = AllowanceCharge.builder()
                 .charge(false)
-                .amount(CalculationUtils.createMoney("10.00"))
+                .amount(CalculationUtils.createEUMoney("10.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
                 .build();
 
         AllowanceCharge allowance2 = AllowanceCharge.builder()
                 .charge(false)
-                .amount(CalculationUtils.createMoney("5.00"))
+                .amount(CalculationUtils.createEUMoney("5.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
                 .build();
@@ -168,7 +168,7 @@ public class InvoiceLineCalculatorTest {
                 .itemName("Notebook")
                 .quantity(BigDecimal.ONE)
                 .unitCode(UnitCode.ONE)
-                .unitPrice(CalculationUtils.createMoney("100.00"))
+                .unitPrice(CalculationUtils.createEUMoney("100.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
                 .addAllowanceCharge(allowance1)
@@ -184,14 +184,14 @@ public class InvoiceLineCalculatorTest {
     public void shouldCalculateLineWithMultipleCharges() {
         AllowanceCharge charge1 = AllowanceCharge.builder()
                 .charge(true)
-                .amount(CalculationUtils.createMoney("10.00"))
+                .amount(CalculationUtils.createEUMoney("10.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
                 .build();
 
         AllowanceCharge charge2 = AllowanceCharge.builder()
                 .charge(true)
-                .amount(CalculationUtils.createMoney("5.00"))
+                .amount(CalculationUtils.createEUMoney("5.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
                 .build();
@@ -201,7 +201,7 @@ public class InvoiceLineCalculatorTest {
                 .itemName("Notebook")
                 .quantity(BigDecimal.ONE)
                 .unitCode(UnitCode.ONE)
-                .unitPrice(CalculationUtils.createMoney("100.00"))
+                .unitPrice(CalculationUtils.createEUMoney("100.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
                 .addAllowanceCharge(charge1)
@@ -226,7 +226,7 @@ public class InvoiceLineCalculatorTest {
                 .itemClassificationIdentifier("12345678")
                 .quantity(new BigDecimal("2"))
                 .unitCode(UnitCode.ONE)
-                .unitPrice(CalculationUtils.createMoney("100.00"))
+                .unitPrice(CalculationUtils.createEUMoney("100.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
                 .build();
@@ -255,7 +255,7 @@ public class InvoiceLineCalculatorTest {
                 .itemName("Notebook")
                 .quantity(BigDecimal.ONE)
                 .unitCode(UnitCode.ONE)
-                .unitPrice(CalculationUtils.createMoney("100.00"))
+                .unitPrice(CalculationUtils.createEUMoney("100.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
                 .build();
@@ -272,7 +272,7 @@ public class InvoiceLineCalculatorTest {
                 .itemName("Notebook")
                 .quantity(BigDecimal.ONE)
                 .unitCode(UnitCode.ONE)
-                .unitPrice(CalculationUtils.createMoney("100.00"))
+                .unitPrice(CalculationUtils.createEUMoney("100.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
                 .build();
@@ -296,7 +296,7 @@ public class InvoiceLineCalculatorTest {
     public void shouldCalculateLineWithZeroAmountAllowance() {
         AllowanceCharge allowance = AllowanceCharge.builder()
                 .charge(false)
-                .amount(CalculationUtils.createMoney("0.00"))
+                .amount(CalculationUtils.createEUMoney("0.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
                 .build();
@@ -306,7 +306,7 @@ public class InvoiceLineCalculatorTest {
                 .itemName("Notebook")
                 .quantity(BigDecimal.ONE)
                 .unitCode(UnitCode.ONE)
-                .unitPrice(CalculationUtils.createMoney("100.00"))
+                .unitPrice(CalculationUtils.createEUMoney("100.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
                 .addAllowanceCharge(allowance)
@@ -321,7 +321,7 @@ public class InvoiceLineCalculatorTest {
     public void shouldCalculateLineWithZeroAmountCharge() {
         AllowanceCharge charge = AllowanceCharge.builder()
                 .charge(true)
-                .amount(CalculationUtils.createMoney("0.00"))
+                .amount(CalculationUtils.createEUMoney("0.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
                 .build();
@@ -331,7 +331,7 @@ public class InvoiceLineCalculatorTest {
                 .itemName("Notebook")
                 .quantity(BigDecimal.ONE)
                 .unitCode(UnitCode.ONE)
-                .unitPrice(CalculationUtils.createMoney("100.00"))
+                .unitPrice(CalculationUtils.createEUMoney("100.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
                 .addAllowanceCharge(charge)
@@ -349,7 +349,7 @@ public class InvoiceLineCalculatorTest {
                 .itemName("Notebook")
                 .quantity(new BigDecimal("3"))
                 .unitCode(UnitCode.ONE)
-                .unitPrice(CalculationUtils.createMoney("33.335"))
+                .unitPrice(CalculationUtils.createEUMoney("33.335"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
                 .build();
