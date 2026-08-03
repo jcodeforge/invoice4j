@@ -27,6 +27,13 @@ import java.util.*;
  */
 public final class TaxCalculator {
 
+    /**
+     * Calculates the VAT breakdown (BG-23) for the given invoice.
+     *
+     * @param invoice the invoice to calculate the VAT breakdown for
+     * @return the calculated VAT breakdown entries
+     * @throws NullPointerException if {@code invoice} is {@code null}
+     */
     public List<Tax> calculate(Invoice invoice) {
         Objects.requireNonNull(invoice);
         Map<TaxKey, BigDecimal> taxableAmounts = new LinkedHashMap<>();
@@ -56,8 +63,11 @@ public final class TaxCalculator {
     }
 
     /**
-     * Applies document level allowance/charges
-     * to the taxable amounts.
+     * Applies document-level allowances and charges to the corresponding
+     * VAT group taxable amounts.
+     *
+     * @param taxableAmounts the taxable amount grouped by VAT category and rate
+     * @param allowanceCharges the document-level allowances and charges
      */
     private void applyAllowanceCharges(Map<TaxKey, BigDecimal> taxableAmounts, List<AllowanceCharge> allowanceCharges) {
         if (allowanceCharges == null || allowanceCharges.isEmpty()) {
@@ -81,7 +91,9 @@ public final class TaxCalculator {
     }
 
     /**
-     * VAT group key.
+     * Identifies a unique VAT group by category and VAT rate.
+     *
+     * <p>Used as the grouping key during VAT breakdown calculation.</p>
      */
     private static final class TaxKey {
 
@@ -122,7 +134,12 @@ public final class TaxCalculator {
     }
 
     /**
-     * Creates one BG-23 VAT breakdown entry.
+     * Creates a VAT breakdown (BG-23) entry for a single VAT category and rate.
+     *
+     * @param key the VAT category and rate
+     * @param taxableAmount the calculated taxable amount (BT-116)
+     * @param currency the invoice currency
+     * @return the generated VAT breakdown
      *
      * Note: Keep TaxCalculator purely computational and let the caller provide the exemption information
      * afterwards.
