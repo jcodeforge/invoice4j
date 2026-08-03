@@ -1,5 +1,6 @@
 package io.github.jcodeforge.invoice4jbase.calculation;
 
+import io.github.jcodeforge.invoice4jbase.DefaultInvoiceValidator;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.InvoiceLine;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.MonetarySummation;
@@ -32,6 +33,8 @@ public final class InvoiceCalculator {
 
     private final MonetarySummationCalculator monetarySummationCalculator = new MonetarySummationCalculator();
 
+    private final DefaultInvoiceValidator validator = new DefaultInvoiceValidator();
+
     /**
      * Calculates all derived invoice values.
      *
@@ -50,7 +53,11 @@ public final class InvoiceCalculator {
 
         MonetarySummation monetarySummation = monetarySummationCalculator.calculate(invoiceWithCalculatedTaxes);
 
-        return createCalculatedInvoice(invoiceWithCalculatedTaxes, monetarySummation);
+        Invoice calculatedInvoice = createCalculatedInvoice(invoiceWithCalculatedTaxes, monetarySummation);
+
+        validator.validate(calculatedInvoice);
+
+        return calculatedInvoice;
     }
 
     /**
