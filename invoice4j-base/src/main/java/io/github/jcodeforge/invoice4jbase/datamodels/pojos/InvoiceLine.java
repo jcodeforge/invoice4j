@@ -387,9 +387,6 @@ public class InvoiceLine {
                 throw new InvoiceValidationException(
                         "BT-149 Base quantity is required when a discount percentage is specified.");
             }
-            if (line.priceDiscount != null && line.unitPrice == null) {
-                throw new InvoiceValidationException("Unit price is required when a discount amount is specified.");
-            }
             if (line.lineExtensionAmount != null && line.lineExtensionAmount.getAmount().compareTo(BigDecimal.ZERO) < 0) {
                 throw new InvoiceValidationException("Line extension amount must not be negative.");
             }
