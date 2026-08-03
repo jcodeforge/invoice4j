@@ -26,7 +26,7 @@ public final class Money {
             throw new ArithmeticException("Division by zero.");
         }
 
-        return left.divide(right, 2, RoundingMode.HALF_UP);
+        return left.divide(right, 8, RoundingMode.HALF_UP);
     }
 
     public static BigDecimal percentage(BigDecimal base, BigDecimal percentage) {
