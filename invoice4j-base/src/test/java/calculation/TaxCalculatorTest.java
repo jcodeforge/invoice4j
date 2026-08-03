@@ -22,7 +22,7 @@ public class TaxCalculatorTest {
     @Before
     public void setUp() {
         SUT = new TaxCalculator();
-        invoice = CalculationUtils.createInvoice().build();
+        invoice = CalculationUtils.createSimpleInvoice().build();
     }
 
     @Test
