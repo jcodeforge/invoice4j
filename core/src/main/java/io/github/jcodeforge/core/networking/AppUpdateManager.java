@@ -5,7 +5,6 @@ import com.google.gson.JsonParser;
 import io.github.jcodeforge.core.common.BackgroundThreadPoster;
 import io.github.jcodeforge.core.common.UiThreadPoster;
 import io.github.jcodeforge.core.common.settings.SettingsManager;
-import io.github.codeforgecore.utils.*;
 import io.github.jcodeforge.core.utils.*;
 import org.apache.commons.io.FilenameUtils;
 import java.io.*;
