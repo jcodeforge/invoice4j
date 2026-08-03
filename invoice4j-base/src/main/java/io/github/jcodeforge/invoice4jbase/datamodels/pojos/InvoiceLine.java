@@ -335,8 +335,8 @@ public class InvoiceLine {
             if (line.unitPrice.getAmount().compareTo(BigDecimal.ZERO) < 0) {
                 throw new InvoiceValidationException("BT-146 Item net price must not be negative.");
             }
-            if (line.lineExtensionAmount == null) {
-                throw new InvoiceValidationException("BT-131 Line extension amount is required.");
+            if (line.lineExtensionAmount != null && line.lineExtensionAmount.getAmount().compareTo(BigDecimal.ZERO) < 0) {
+                throw new InvoiceValidationException("Line extension amount must not be negative.");
             }
             if (line.taxCategory == null) {
                 throw new InvoiceValidationException("Invoice line VAT category is required.");
