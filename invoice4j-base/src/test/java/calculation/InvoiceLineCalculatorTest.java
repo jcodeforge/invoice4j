@@ -13,11 +13,11 @@ import java.math.BigDecimal;
 
 public class InvoiceLineCalculatorTest {
 
-    private InvoiceLineCalculator calculator;
+    private InvoiceLineCalculator SUT;
 
     @Before
     public void setUp() {
-        calculator = new InvoiceLineCalculator();
+        SUT = new InvoiceLineCalculator();
     }
 
     @Test
@@ -32,7 +32,7 @@ public class InvoiceLineCalculatorTest {
                 .taxRate(new BigDecimal("19"))
                 .build();
 
-        InvoiceLine result = calculator.calculate(line);
+        InvoiceLine result = SUT.calculate(line);
 
         assertEquals(new BigDecimal("200.00"), result.getLineExtensionAmount().getAmount());
 
@@ -52,7 +52,7 @@ public class InvoiceLineCalculatorTest {
                 .taxRate(new BigDecimal("19"))
                 .build();
 
-        InvoiceLine result = calculator.calculate(line);
+        InvoiceLine result = SUT.calculate(line);
 
         assertEquals(new BigDecimal("85.00"), result.getLineExtensionAmount().getAmount());
     }
@@ -71,7 +71,7 @@ public class InvoiceLineCalculatorTest {
                 .taxRate(new BigDecimal("19"))
                 .build();
 
-        InvoiceLine result = calculator.calculate(line);
+        InvoiceLine result = SUT.calculate(line);
 
         assertEquals(new BigDecimal("90.00"), result.getLineExtensionAmount().getAmount());
     }
@@ -91,7 +91,7 @@ public class InvoiceLineCalculatorTest {
                 .taxRate(new BigDecimal("19"))
                 .build();
 
-        InvoiceLine result = calculator.calculate(line);
+        InvoiceLine result = SUT.calculate(line);
 
         // Fixed discount (20.00) takes precedence over 10%
         assertEquals(new BigDecimal("80.00"), result.getLineExtensionAmount().getAmount());
@@ -117,7 +117,7 @@ public class InvoiceLineCalculatorTest {
                 .addAllowanceCharge(allowance)
                 .build();
 
-        InvoiceLine result = calculator.calculate(line);
+        InvoiceLine result = SUT.calculate(line);
 
         assertEquals(new BigDecimal("90.00"), result.getLineExtensionAmount().getAmount());
     }
@@ -142,7 +142,7 @@ public class InvoiceLineCalculatorTest {
                 .addAllowanceCharge(charge)
                 .build();
 
-        InvoiceLine result = calculator.calculate(line);
+        InvoiceLine result = SUT.calculate(line);
 
         assertEquals(new BigDecimal("110.00"), result.getLineExtensionAmount().getAmount());
     }
@@ -175,7 +175,7 @@ public class InvoiceLineCalculatorTest {
                 .addAllowanceCharge(allowance2)
                 .build();
 
-        InvoiceLine result = calculator.calculate(line);
+        InvoiceLine result = SUT.calculate(line);
 
         assertEquals(new BigDecimal("85.00"), result.getLineExtensionAmount().getAmount());
     }
@@ -208,7 +208,7 @@ public class InvoiceLineCalculatorTest {
                 .addAllowanceCharge(charge2)
                 .build();
 
-        InvoiceLine result = calculator.calculate(line);
+        InvoiceLine result = SUT.calculate(line);
 
         assertEquals(new BigDecimal("115.00"), result.getLineExtensionAmount().getAmount());
     }
@@ -231,7 +231,7 @@ public class InvoiceLineCalculatorTest {
                 .taxRate(new BigDecimal("19"))
                 .build();
 
-        InvoiceLine result = calculator.calculate(line);
+        InvoiceLine result = SUT.calculate(line);
 
         assertEquals(line.getId(), result.getId());
         assertEquals(line.getObjectIdentifier(), result.getObjectIdentifier());
@@ -260,7 +260,7 @@ public class InvoiceLineCalculatorTest {
                 .taxRate(new BigDecimal("19"))
                 .build();
 
-        InvoiceLine result = calculator.calculate(line);
+        InvoiceLine result = SUT.calculate(line);
 
         assertNotSame(line, result);
     }
@@ -279,7 +279,7 @@ public class InvoiceLineCalculatorTest {
 
         assertNull(line.getLineExtensionAmount());
 
-        InvoiceLine result = calculator.calculate(line);
+        InvoiceLine result = SUT.calculate(line);
 
         assertNull(line.getLineExtensionAmount());
 
@@ -289,7 +289,7 @@ public class InvoiceLineCalculatorTest {
 
     @Test(expected = NullPointerException.class)
     public void shouldThrowNullPointerExceptionWhenInvoiceLineIsNull() {
-        calculator.calculate(null);
+        SUT.calculate(null);
     }
 
     @Test
@@ -312,7 +312,7 @@ public class InvoiceLineCalculatorTest {
                 .addAllowanceCharge(allowance)
                 .build();
 
-        InvoiceLine result = calculator.calculate(line);
+        InvoiceLine result = SUT.calculate(line);
 
         assertEquals(new BigDecimal("100.00"), result.getLineExtensionAmount().getAmount());
     }
@@ -337,7 +337,7 @@ public class InvoiceLineCalculatorTest {
                 .addAllowanceCharge(charge)
                 .build();
 
-        InvoiceLine result = calculator.calculate(line);
+        InvoiceLine result = SUT.calculate(line);
 
         assertEquals(new BigDecimal("100.00"), result.getLineExtensionAmount().getAmount());
     }
@@ -354,7 +354,7 @@ public class InvoiceLineCalculatorTest {
                 .taxRate(new BigDecimal("19"))
                 .build();
 
-        InvoiceLine result = calculator.calculate(line);
+        InvoiceLine result = SUT.calculate(line);
 
         assertEquals(new BigDecimal("100.01"), result.getLineExtensionAmount().getAmount());
     }
