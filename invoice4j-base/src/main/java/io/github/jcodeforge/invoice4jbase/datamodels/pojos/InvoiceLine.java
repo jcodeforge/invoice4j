@@ -390,7 +390,7 @@ public class InvoiceLine {
             if (line.priceDiscount != null && line.unitPrice == null) {
                 throw new InvoiceValidationException("Unit price is required when a discount amount is specified.");
             }
-            if (line.lineExtensionAmount.getAmount().compareTo(BigDecimal.ZERO) < 0) {
+            if (line.lineExtensionAmount != null && line.lineExtensionAmount.getAmount().compareTo(BigDecimal.ZERO) < 0) {
                 throw new InvoiceValidationException("Line extension amount must not be negative.");
             }
             if (line.quantity.compareTo(BigDecimal.ZERO) <= 0) {
