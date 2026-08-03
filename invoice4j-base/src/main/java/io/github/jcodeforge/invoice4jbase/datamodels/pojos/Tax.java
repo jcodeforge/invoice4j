@@ -111,12 +111,12 @@ public class Tax {
         }
 
         public Builder exemptionReasonCode(String exemptionReasonCode) {
-            tax.exemptionReasonCode = exemptionReasonCode;
+            tax.exemptionReasonCode = exemptionReasonCode == null ? null : exemptionReasonCode.trim();
             return this;
         }
 
         public Builder exemptionReason(String exemptionReason) {
-            tax.exemptionReason = exemptionReason;
+            tax.exemptionReason = exemptionReason == null ? null : exemptionReason.trim();
             return this;
         }
 
