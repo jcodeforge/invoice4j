@@ -73,7 +73,6 @@ public final class MonetarySummationCalculator {
      * @return the calculated invoice line net amount total
      */
     private MonetaryAmount calculateLineExtensionAmount(Invoice invoice) {
-
         BigDecimal amount = BigDecimal.ZERO;
 
         for (InvoiceLine line : invoice.getLines()) {
@@ -95,7 +94,6 @@ public final class MonetarySummationCalculator {
         BigDecimal amount = BigDecimal.ZERO;
 
         for (AllowanceCharge allowanceCharge : invoice.getAllowanceCharges()) {
-
             if (!allowanceCharge.isCharge()) {
                 amount = Money.add(amount, allowanceCharge.getAmount().getAmount());
             }
@@ -116,8 +114,8 @@ public final class MonetarySummationCalculator {
         BigDecimal amount = BigDecimal.ZERO;
 
         for (AllowanceCharge allowanceCharge : invoice.getAllowanceCharges()) {
-
-            if (allowanceCharge.isCharge()) {amount = Money.add(amount, allowanceCharge.getAmount().getAmount());
+            if (allowanceCharge.isCharge()) {
+                amount = Money.add(amount, allowanceCharge.getAmount().getAmount());
             }
         }
 
@@ -165,9 +163,7 @@ public final class MonetarySummationCalculator {
         BigDecimal amount = BigDecimal.ZERO;
 
         for (Tax tax : invoice.getTaxes()) {
-            amount = Money.add(
-                    amount,
-                    tax.getTaxAmount().getAmount());
+            amount = Money.add(amount, tax.getTaxAmount().getAmount());
         }
 
         return createMonetaryAmount(amount, invoice.getCurrency());
