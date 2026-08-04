@@ -1,56 +1,46 @@
 package io.github.jcodeforge.invoice4jbase.datamodels.enums;
 
-/**
- * Electronic address identification scheme (BT-34 / BT-49).
- *
- * Based on ISO 6523 ICD codes used by
- * EN 16931, PEPPOL BIS Billing and XRechnung.
- */
 public enum IdentifierScheme {
 
     /**
-     * GLN (GS1 Global Location Number)
-     * ICD: 0088
+     * GLN (Global Location Number)
      */
-    GLN("0088"),
-
-    /**
-     * DUNS Number
-     * ICD: 0060
-     */
-    DUNS("0060"),
-
-    /**
-     * VAT Registration Number
-     * ICD: 9930
-     */
-    VAT("9930"),
+    GLN("0088", true),
 
     /**
      * German Leitweg-ID
-     * ICD: 0204
      */
-    LEITWEG_ID("0204"),
+    LEITWEG_ID("0204", false),
 
     /**
-     * E-mail address.
-     * Commonly used outside PEPPOL.
+     * VAT number
      */
-    EMAIL("EM"),
+    VAT("9930", false),
 
     /**
-     * URI / URL.
+     * Email address
      */
-    URI("URI");
+    EMAIL("EM", false);
 
     private final String code;
 
-    IdentifierScheme(String code) {
+    /**
+     * Indicates whether the identifier shall be serialized
+     * as ram:GlobalID instead of ram:ID.
+     */
+    private final boolean globalIdentifier;
+
+    IdentifierScheme(String code, boolean globalIdentifier) {
         this.code = code;
+        this.globalIdentifier = globalIdentifier;
     }
 
     public String getCode() {
         return code;
+    }
+
+    public boolean isGlobalIdentifier() {
+        return globalIdentifier;
     }
 
     public static IdentifierScheme fromCode(String code) {
@@ -59,6 +49,7 @@ public enum IdentifierScheme {
                 return scheme;
             }
         }
-        throw new IllegalArgumentException("Unknown electronic address scheme: " + code);
+
+        throw new IllegalArgumentException("Unknown identifier scheme: " + code);
     }
 }
