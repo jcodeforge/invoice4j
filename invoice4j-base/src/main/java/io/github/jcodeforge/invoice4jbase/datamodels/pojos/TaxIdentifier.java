@@ -1,13 +1,13 @@
 package io.github.jcodeforge.invoice4jbase.datamodels.pojos;
 
-import io.github.jcodeforge.invoice4jbase.datamodels.enums.TaxIdentifierType;
+import io.github.jcodeforge.invoice4jbase.datamodels.enums.TaxRegistrationScheme;
 import io.github.jcodeforge.invoice4jbase.exceptions.InvoiceValidationException;
 
 public class TaxIdentifier {
 
     private String value;
 
-    private TaxIdentifierType type;
+    private TaxRegistrationScheme type;
 
     private TaxIdentifier() {
     }
@@ -16,7 +16,7 @@ public class TaxIdentifier {
         return value;
     }
 
-    public TaxIdentifierType getType() {
+    public TaxRegistrationScheme getType() {
         return type;
     }
 
@@ -37,7 +37,7 @@ public class TaxIdentifier {
             return this;
         }
 
-        public Builder type(TaxIdentifierType type) {
+        public Builder type(TaxRegistrationScheme type) {
             taxIdentifier.type = type;
             return this;
         }

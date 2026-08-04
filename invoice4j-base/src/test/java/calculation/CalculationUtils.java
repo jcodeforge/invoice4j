@@ -444,7 +444,7 @@ public final class CalculationUtils {
     public static TaxIdentifier createTaxIdentifier() {
         return TaxIdentifier.builder()
                 .value("DE123456789")
-                .type(TaxIdentifierType.VAT_REGISTRATION_NUMBER)
+                .type(TaxRegistrationScheme.VAT_REGISTRATION_NUMBER)
                 .build();
     }
 
