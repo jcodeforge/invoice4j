@@ -14,26 +14,31 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>core</module>
         <module>invoice4j-base</module>
         <module>invoice4j-zugferd</module>
         <module>invoice4j-xr</module>
     </modules>
 
     <properties>
-        <project.version>0.1.0</project.version>
         <java.version>23</java.version>
-        <maven.compiler.source>23</maven.compiler.source>
-        <maven.compiler.target>23</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <app.deploy.url>none</app.deploy.url>
         <mainClass>none</mainClass>
-        <!--Force accepting fingerprint for wagon-maven-plugin-->
-        <wagon.ssh.StrictHostKeyChecking>no</wagon.ssh.StrictHostKeyChecking>
-        <jsch.StrictHostKeyChecking>no</jsch.StrictHostKeyChecking>
     </properties>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.14.0</version>
+                    <configuration>
+                        <release>${java.version}</release>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -55,102 +60,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.15.0</version>
-                <configuration>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>com.google.dagger</groupId>
-                            <artifactId>dagger-compiler</artifactId>
-                            <version>2.57.2</version>
-                        </path>
-                    </annotationProcessorPaths>
-                    <showDeprecation>true</showDeprecation>
-                </configuration>
-            </plugin>
-            <plugin>
-                <!--https://github.com/git-commit-id/git-commit-id-maven-plugin-->
-                <groupId>io.github.git-commit-id</groupId>
-                <artifactId>git-commit-id-maven-plugin</artifactId>
-                <version>10.0.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>revision</goal>
-                        </goals>
-                        <phase>initialize</phase>
-                    </execution>
-                </executions>
-                <configuration>
-                    <verbose>true</verbose>
-                    <skip>false</skip>
-                    <dotGitDirectory>${maven.multiModuleProjectDirectory}/.git</dotGitDirectory>
-                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
-                    <generateGitPropertiesFilename>
-                        ${project.build.outputDirectory}/git.properties
-                    </generateGitPropertiesFilename>
-                    <includeOnlyProperties>
-                        <includeOnlyProperty>git.commit.id.abbrev</includeOnlyProperty>
-                        <includeOnlyProperty>git.total.commit.count</includeOnlyProperty>
-                    </includeOnlyProperties>
-                </configuration>
-            </plugin>
         </plugins>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>false</filtering>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>**/*.properties</include>
-                    <include>**/*.json</include>
-                </includes>
-            </resource>
-        </resources>
     </build>
-
-    <profiles>
-        <profile>
-            <id>dev</id>
-            <properties>
-                <app.env>dev</app.env>
-                <app.env.debug>true</app.env.debug>
-            </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>versions-maven-plugin</artifactId>
-                        <version>2.21.0</version>
-                        <executions>
-                            <execution>
-                                <id>dependency-updates</id>
-                                <phase>validate</phase>
-                                <goals>
-                                    <goal>display-dependency-updates</goal>
-                                    <goal>display-plugin-updates</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-                <finalName>${project.artifactId}-dev</finalName>
-            </build>
-        </profile>
-        <profile>
-            <id>prod</id>
-            <properties>
-                <app.env>prod</app.env>
-                <app.env.debug>false</app.env.debug>
-            </properties>
-            <build>
-                <finalName>${project.artifactId}</finalName>
-            </build>
-        </profile>
-    </profiles>
 </project>
