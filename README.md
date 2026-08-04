@@ -49,13 +49,41 @@ The project provides a shared invoice domain model and support for multiple e-in
 
 ## Installation
 
-*todo*
+### Requirements
+
+- Java 23 or later
+
+```xml
+<dependency>
+    <groupId>io.github.scholzalex</groupId>
+    <artifactId>invoice4j-base</artifactId>
+    <version>0.1.0</version>
+</dependency>
+```
+
+### Gradle (Kotlin DSL)
+
+```kotlin
+implementation("io.github.scholzalex:invoice4j-base:0.1.0")
+```
+
+### Gradle (Groovy)
+
+```groovy
+implementation 'io.github.scholzalex:invoice4j-base:0.1.0'
+```
 
 ---
 
 ## Quick Start
 
-*todo*
+A complete runnable example is available here:
+
+```text
+invoice4j-base/src/main/java/io/github/jcodeforge/invoice4jbase/examples/QuickStart.java
+```
+
+Run the example to see how to create an invoice and calculate its totals using the `InvoiceCalculator`.
 
 ---
 
