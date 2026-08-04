@@ -6,12 +6,40 @@
 
     <groupId>io.github.scholzalex</groupId>
     <artifactId>invoice4j</artifactId>
+    <name>invoice4j</name>
+    <url>https://github.com/jcodeforge/invoice4j</url>
     <version>0.1.0</version>
 
-    <description>A modular Java library for creating, reading, validating, and converting electronic
-        invoices (ZUGFeRD, XRechnung, PEPPOL, and more).</description>
+    <description>
+        A modular Java library for creating, reading, validating, and converting
+        electronic invoices (ZUGFeRD, XRechnung, PEPPOL, and more).
+    </description>
+
     <inceptionYear>2026</inceptionYear>
     <packaging>pom</packaging>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>scholzalex</id>
+            <name>Alexander Scholz</name>
+            <email>scholzalex90@gmail.com</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/jcodeforge/invoice4j.git</connection>
+        <developerConnection>scm:git:https://github.com/jcodeforge/invoice4j.git</developerConnection>
+        <url>https://github.com/jcodeforge/invoice4j</url>
+        <tag>HEAD</tag>
+    </scm>
 
     <modules>
         <module>invoice4j-base</module>
