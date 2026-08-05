@@ -8,7 +8,7 @@ public final class TestPartyFactory {
 
     public static Seller createSeller() {
         return Seller.builder()
-                .name("JCodeForge GmbH")
+                .name("Müller & Söhne GmbH")
                 .tradingName("JCodeForge")
                 .address(createAddress())
                 .electronicAddress(createElectronicAddress())
@@ -18,7 +18,7 @@ public final class TestPartyFactory {
 
     public static Buyer createBuyer() {
         return Buyer.builder()
-                .name("JCodeForge GmbH")
+                .name("Müller & Söhne GmbH")
                 .tradingName("JCodeForge")
                 .address(createAddress())
                 .electronicAddress(createElectronicAddress())
@@ -26,6 +26,23 @@ public final class TestPartyFactory {
                 .build();
     }
 
+    public static Payee createPayee() {
+        return Payee.builder()
+                .name("JCodeForge GmbH")
+                .tradingName("JCodeForge")
+                .address(createAddress())
+                .electronicAddress(createElectronicAddress())
+                .contact(createContact())
+                .addIdentifier(createPartyIdentifier())
+                .build();
+    }
+
+    public static PartyIdentifier createPartyIdentifier() {
+        return PartyIdentifier.builder()
+                .value("1234567890123")
+                .scheme(IdentifierScheme.GLN)
+                .build();
+    }
 
     public static Address createAddress() {
         return Address.builder()
@@ -38,7 +55,7 @@ public final class TestPartyFactory {
 
     private static Contact createContact() {
         return Contact.builder()
-                .name("Max Mustermann")
+                .name("Müller Sühne")
                 .email("info@example.com")
                 .telephone("+49 341 123456")
                 .build();
