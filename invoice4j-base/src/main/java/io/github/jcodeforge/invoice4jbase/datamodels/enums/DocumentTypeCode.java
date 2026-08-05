@@ -8,6 +8,32 @@ package io.github.jcodeforge.invoice4jbase.datamodels.enums;
 public enum DocumentTypeCode {
 
     /**
+     * 220 - Purchase order
+     */
+    PURCHASE_ORDER("220"),
+
+    /**
+     * 326 - Contract
+     */
+    CONTRACT("326"),
+
+    /**
+     * 351 - Despatch advice
+     *
+     * Document issued by the seller advising
+     * the buyer that goods have been dispatched.
+     */
+    DESPATCH_ADVICE("351"),
+
+    /**
+     * 352 - Receiving advice
+     *
+     * Document issued by the buyer confirming
+     * receipt of delivered goods.
+     */
+    RECEIVING_ADVICE("352"),
+
+    /**
      * 380 - Commercial invoice
      */
     COMMERCIAL_INVOICE("380"),
@@ -35,7 +61,12 @@ public enum DocumentTypeCode {
     /**
      * 751 - Invoice information
      */
-    INVOICE_INFORMATION("751");
+    INVOICE_INFORMATION("751"),
+
+    /**
+     * 916 - Related document
+     */
+    RELATED_DOCUMENT("916");
 
     private final String code;
 
