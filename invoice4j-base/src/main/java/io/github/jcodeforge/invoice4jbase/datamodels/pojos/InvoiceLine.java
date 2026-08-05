@@ -48,13 +48,13 @@ public class InvoiceLine {
      * BT-130
      * Seller assigned item identifier.
      */
-    private String sellerItemIdentifier;
+    private String sellerAssignedIdentifier;
 
     /**
      * BT-131
      * Buyer assigned item identifier.
      */
-    private String buyerItemIdentifier;
+    private String buyerAssignedIdentifier;
 
     /**
      * BT-158
@@ -74,7 +74,7 @@ public class InvoiceLine {
      * BT-146
      * Item net price.
      */
-    private MonetaryAmount unitPrice;
+    private MonetaryAmount netPrice;
 
     /**
      * BT-147
@@ -143,12 +143,12 @@ public class InvoiceLine {
         return description;
     }
 
-    public String getSellerItemIdentifier() {
-        return sellerItemIdentifier;
+    public String getSellerAssignedIdentifier() {
+        return sellerAssignedIdentifier;
     }
 
-    public String getBuyerItemIdentifier() {
-        return buyerItemIdentifier;
+    public String getBuyerAssignedIdentifier() {
+        return buyerAssignedIdentifier;
     }
 
     public String getItemClassificationIdentifier() {
@@ -163,8 +163,8 @@ public class InvoiceLine {
         return unitCode;
     }
 
-    public MonetaryAmount getUnitPrice() {
-        return unitPrice;
+    public MonetaryAmount getNetPrice() {
+        return netPrice;
     }
 
     public BigDecimal getPriceDiscount() {
@@ -236,13 +236,13 @@ public class InvoiceLine {
             return this;
         }
 
-        public Builder sellerItemIdentifier(String sellerItemIdentifier) {
-            line.sellerItemIdentifier = sellerItemIdentifier;
+        public Builder sellerAssignedIdentifier(String sellerItemIdentifier) {
+            line.sellerAssignedIdentifier = sellerItemIdentifier;
             return this;
         }
 
-        public Builder buyerItemIdentifier(String buyerItemIdentifier) {
-            line.buyerItemIdentifier = buyerItemIdentifier;
+        public Builder buyerAssignedIdentifier(String buyerItemIdentifier) {
+            line.buyerAssignedIdentifier = buyerItemIdentifier;
             return this;
         }
 
@@ -261,8 +261,8 @@ public class InvoiceLine {
             return this;
         }
 
-        public Builder unitPrice(MonetaryAmount unitPrice) {
-            line.unitPrice = unitPrice;
+        public Builder netPrice(MonetaryAmount unitPrice) {
+            line.netPrice = unitPrice;
             return this;
         }
 
@@ -329,10 +329,10 @@ public class InvoiceLine {
             if (line.unitCode == null) {
                 throw new InvoiceValidationException("BT-130 Unit code is required.");
             }
-            if (line.unitPrice == null) {
+            if (line.netPrice == null) {
                 throw new InvoiceValidationException("BT-146 Item net price is required.");
             }
-            if (line.unitPrice.getAmount().compareTo(BigDecimal.ZERO) < 0) {
+            if (line.netPrice.getAmount().compareTo(BigDecimal.ZERO) < 0) {
                 throw new InvoiceValidationException("BT-146 Item net price must not be negative.");
             }
             if (line.lineExtensionAmount != null && line.lineExtensionAmount.getAmount().compareTo(BigDecimal.ZERO) < 0) {
@@ -360,10 +360,10 @@ public class InvoiceLine {
             if (line.description != null && line.description.isBlank()) {
                 throw new InvoiceValidationException("BT-129 Item description must not be blank.");
             }
-            if (line.sellerItemIdentifier != null && line.sellerItemIdentifier.isBlank()) {
+            if (line.sellerAssignedIdentifier != null && line.sellerAssignedIdentifier.isBlank()) {
                 throw new InvoiceValidationException("Seller item identifier must not be blank.");
             }
-            if (line.buyerItemIdentifier != null && line.buyerItemIdentifier.isBlank()) {
+            if (line.buyerAssignedIdentifier != null && line.buyerAssignedIdentifier.isBlank()) {
                 throw new InvoiceValidationException("Buyer item identifier must not be blank.");
             }
             if (line.itemClassificationIdentifier != null && line.itemClassificationIdentifier.isBlank()) {

@@ -663,8 +663,8 @@ public final class Invoice {
             if (line.getQuantity() == null || line.getQuantity().signum() <= 0) {
                 throw new InvoiceValidationException("BT-153 Quantity must be greater than zero.");
             }
-            if (line.getUnitPrice() == null) {
-                throw new InvoiceValidationException("BT-146 Unit price is required.");
+            if (line.getNetPrice() == null) {
+                throw new InvoiceValidationException("BT-146 Net price is required.");
             }
 
             for (InvoiceLine existing : lines) {

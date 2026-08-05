@@ -43,12 +43,12 @@ public final class InvoiceLineCalculator {
                 .buyerAccountingReference(line.getBuyerAccountingReference())
                 .itemName(line.getItemName())
                 .description(line.getDescription())
-                .sellerItemIdentifier(line.getSellerItemIdentifier())
-                .buyerItemIdentifier(line.getBuyerItemIdentifier())
+                .sellerAssignedIdentifier(line.getSellerAssignedIdentifier())
+                .buyerAssignedIdentifier(line.getBuyerAssignedIdentifier())
                 .itemClassificationIdentifier(line.getItemClassificationIdentifier())
                 .quantity(line.getQuantity())
                 .unitCode(line.getUnitCode())
-                .unitPrice(line.getUnitPrice())
+                .netPrice(line.getNetPrice())
                 .priceDiscount(line.getPriceDiscount())
                 .priceDiscountPercentage(line.getPriceDiscountPercentage())
                 .baseQuantity(line.getBaseQuantity())
@@ -68,7 +68,7 @@ public final class InvoiceLineCalculator {
      * @return the effective unit price
      */
     private BigDecimal calculateEffectiveUnitPrice(InvoiceLine line) {
-        return Money.subtract(line.getUnitPrice().getAmount(), calculateDiscount(line));
+        return Money.subtract(line.getNetPrice().getAmount(), calculateDiscount(line));
     }
 
     /**
@@ -86,7 +86,7 @@ public final class InvoiceLineCalculator {
             return line.getPriceDiscount();
         }
         if (line.getPriceDiscountPercentage() != null) {
-            return Money.percentage(line.getUnitPrice().getAmount(), line.getPriceDiscountPercentage());
+            return Money.percentage(line.getNetPrice().getAmount(), line.getPriceDiscountPercentage());
         }
 
         return BigDecimal.ZERO;
@@ -128,7 +128,7 @@ public final class InvoiceLineCalculator {
     private MonetaryAmount createMonetaryAmount(BigDecimal amount, InvoiceLine line) {
         return MonetaryAmount.builder()
                 .amount(amount)
-                .currency(line.getUnitPrice().getCurrency())
+                .currency(line.getNetPrice().getCurrency())
                 .build();
     }
 }

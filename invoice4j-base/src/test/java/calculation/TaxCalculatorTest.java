@@ -35,7 +35,7 @@ public class TaxCalculatorTest {
                                 .itemName("Notebook")
                                 .quantity(BigDecimal.ONE)
                                 .unitCode(UnitCode.ONE)
-                                .unitPrice(CalculationUtils.createEUMoney("100.00"))
+                                .netPrice(CalculationUtils.createEUMoney("100.00"))
                                 .taxCategory(TaxCategoryCode.STANDARD)
                                 .taxRate(new BigDecimal("19"))
                                 .lineExtensionAmount(CalculationUtils.createEUMoney("100.00"))

@@ -43,7 +43,7 @@ public final class QuickStart {
                 .itemName("Notebook")
                 .quantity(BigDecimal.ONE)
                 .unitCode(UnitCode.ONE)
-                .unitPrice(money("100.00"))
+                .netPrice(money("100.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
                 .lineExtensionAmount(money("100.00"))
