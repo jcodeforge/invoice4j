@@ -1,6 +1,8 @@
 package io.github.jcodeforge.invoice4jzugferd.cii.serializer;
 
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.*;
+import io.github.jcodeforge.invoice4jzugferd.cii.CiiProfile;
+import io.github.jcodeforge.invoice4jzugferd.cii.CiiSerializationContext;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlNamespaces;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlWriter;
 import java.time.format.DateTimeFormatter;
@@ -33,6 +35,12 @@ public class InvoiceSerializer implements XmlSerializer<Invoice> {
 
     private final InvoicePeriodSerializer invoicePeriodSerializer = new InvoicePeriodSerializer();
 
+    private final CiiSerializationContext context;
+
+    public InvoiceSerializer(CiiSerializationContext context) {
+        this.context = context;
+    }
+
     @Override
     public void serialize(XmlWriter writer, Invoice invoice) {
         writer.startDocument();
@@ -51,26 +59,17 @@ public class InvoiceSerializer implements XmlSerializer<Invoice> {
     private void writeExchangedDocumentContext(XmlWriter writer, Invoice invoice) {
         writer.startElement(XmlNamespaces.RSM, "ExchangedDocumentContext");
 
-        /*
-         * BT-23
-         * Business process identifier (optional)
-         */
-        if (invoice.getBusinessProcessIdentifier() != null) {
+        CiiProfile profile = context.getProfile();
+
+        if (profile.hasBusinessProcessId()) {
             writer.startElement(XmlNamespaces.RAM, "BusinessProcessSpecifiedDocumentContextParameter");
-            writer.writeElement(XmlNamespaces.RAM, "ID", invoice.getBusinessProcessIdentifier());
+            writer.writeElement(XmlNamespaces.RAM, "ID", profile.getBusinessProcessId());
             writer.endElement();
         }
 
-        /*
-         * BT-24
-         * Specification identifier (mandatory for EN16931/ZUGFeRD profiles)
-         */
-        if (invoice.getCustomizationIdentifier() != null) {
-            writer.startElement(XmlNamespaces.RAM, "GuidelineSpecifiedDocumentContextParameter");
-            writer.writeElement(XmlNamespaces.RAM, "ID", invoice.getCustomizationIdentifier());
-            writer.endElement();
-        }
-
+        writer.startElement(XmlNamespaces.RAM, "GuidelineSpecifiedDocumentContextParameter");
+        writer.writeElement(XmlNamespaces.RAM, "ID", profile.getGuidelineId());
+        writer.endElement();
         writer.endElement();
     }
 

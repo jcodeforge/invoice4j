@@ -38,9 +38,6 @@ public final class TestInvoiceFactory {
                 .issueDate(ISSUE_DATE)
                 .currency(CurrencyCode.EUR)
                 .taxCurrency(CurrencyCode.EUR)
-                // Context
-                .businessProcessIdentifier("urn:fdc:peppol.eu:2017:poacc:billing:01:1.0")
-                .customizationIdentifier("urn:cen.eu:en16931:2017")
                 // References
                 .buyerReference("BUYER-REF-001")
                 .contractReference("CONTRACT-2026")

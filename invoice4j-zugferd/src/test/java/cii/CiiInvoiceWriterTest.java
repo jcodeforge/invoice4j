@@ -4,6 +4,7 @@ import factory.TestInvoiceFactory;
 import factory.TestXPathFactory;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jzugferd.CiiInvoiceWriter;
+import io.github.jcodeforge.invoice4jzugferd.cii.CiiProfile;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -24,7 +25,9 @@ public class CiiInvoiceWriterTest {
 
     @Before
     public void setUp() {
-        SUT = new CiiInvoiceWriter();
+        SUT = CiiInvoiceWriter.builder()
+                .profile(CiiProfile.EN16931)
+                .build();
     }
 
     @Test
