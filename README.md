@@ -59,19 +59,32 @@ The project provides a shared invoice domain model and support for multiple e-in
     <artifactId>invoice4j-zugferd</artifactId>
     <version>0.2.0</version>
 </dependency>
+
+<dependency>
+    <groupId>io.github.jcodeforge</groupId>
+    <artifactId>invoice4j-xr</artifactId>
+    <version>0.2.0</version>
+</dependency>
 ```
+
+Only add the module(s) you need. Both modules automatically include the shared invoice4j-base dependency.
 
 ### Gradle (Kotlin DSL)
 
 ```kotlin
 implementation("io.github.jcodeforge:invoice4j-zugferd:0.2.0")
+implementation("io.github.jcodeforge:invoice4j-xr:0.2.0")
 ```
 
 ### Gradle (Groovy)
 
 ```groovy
 implementation 'io.github.jcodeforge:invoice4j-zugferd:0.2.0'
+implementation 'io.github.jcodeforge:invoice4j-xr:0.2.0'
 ```
+
+invoice4j-zugferd supports ZUGFeRD and Factur-X documents. invoice4j-xr supports XRechnung. Both modules automatically
+include the shared core library.
 
 ---
 
