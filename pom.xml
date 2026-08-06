@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.github.scholzalex</groupId>
+    <groupId>io.github.jcodeforge</groupId>
     <artifactId>invoice4j</artifactId>
     <name>invoice4j</name>
     <url>https://github.com/jcodeforge/invoice4j</url>
