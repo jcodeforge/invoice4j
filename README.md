@@ -90,14 +90,15 @@ Run the example to see how to create an invoice and calculate its totals using t
 ## Examples
 
 ```
-Invoice invoice = Invoice.builder()
-    .invoiceNumber("INV-1")
-    .seller(...)
-    .buyer(...)
-    .addLine(...)
-    .build();
+Invoice invoice = InvoiceCalculator.calculate(
+        TestInvoiceFactory.createMinimalInvoice());
 
-Invoice calculated = InvoiceCalculator.calculate(invoice);
+CiiInvoiceWriter writer = CiiInvoiceWriter.builder()
+        .profile(CiiProfile.EN16931)
+        .prettyPrint(true)
+        .build();
+
+writer.writeToFile(invoice, new File("invoice.xml"));
         
 ```
 
