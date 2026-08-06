@@ -32,7 +32,7 @@ public class DeliverySerializer implements XmlSerializer<Delivery> {
             writer.endElement();
         }
 
-        // BG-14
+        // BT-73 / BT-74
         if (delivery.getDeliveryPeriodStartDate() != null || delivery.getDeliveryPeriodEndDate() != null) {
             writer.startElement(XmlNamespaces.RAM, "BillingSpecifiedPeriod");
 

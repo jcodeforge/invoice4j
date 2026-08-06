@@ -17,7 +17,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.github.scholzalex</groupId>
+            <groupId>io.github.jcodeforge</groupId>
             <artifactId>invoice4j-base</artifactId>
             <version>${project.version}</version>
         </dependency>
