@@ -81,4 +81,41 @@ public final class TestInvoiceFactory {
                 .monetarySummation(TestMonetarySummationFactory.createMonetarySummation())
                 .build();
     }
+
+    public static Invoice createInvoiceWithAllowanceAndCharge() {
+        return Invoice.builder()
+                .invoiceNumber("INV-2026-0003")
+                .documentTypeCode(DocumentTypeCode.COMMERCIAL_INVOICE)
+                .issueDate(ISSUE_DATE)
+                .currency(CurrencyCode.EUR)
+                .taxCurrency(CurrencyCode.EUR)
+                // Parties
+                .seller(TestPartyFactory.createSeller())
+                .buyer(TestPartyFactory.createBuyer())
+                .payee(TestPartyFactory.createPayee())
+                // Delivery
+                .delivery(TestDeliveryFactory.createDelivery())
+                // Payment
+                .paymentMeans(TestPaymentFactory.createPaymentMeans())
+                .paymentTerms(TestPaymentFactory.createPaymentTerms())
+                // Period
+                .invoicePeriod(TestInvoicePeriodFactory.createInvoicePeriod())
+                // Invoice lines
+                .lines(List.of(
+                        TestInvoiceLineFactory.createFirstInvoiceLine(),
+                        TestInvoiceLineFactory.createSecoundInvoiceLine()
+                ))
+                // Taxes
+                .taxes(List.of(
+                        TestTaxFactory.createTax()
+                ))
+                // One allowance + one charge
+                .allowanceCharges(List.of(
+                        TestAllowanceChargeFactory.createAllowance("10.00"),
+                        TestAllowanceChargeFactory.createCharge("15.00")
+                ))
+                // Totals
+                .monetarySummation(TestMonetarySummationFactory.createMonetarySummation())
+                .build();
+    }
 }

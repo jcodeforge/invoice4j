@@ -1,8 +1,10 @@
 package cii;
 
-import factory.TestInvoiceFactory;
-import factory.TestXPathFactory;
+import factory.*;
+import io.github.jcodeforge.invoice4jbase.datamodels.enums.CurrencyCode;
+import io.github.jcodeforge.invoice4jbase.datamodels.enums.DocumentTypeCode;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
+import io.github.jcodeforge.invoice4jbase.exceptions.InvoiceValidationException;
 import io.github.jcodeforge.invoice4jzugferd.CiiInvoiceWriter;
 import io.github.jcodeforge.invoice4jzugferd.cii.CiiProfile;
 import org.junit.Before;
@@ -16,6 +18,8 @@ import javax.xml.xpath.XPathConstants;
 import java.io.File;
 import java.io.StringReader;
 import java.nio.file.Files;
+import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -394,5 +398,209 @@ public class CiiInvoiceWriterTest {
     @Test(expected = NullPointerException.class)
     public void shouldRejectNullFile() {
         SUT.writeToFile(TestInvoiceFactory.createMinimalInvoice(), null);
+    }
+
+    @Test(expected = InvoiceValidationException.class)
+    public void shouldRejectInvoiceWithoutInvoiceNumber() {
+        Invoice invoice = Invoice.builder()
+                .documentTypeCode(DocumentTypeCode.COMMERCIAL_INVOICE)
+                .issueDate(LocalDate.of(2026, 1, 1))
+                .currency(CurrencyCode.EUR)
+                .seller(TestPartyFactory.createSeller())
+                .buyer(TestPartyFactory.createBuyer())
+                .delivery(TestDeliveryFactory.createDelivery())
+                .paymentMeans(TestPaymentFactory.createPaymentMeans())
+                .paymentTerms(TestPaymentFactory.createPaymentTerms())
+                .invoicePeriod(TestPartyFactory.createInvoicePeriod())
+                .allowanceCharges(List.of())
+                .lines(List.of(TestInvoiceLineFactory.createFirstInvoiceLine()))
+                .taxes(List.of(TestTaxFactory.createTax()))
+                .monetarySummation(TestMonetarySummationFactory.createMonetarySummation())
+                .build();
+
+        SUT.writeToString(invoice);
+    }
+
+    @Test(expected = InvoiceValidationException.class)
+    public void shouldRejectInvoiceWithoutIssueDate() {
+        Invoice invoice = Invoice.builder()
+                .invoiceNumber("INV-2026-0001")
+                .documentTypeCode(DocumentTypeCode.COMMERCIAL_INVOICE)
+                .currency(CurrencyCode.EUR)
+                .seller(TestPartyFactory.createSeller())
+                .buyer(TestPartyFactory.createBuyer())
+                .delivery(TestDeliveryFactory.createDelivery())
+                .paymentMeans(TestPaymentFactory.createPaymentMeans())
+                .paymentTerms(TestPaymentFactory.createPaymentTerms())
+                .invoicePeriod(TestPartyFactory.createInvoicePeriod())
+                .allowanceCharges(List.of())
+                .lines(List.of(TestInvoiceLineFactory.createFirstInvoiceLine()))
+                .taxes(List.of(TestTaxFactory.createTax()))
+                .monetarySummation(TestMonetarySummationFactory.createMonetarySummation())
+                .build();
+
+        SUT.writeToString(invoice);
+    }
+
+    @Test(expected = InvoiceValidationException.class)
+    public void shouldRejectInvoiceWithoutCurrency() {
+        Invoice invoice = Invoice.builder()
+                .invoiceNumber("INV-2026-0001")
+                .documentTypeCode(DocumentTypeCode.COMMERCIAL_INVOICE)
+                .issueDate(LocalDate.of(2026, 1, 1))
+                .seller(TestPartyFactory.createSeller())
+                .buyer(TestPartyFactory.createBuyer())
+                .delivery(TestDeliveryFactory.createDelivery())
+                .paymentMeans(TestPaymentFactory.createPaymentMeans())
+                .paymentTerms(TestPaymentFactory.createPaymentTerms())
+                .invoicePeriod(TestPartyFactory.createInvoicePeriod())
+                .allowanceCharges(List.of())
+                .lines(List.of(TestInvoiceLineFactory.createFirstInvoiceLine()))
+                .taxes(List.of(TestTaxFactory.createTax()))
+                .monetarySummation(TestMonetarySummationFactory.createMonetarySummation())
+                .build();
+
+        SUT.writeToString(invoice);
+    }
+
+    @Test
+    public void shouldWriteMultipleInvoiceLines() throws Exception {
+        Invoice invoice = TestInvoiceFactory.createCompleteInvoice();
+        Document document = parse(SUT.writeToString(invoice));
+        XPath xpath = TestXPathFactory.createXPath();
+
+        String count = xpath.evaluate("count(/rsm:CrossIndustryInvoice"
+                        + "/rsm:SupplyChainTradeTransaction"
+                        + "/ram:IncludedSupplyChainTradeLineItem)", document);
+
+        assertEquals("2", count);
+    }
+
+    @Test
+    public void shouldWriteSecondInvoiceLine() throws Exception {
+        Invoice invoice = TestInvoiceFactory.createCompleteInvoice();
+        Document document = parse(SUT.writeToString(invoice));
+        XPath xpath = TestXPathFactory.createXPath();
+
+        String id = xpath.evaluate("/rsm:CrossIndustryInvoice"
+                        + "/rsm:SupplyChainTradeTransaction"
+                        + "/ram:IncludedSupplyChainTradeLineItem[2]"
+                        + "/ram:AssociatedDocumentLineDocument"
+                        + "/ram:LineID", document);
+
+        assertEquals("2", id);
+    }
+
+    @Test
+    public void shouldWriteAllowance() throws Exception {
+        Invoice invoice = TestInvoiceFactory.createCompleteInvoice();
+        Document document = parse(SUT.writeToString(invoice));
+        XPath xpath = TestXPathFactory.createXPath();
+
+        String count = xpath.evaluate("count(/rsm:CrossIndustryInvoice"
+                        + "/rsm:SupplyChainTradeTransaction"
+                        + "/ram:ApplicableHeaderTradeSettlement"
+                        + "/ram:SpecifiedTradeAllowanceCharge)", document);
+
+        assertEquals("1", count);
+    }
+
+    @Test
+    public void shouldWriteAllowanceAndCharge() throws Exception {
+        Invoice invoice = TestInvoiceFactory.createInvoiceWithAllowanceAndCharge();
+        Document document = parse(SUT.writeToString(invoice));
+        XPath xpath = TestXPathFactory.createXPath();
+
+        String count = xpath.evaluate("count(/rsm:CrossIndustryInvoice"
+                        + "/rsm:SupplyChainTradeTransaction"
+                        + "/ram:ApplicableHeaderTradeSettlement"
+                        + "/ram:SpecifiedTradeAllowanceCharge)", document);
+
+        assertEquals("2", count);
+    }
+
+    @Test
+    public void shouldNotWriteNotesWhenCollectionIsEmpty() throws Exception {
+        Invoice invoice = TestInvoiceFactory.createMinimalInvoice();
+        Document document = parse(SUT.writeToString(invoice));
+        XPath xpath = TestXPathFactory.createXPath();
+
+        String count = xpath.evaluate("count(/rsm:CrossIndustryInvoice"
+                        + "/rsm:ExchangedDocument"
+                        + "/ram:IncludedNote)", document);
+
+        assertEquals("0", count);
+    }
+
+    @Test
+    public void shouldNotWriteAllowanceChargesWhenCollectionIsEmpty() throws Exception {
+        Invoice invoice = TestInvoiceFactory.createMinimalInvoice();
+        Document document = parse(SUT.writeToString(invoice));
+        XPath xpath = TestXPathFactory.createXPath();
+
+        String count = xpath.evaluate("count(/rsm:CrossIndustryInvoice"
+                        + "/rsm:SupplyChainTradeTransaction"
+                        + "/ram:ApplicableHeaderTradeSettlement"
+                        + "/ram:SpecifiedTradeAllowanceCharge)", document);
+
+        assertEquals("0", count);
+    }
+
+    @Test
+    public void shouldNotWriteBillingReferencesWhenCollectionIsEmpty() throws Exception {
+        Invoice invoice = TestInvoiceFactory.createMinimalInvoice();
+        Document document = parse(SUT.writeToString(invoice));
+        XPath xpath = TestXPathFactory.createXPath();
+
+        String count = xpath.evaluate("count(/rsm:CrossIndustryInvoice"
+                        + "/rsm:SupplyChainTradeTransaction"
+                        + "/ram:ApplicableHeaderTradeSettlement"
+                        + "/ram:InvoiceReferencedDocument)", document);
+
+        assertEquals("0", count);
+    }
+
+    @Test
+    public void shouldNotWriteAdditionalDocumentsWhenCollectionIsEmpty() throws Exception {
+        Invoice invoice = TestInvoiceFactory.createMinimalInvoice();
+        Document document = parse(SUT.writeToString(invoice));
+        XPath xpath = TestXPathFactory.createXPath();
+
+        String count = xpath.evaluate("count(/rsm:CrossIndustryInvoice"
+                        + "/rsm:SupplyChainTradeTransaction"
+                        + "/ram:ApplicableHeaderTradeSettlement"
+                        + "/ram:AdditionalReferencedDocument)", document);
+
+        assertEquals("0", count);
+    }
+
+    @Test
+    public void shouldNotWriteTradeTaxWhenCollectionIsEmpty() throws Exception {
+        Invoice invoice = Invoice.builder()
+                .invoiceNumber("INV-2026-0001")
+                .documentTypeCode(DocumentTypeCode.COMMERCIAL_INVOICE)
+                .issueDate(LocalDate.of(2026, 1, 1))
+                .currency(CurrencyCode.EUR)
+                .seller(TestPartyFactory.createSeller())
+                .buyer(TestPartyFactory.createBuyer())
+                .delivery(TestDeliveryFactory.createDelivery())
+                .paymentMeans(TestPaymentFactory.createPaymentMeans())
+                .paymentTerms(TestPaymentFactory.createPaymentTerms())
+                .invoicePeriod(TestPartyFactory.createInvoicePeriod())
+                .allowanceCharges(List.of())
+                .lines(List.of(TestInvoiceLineFactory.createFirstInvoiceLine()))
+                .taxes(List.of())
+                .monetarySummation(TestMonetarySummationFactory.createMonetarySummation())
+                .build();
+
+        Document document = parse(SUT.writeToString(invoice));
+        XPath xpath = TestXPathFactory.createXPath();
+
+        String count = xpath.evaluate("count(/rsm:CrossIndustryInvoice"
+                        + "/rsm:SupplyChainTradeTransaction"
+                        + "/ram:ApplicableHeaderTradeSettlement"
+                        + "/ram:ApplicableTradeTax)", document);
+
+        assertEquals("0", count);
     }
 }

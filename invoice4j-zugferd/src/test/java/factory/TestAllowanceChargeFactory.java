@@ -19,4 +19,16 @@ public final class TestAllowanceChargeFactory {
                 .taxRate(new BigDecimal("19"))
                 .build();
     }
+
+    public static AllowanceCharge createCharge(String amount) {
+        return AllowanceCharge.builder()
+                .charge(true)
+                .amount(MonetaryAmount.builder()
+                        .amount(new BigDecimal(amount))
+                        .currency(CurrencyCode.EUR)
+                        .build())
+                .taxCategory(TaxCategoryCode.STANDARD)
+                .taxRate(new BigDecimal("19"))
+                .build();
+    }
 }
