@@ -1,12 +1,11 @@
-package cii;
+package io.github.jcodeforge.invoice4jzugferd.xml;
 
-import io.github.jcodeforge.invoice4jzugferd.xml.XmlNamespaces;
 import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 import java.util.Iterator;
 import java.util.Map;
 
-public class CiiNamespaceContext implements NamespaceContext {
+public class XmlNamespaceContext implements NamespaceContext {
 
     private static final Map<String, String> NAMESPACES = Map.of(
             "rsm", XmlNamespaces.RSM,
