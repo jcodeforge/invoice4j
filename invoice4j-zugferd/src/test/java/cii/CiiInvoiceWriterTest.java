@@ -5,7 +5,7 @@ import io.github.jcodeforge.invoice4jbase.datamodels.enums.CurrencyCode;
 import io.github.jcodeforge.invoice4jbase.datamodels.enums.DocumentTypeCode;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jbase.exceptions.InvoiceValidationException;
-import io.github.jcodeforge.invoice4jzugferd.CiiInvoiceWriter;
+import io.github.jcodeforge.invoice4jzugferd.cii.CiiInvoiceWriter;
 import io.github.jcodeforge.invoice4jzugferd.cii.CiiProfile;
 import org.junit.Before;
 import org.junit.Test;

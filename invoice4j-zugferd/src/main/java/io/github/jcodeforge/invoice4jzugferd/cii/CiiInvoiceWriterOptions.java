@@ -1,7 +1,7 @@
 package io.github.jcodeforge.invoice4jzugferd.cii;
 
 /**
- * Configuration options for a {@link io.github.jcodeforge.invoice4jzugferd.CiiInvoiceWriter}.
+ * Configuration options for a {@link CiiInvoiceWriter}.
  *
  * <p>Instances of this class are immutable and are created using the
  * {@link Builder}. If no profile is specified, the

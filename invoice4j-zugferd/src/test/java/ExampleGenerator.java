@@ -1,5 +1,5 @@
 import factory.TestInvoiceFactory;
-import io.github.jcodeforge.invoice4jzugferd.CiiInvoiceWriter;
+import io.github.jcodeforge.invoice4jzugferd.cii.CiiInvoiceWriter;
 import java.io.File;
 
 public final class ExampleGenerator {

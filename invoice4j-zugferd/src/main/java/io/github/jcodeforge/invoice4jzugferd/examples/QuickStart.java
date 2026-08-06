@@ -2,7 +2,7 @@ package io.github.jcodeforge.invoice4jzugferd.examples;
 
 import io.github.jcodeforge.invoice4jbase.calculation.InvoiceCalculator;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
-import io.github.jcodeforge.invoice4jzugferd.CiiInvoiceWriter;
+import io.github.jcodeforge.invoice4jzugferd.cii.CiiInvoiceWriter;
 import io.github.jcodeforge.invoice4jzugferd.cii.CiiProfile;
 import java.io.File;
 

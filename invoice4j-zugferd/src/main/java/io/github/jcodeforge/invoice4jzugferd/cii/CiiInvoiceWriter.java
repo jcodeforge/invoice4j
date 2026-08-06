@@ -1,9 +1,6 @@
-package io.github.jcodeforge.invoice4jzugferd;
+package io.github.jcodeforge.invoice4jzugferd.cii;
 
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
-import io.github.jcodeforge.invoice4jzugferd.cii.CiiInvoiceWriterOptions;
-import io.github.jcodeforge.invoice4jzugferd.cii.CiiProfile;
-import io.github.jcodeforge.invoice4jzugferd.cii.CiiSerializationContext;
 import io.github.jcodeforge.invoice4jzugferd.cii.serializer.InvoiceSerializer;
 import io.github.jcodeforge.invoice4jbase.exceptions.SerializationException;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlWriter;
