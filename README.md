@@ -64,23 +64,24 @@ The project provides a shared invoice domain model and support for multiple e-in
 ### Gradle (Kotlin DSL)
 
 ```kotlin
-implementation("io.github.scholzalex:invoice4j-base:0.1.0")
+implementation("io.github.jcodeforge:invoice4j-zugferd:0.2.0")
 ```
 
 ### Gradle (Groovy)
 
 ```groovy
-implementation 'io.github.scholzalex:invoice4j-base:0.1.0'
+implementation 'io.github.jcodeforge:invoice4j-zugferd:0.2.0'
 ```
 
 ---
 
 ## Quick Start
 
-A complete runnable example is available here:
+Complete runnable examples are available here:
 
 ```text
 invoice4j-base/src/main/java/io/github/jcodeforge/invoice4jbase/examples/QuickStart.java
+invoice4j-zugferd/src/main/java/io/github/jcodeforge/invoice4jzugferd/examples/QuickStart.java
 ```
 
 Run the example to see how to create an invoice and calculate its totals using the `InvoiceCalculator`.
@@ -148,18 +149,6 @@ The test suite covers:
 | v1.4.0    | Digital Signatures (XAdES/PAdES)        | Planned     |
 
 See the **GitHub Milestones** for the detailed implementation plan and progress.
-
----
-
-### Maven
-
-```xml
-<dependency>
-    <groupId>io.github.scholzalex</groupId>
-    <artifactId>invoice4j-zugferd</artifactId>
-    <version>1.0.0</version>
-</dependency>
-```
 
 ---
 
