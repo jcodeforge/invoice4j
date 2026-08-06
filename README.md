@@ -89,7 +89,6 @@ Run the example to see how to create an invoice and calculate its totals using t
 
 ## Examples
 
-*todo*
 ```
 Invoice invoice = Invoice.builder()
     .invoiceNumber("INV-1")
@@ -101,6 +100,11 @@ Invoice invoice = Invoice.builder()
 Invoice calculated = InvoiceCalculator.calculate(invoice);
         
 ```
+
+### Generated XML examples
+
+- minimal-invoice.xml
+- complete-invoice.xml
 
 ---
 
