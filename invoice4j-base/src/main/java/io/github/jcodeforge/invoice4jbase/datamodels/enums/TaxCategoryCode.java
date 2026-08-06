@@ -18,4 +18,14 @@ public enum TaxCategoryCode {
     public String getCode() {
         return code;
     }
+
+    public static TaxCategoryCode fromCode(String code) {
+        for (TaxCategoryCode category : values()) {
+            if (category.code.equals(code)) {
+                return category;
+            }
+        }
+
+        throw new IllegalArgumentException("Unknown tax category code: " + code);
+    }
 }
