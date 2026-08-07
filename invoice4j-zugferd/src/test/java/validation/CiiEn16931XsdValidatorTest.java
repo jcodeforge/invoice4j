@@ -4,7 +4,7 @@ import factory.TestInvoiceFactory;
 import io.github.jcodeforge.invoice4jbase.calculation.InvoiceCalculator;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jbase.exceptions.XsdValidationException;
-import io.github.jcodeforge.invoice4jbase.validator.CiiEn16931XsdValidator;
+import io.github.jcodeforge.invoice4jzugferd.validation.CiiEn16931XsdValidator;
 import io.github.jcodeforge.invoice4jzugferd.cii.CiiInvoiceWriter;
 import org.junit.Test;
 import java.io.ByteArrayInputStream;

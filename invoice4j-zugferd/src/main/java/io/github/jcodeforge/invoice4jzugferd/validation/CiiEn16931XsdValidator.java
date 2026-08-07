@@ -1,7 +1,6 @@
-package io.github.jcodeforge.invoice4jbase.validator;
+package io.github.jcodeforge.invoice4jzugferd.validation;
 
 import io.github.jcodeforge.invoice4jbase.exceptions.XsdValidationException;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
@@ -13,6 +12,7 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
+import io.github.jcodeforge.invoice4jbase.validator.XsdValidator;
 import org.xml.sax.SAXException;
 
 public final class CiiEn16931XsdValidator implements XsdValidator {
