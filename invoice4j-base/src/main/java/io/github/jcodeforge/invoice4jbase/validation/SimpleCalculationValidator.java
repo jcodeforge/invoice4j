@@ -1,4 +1,4 @@
-package io.github.jcodeforge.invoice4jbase.validator;
+package io.github.jcodeforge.invoice4jbase.validation;
 
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.*;
 import io.github.jcodeforge.invoice4jbase.exceptions.InvoiceValidationException;
