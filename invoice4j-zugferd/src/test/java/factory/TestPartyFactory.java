@@ -37,6 +37,13 @@ public final class TestPartyFactory {
                 .build();
     }
 
+    public static ShipTo createShipTo() {
+        return ShipTo.builder()
+                .name("Warehouse Leipzig")
+                .address(TestPartyFactory.createAddress())
+                .build();
+    }
+
     public static PartyIdentifier createPartyIdentifier() {
         return PartyIdentifier.builder()
                 .value("1234567890123")
