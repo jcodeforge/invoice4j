@@ -8,7 +8,7 @@
     <artifactId>invoice4j</artifactId>
     <name>invoice4j</name>
     <url>https://github.com/jcodeforge/invoice4j</url>
-    <version>0.2.0-snapshot</version>
+    <version>0.2.0</version>
 
     <description>
         A modular Java library for creating, reading, validating, and converting
