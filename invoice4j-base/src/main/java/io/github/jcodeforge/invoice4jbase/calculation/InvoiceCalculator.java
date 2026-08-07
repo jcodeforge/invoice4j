@@ -4,6 +4,7 @@ import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.InvoiceLine;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.MonetarySummation;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Tax;
+import io.github.jcodeforge.invoice4jbase.validator.SimpleCalculationValidator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
