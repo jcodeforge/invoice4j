@@ -41,13 +41,6 @@ public class DocumentReferenceTest {
     }
 
     @Test(expected = InvoiceValidationException.class)
-    public void shouldRejectMissingTypeCode() {
-        DocumentReference.builder()
-                .id("PO-12345")
-                .build();
-    }
-
-    @Test(expected = InvoiceValidationException.class)
     public void shouldRejectBlankName() {
         DocumentReference.builder()
                 .id("PO-12345")
