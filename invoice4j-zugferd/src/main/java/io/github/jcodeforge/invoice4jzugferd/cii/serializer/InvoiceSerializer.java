@@ -7,7 +7,7 @@ import io.github.jcodeforge.invoice4jzugferd.xml.XmlNamespaces;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlWriter;
 import java.time.format.DateTimeFormatter;
 
-public class InvoiceSerializer implements XmlSerializer<Invoice> {
+public final class InvoiceSerializer implements XmlSerializer<Invoice> {
 
     private final SellerSerializer sellerSerializer = new SellerSerializer();
 
