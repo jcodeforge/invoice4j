@@ -62,6 +62,42 @@ public final class InvoiceParser implements XmlParser<Invoice> {
                                 + "/ram:IssueDateTime"
                                 + "/udt:DateTimeString"))
                 .notes(readNotes(reader, basePath))
+                // Agreement
+                .buyerReference(reader.readString(
+                        basePath
+                                + "/rsm:SupplyChainTradeTransaction"
+                                + "/ram:ApplicableHeaderTradeAgreement"
+                                + "/ram:BuyerReference"))
+                .purchaseOrderReference(reader.readString(
+                        basePath
+                                + "/rsm:SupplyChainTradeTransaction"
+                                + "/ram:ApplicableHeaderTradeAgreement"
+                                + "/ram:BuyerOrderReferencedDocument"
+                                + "/ram:IssuerAssignedID"))
+                .salesOrderReference(reader.readString(
+                        basePath
+                                + "/rsm:SupplyChainTradeTransaction"
+                                + "/ram:ApplicableHeaderTradeAgreement"
+                                + "/ram:SellerOrderReferencedDocument"
+                                + "/ram:IssuerAssignedID"))
+                .contractReference(reader.readString(
+                        basePath
+                                + "/rsm:SupplyChainTradeTransaction"
+                                + "/ram:ApplicableHeaderTradeAgreement"
+                                + "/ram:ContractReferencedDocument"
+                                + "/ram:IssuerAssignedID"))
+                .projectReference(reader.readString(
+                        basePath
+                                + "/rsm:SupplyChainTradeTransaction"
+                                + "/ram:ApplicableHeaderTradeAgreement"
+                                + "/ram:SpecifiedProcuringProject"
+                                + "/ram:ID"))
+                .tenderReference(reader.readString(
+                        basePath
+                                + "/rsm:SupplyChainTradeTransaction"
+                                + "/ram:ApplicableHeaderTradeAgreement"
+                                + "/ram:TenderReferencedDocument"
+                                + "/ram:IssuerAssignedID"))
                 // References
                 .billingReferences(readBillingReferences(reader, basePath))
                 // Parties
@@ -181,8 +217,8 @@ public final class InvoiceParser implements XmlParser<Invoice> {
         for (String path : reader.readPaths(
                 basePath
                         + "/rsm:SupplyChainTradeTransaction"
-                        + "/ram:ApplicableHeaderTradeAgreement"
-                        + "/ram:BuyerOrderReferencedDocument")) {
+                        + "/ram:ApplicableHeaderTradeSettlement"
+                        + "/ram:InvoiceReferencedDocument")) {
 
             references.add(documentReferenceParser.parse(reader, path));
         }
