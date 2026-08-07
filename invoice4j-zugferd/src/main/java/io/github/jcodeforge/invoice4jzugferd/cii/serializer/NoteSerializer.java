@@ -4,7 +4,7 @@ import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Note;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlNamespaces;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlWriter;
 
-public class NoteSerializer implements XmlSerializer<Note> {
+public final class NoteSerializer implements XmlSerializer<Note> {
 
     @Override
     public void serialize(XmlWriter writer, Note note) {

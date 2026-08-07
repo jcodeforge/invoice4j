@@ -4,7 +4,7 @@ import io.github.jcodeforge.invoice4jbase.datamodels.pojos.BankAccount;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlNamespaces;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlWriter;
 
-public class BankAccountSerializer implements XmlSerializer<BankAccount> {
+public final class BankAccountSerializer implements XmlSerializer<BankAccount> {
 
     @Override
     public void serialize(XmlWriter writer, BankAccount bankAccount) {

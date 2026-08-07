@@ -5,7 +5,7 @@ import io.github.jcodeforge.invoice4jbase.datamodels.pojos.ShipTo;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlNamespaces;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlWriter;
 
-public class ShipToSerializer implements XmlSerializer<ShipTo> {
+public final class ShipToSerializer implements XmlSerializer<ShipTo> {
 
     private final PartyIdentifierSerializer partyIdentifierSerializer = new PartyIdentifierSerializer();
 

@@ -49,14 +49,14 @@ public class InvoiceSerializer implements XmlSerializer<Invoice> {
         writer.writeNamespace("ram", XmlNamespaces.RAM);
         writer.writeNamespace("udt", XmlNamespaces.UDT);
         writer.writeNamespace("qdt", XmlNamespaces.QDT);
-        writeExchangedDocumentContext(writer, invoice);
+        writeExchangedDocumentContext(writer);
         writeExchangedDocument(writer, invoice);
         writeSupplyChainTradeTransaction(writer, invoice);
         writer.endElement();
         writer.endDocument();
     }
 
-    private void writeExchangedDocumentContext(XmlWriter writer, Invoice invoice) {
+    private void writeExchangedDocumentContext(XmlWriter writer) {
         writer.startElement(XmlNamespaces.RSM, "ExchangedDocumentContext");
 
         CiiProfile profile = context.getProfile();

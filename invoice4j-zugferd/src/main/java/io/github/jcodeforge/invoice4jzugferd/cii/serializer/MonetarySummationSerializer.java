@@ -4,7 +4,7 @@ import io.github.jcodeforge.invoice4jbase.datamodels.pojos.MonetarySummation;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlNamespaces;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlWriter;
 
-public class MonetarySummationSerializer implements XmlSerializer<MonetarySummation> {
+public final class MonetarySummationSerializer implements XmlSerializer<MonetarySummation> {
 
     @Override
     public void serialize(XmlWriter writer, MonetarySummation monetarySummation) {

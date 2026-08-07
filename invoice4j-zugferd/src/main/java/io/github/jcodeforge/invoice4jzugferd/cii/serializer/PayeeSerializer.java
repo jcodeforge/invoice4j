@@ -5,7 +5,7 @@ import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Payee;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlNamespaces;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlWriter;
 
-public class PayeeSerializer implements XmlSerializer<Payee> {
+public final class PayeeSerializer implements XmlSerializer<Payee> {
 
     private final PartyIdentifierSerializer partyIdentifierSerializer = new PartyIdentifierSerializer();
 

@@ -4,7 +4,7 @@ import io.github.jcodeforge.invoice4jbase.datamodels.pojos.PaymentMeans;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlNamespaces;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlWriter;
 
-public class PaymentMeansSerializer implements XmlSerializer<PaymentMeans> {
+public final class PaymentMeansSerializer implements XmlSerializer<PaymentMeans> {
 
     private final BankAccountSerializer bankAccountSerializer = new BankAccountSerializer();
 

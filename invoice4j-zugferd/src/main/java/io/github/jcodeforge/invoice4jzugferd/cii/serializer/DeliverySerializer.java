@@ -5,7 +5,7 @@ import io.github.jcodeforge.invoice4jzugferd.xml.XmlNamespaces;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlWriter;
 import java.time.format.DateTimeFormatter;
 
-public class DeliverySerializer implements XmlSerializer<Delivery> {
+public final class DeliverySerializer implements XmlSerializer<Delivery> {
 
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.BASIC_ISO_DATE;
 

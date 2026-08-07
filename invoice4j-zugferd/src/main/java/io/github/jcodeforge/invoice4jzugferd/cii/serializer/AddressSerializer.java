@@ -4,7 +4,7 @@ import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Address;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlNamespaces;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlWriter;
 
-public class AddressSerializer implements XmlSerializer<Address> {
+public final class AddressSerializer implements XmlSerializer<Address> {
 
     @Override
     public void serialize(XmlWriter writer, Address address) {

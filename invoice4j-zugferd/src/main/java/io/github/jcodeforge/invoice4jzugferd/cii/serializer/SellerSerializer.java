@@ -5,7 +5,7 @@ import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Seller;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlNamespaces;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlWriter;
 
-public class SellerSerializer implements XmlSerializer<Seller> {
+public final class SellerSerializer implements XmlSerializer<Seller> {
 
     private final PartyIdentifierSerializer partyIdentifierSerializer = new PartyIdentifierSerializer();
 

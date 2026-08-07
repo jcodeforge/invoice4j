@@ -4,7 +4,7 @@ import io.github.jcodeforge.invoice4jbase.datamodels.pojos.PaymentTerms;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlNamespaces;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlWriter;
 
-public class PaymentTermsSerializer implements XmlSerializer<PaymentTerms> {
+public final class PaymentTermsSerializer implements XmlSerializer<PaymentTerms> {
 
     @Override
     public void serialize(XmlWriter writer, PaymentTerms paymentTerms) {

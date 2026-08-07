@@ -4,7 +4,7 @@ import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Tax;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlNamespaces;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlWriter;
 
-public class TaxSerializer implements XmlSerializer<Tax> {
+public final class TaxSerializer implements XmlSerializer<Tax> {
 
     @Override
     public void serialize(XmlWriter writer, Tax tax) {

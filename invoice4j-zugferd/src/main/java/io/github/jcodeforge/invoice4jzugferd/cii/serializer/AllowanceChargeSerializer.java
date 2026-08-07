@@ -4,7 +4,7 @@ import io.github.jcodeforge.invoice4jbase.datamodels.pojos.AllowanceCharge;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlNamespaces;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlWriter;
 
-public class AllowanceChargeSerializer implements XmlSerializer<AllowanceCharge> {
+public final class AllowanceChargeSerializer implements XmlSerializer<AllowanceCharge> {
 
     @Override
     public void serialize(XmlWriter writer, AllowanceCharge allowanceCharge) {

@@ -4,7 +4,7 @@ import io.github.jcodeforge.invoice4jbase.datamodels.pojos.InvoiceLine;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlNamespaces;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlWriter;
 
-public class InvoiceLineSerializer implements XmlSerializer<InvoiceLine> {
+public final class InvoiceLineSerializer implements XmlSerializer<InvoiceLine> {
 
     @Override
     public void serialize(XmlWriter writer, InvoiceLine line) {

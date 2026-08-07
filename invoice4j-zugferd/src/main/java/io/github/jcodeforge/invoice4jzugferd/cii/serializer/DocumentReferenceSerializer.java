@@ -5,7 +5,7 @@ import io.github.jcodeforge.invoice4jzugferd.xml.XmlNamespaces;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlWriter;
 import java.time.format.DateTimeFormatter;
 
-public class DocumentReferenceSerializer implements XmlSerializer<DocumentReference> {
+public final class DocumentReferenceSerializer implements XmlSerializer<DocumentReference> {
 
     @Override
     public void serialize(XmlWriter writer, DocumentReference reference) {

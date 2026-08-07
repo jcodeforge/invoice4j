@@ -4,7 +4,7 @@ import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Contact;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlNamespaces;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlWriter;
 
-public class ContactSerializer implements XmlSerializer<Contact> {
+public final class ContactSerializer implements XmlSerializer<Contact> {
 
     @Override
     public void serialize(XmlWriter writer, Contact contact) {
