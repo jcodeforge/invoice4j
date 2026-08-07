@@ -50,7 +50,7 @@ public final class CiiInvoiceWriter {
 
     public static final class Builder {
 
-        private final CiiInvoiceWriterOptions.Builder options = CiiInvoiceWriterOptions.builder();
+        private final CiiConfigurationOptions.Builder options = CiiConfigurationOptions.builder();
 
         /**
          * Sets the CII profile used during serialization.

@@ -1,19 +1,19 @@
 package io.github.jcodeforge.invoice4jzugferd.cii;
 
 /**
- * Configuration options for a {@link CiiInvoiceWriter}.
+ * Configuration options for a {@link CiiInvoiceWriter} and {@link CiiInvoiceReader}.
  *
  * <p>Instances of this class are immutable and are created using the
  * {@link Builder}. If no profile is specified, the
  * {@link CiiProfile#EN16931} profile is used by default.</p>
  */
-public final class CiiInvoiceWriterOptions {
+public final class CiiConfigurationOptions {
 
     private final CiiProfile profile;
 
     private final boolean prettyPrint;
 
-    private CiiInvoiceWriterOptions(Builder builder) {
+    private CiiConfigurationOptions(Builder builder) {
         this.prettyPrint = builder.prettyPrint;
         this.profile = builder.profile;
     }
@@ -46,7 +46,7 @@ public final class CiiInvoiceWriterOptions {
     }
 
     /**
-     * Builder for creating immutable {@link CiiInvoiceWriterOptions} instances.
+     * Builder for creating immutable {@link CiiConfigurationOptions} instances.
      */
     public static final class Builder {
 
@@ -85,12 +85,12 @@ public final class CiiInvoiceWriterOptions {
         }
 
         /**
-         * Builds a new immutable {@link CiiInvoiceWriterOptions} instance.
+         * Builds a new immutable {@link CiiConfigurationOptions} instance.
          *
          * @return the configured writer options
          */
-        public CiiInvoiceWriterOptions build() {
-            return new CiiInvoiceWriterOptions(this);
+        public CiiConfigurationOptions build() {
+            return new CiiConfigurationOptions(this);
         }
     }
 }

@@ -2,9 +2,9 @@ package io.github.jcodeforge.invoice4jzugferd.cii;
 
 public final class CiiSerializationContext {
 
-    private final CiiInvoiceWriterOptions options;
+    private final CiiConfigurationOptions options;
 
-    public CiiSerializationContext(CiiInvoiceWriterOptions options) {
+    public CiiSerializationContext(CiiConfigurationOptions options) {
         this.options = options;
     }
 

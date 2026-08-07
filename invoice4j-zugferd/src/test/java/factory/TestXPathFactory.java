@@ -1,6 +1,6 @@
 package factory;
 
-import cii.CiiNamespaceContext;
+import io.github.jcodeforge.invoice4jzugferd.xml.XmlNamespaceContext;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
 
@@ -8,7 +8,7 @@ public final class TestXPathFactory {
 
     public static XPath createXPath() {
         XPath xpath = XPathFactory.newInstance().newXPath();
-        xpath.setNamespaceContext(new CiiNamespaceContext());
+        xpath.setNamespaceContext(new XmlNamespaceContext());
         return xpath;
     }
 }
