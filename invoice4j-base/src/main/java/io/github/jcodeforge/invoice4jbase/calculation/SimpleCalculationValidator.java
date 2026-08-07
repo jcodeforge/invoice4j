@@ -1,4 +1,4 @@
-package io.github.jcodeforge.invoice4jbase;
+package io.github.jcodeforge.invoice4jbase.calculation;
 
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.*;
 import io.github.jcodeforge.invoice4jbase.exceptions.InvoiceValidationException;
@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
-public final class DefaultInvoiceValidator {
+public final class SimpleCalculationValidator {
 
     public void validate(Invoice invoice) {
         validateMonetarySummation(invoice);
