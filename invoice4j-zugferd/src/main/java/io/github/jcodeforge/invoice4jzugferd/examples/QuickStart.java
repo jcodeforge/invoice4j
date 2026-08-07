@@ -8,7 +8,15 @@ import io.github.jcodeforge.invoice4jzugferd.cii.CiiProfile;
 import java.io.File;
 
 /**
- * Demonstrates how to generate a minimal EN 16931 CII invoice.
+ * Demonstrates the basic usage of the invoice4j ZUGFeRD module.
+ *
+ * <p>This example shows how to:
+ * <ol>
+ *     <li>Create a minimal invoice.</li>
+ *     <li>Calculate invoice totals and taxes.</li>
+ *     <li>Write the invoice as an EN 16931 Cross Industry Invoice (CII) XML document.</li>
+ *     <li>Read the generated XML back into an {@link Invoice}.</li>
+ * </ol>
  */
 public final class QuickStart {
 

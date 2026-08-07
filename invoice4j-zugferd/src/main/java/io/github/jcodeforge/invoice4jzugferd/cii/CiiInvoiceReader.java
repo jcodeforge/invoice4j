@@ -13,6 +13,12 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
+/**
+ * Reads EN16931 Cross Industry Invoice (CII) XML documents and converts them
+ * into {@link Invoice} domain objects.
+ *
+ * <p>Create instances using the {@link Builder}.</p>
+ */
 public final class CiiInvoiceReader {
 
     private final InvoiceParser invoiceParser;
@@ -21,17 +27,37 @@ public final class CiiInvoiceReader {
         this.invoiceParser = new InvoiceParser();
     }
 
+    /**
+     * Creates a new builder for configuring a {@link CiiInvoiceReader}.
+     *
+     * @return a new reader builder
+     */
     public static Builder builder() {
         return new Builder();
     }
 
+    /**
+     * Builder for creating {@link CiiInvoiceReader} instances.
+     */
     public static final class Builder {
 
+        /**
+         * Builds a new {@link CiiInvoiceReader}.
+         *
+         * @return a new reader instance
+         */
         public CiiInvoiceReader build() {
             return new CiiInvoiceReader();
         }
     }
 
+    /**
+     * Reads an invoice from the given input stream.
+     *
+     * @param inputStream the XML input stream
+     * @return the parsed invoice
+     * @throws DeserializationException if the invoice cannot be read
+     */
     private Invoice read(InputStream inputStream) {
         try {
             XmlReader reader = XmlReaderFactory.create(inputStream);
@@ -42,6 +68,14 @@ public final class CiiInvoiceReader {
         }
     }
 
+    /**
+     * Reads an invoice from a CII XML file.
+     *
+     * @param file the XML file to read
+     * @return the parsed invoice
+     * @throws NullPointerException if {@code file} is {@code null}
+     * @throws DeserializationException if the invoice cannot be read
+     */
     public Invoice readFromFile(File file) {
         Objects.requireNonNull(file, "file must not be null");
 
@@ -53,6 +87,14 @@ public final class CiiInvoiceReader {
         }
     }
 
+    /**
+     * Reads an invoice from a CII XML string.
+     *
+     * @param xml the XML document
+     * @return the parsed invoice
+     * @throws NullPointerException if {@code xml} is {@code null}
+     * @throws DeserializationException if the invoice cannot be read
+     */
     public Invoice readFromString(String xml) {
         Objects.requireNonNull(xml, "xml must not be null");
 
