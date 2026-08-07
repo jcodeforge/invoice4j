@@ -17,6 +17,8 @@ import java.nio.file.Path;
 
 public class CiiEn16931XsdValidatorTest {
 
+    private final CiiEn16931XsdValidator SUT = new CiiEn16931XsdValidator();
+
     @Test
     public void shouldValidateMinimalInvoice() throws IOException {
         Invoice invoice = new InvoiceCalculator().calculate(TestInvoiceFactory.createMinimalInvoice());
@@ -29,7 +31,7 @@ public class CiiEn16931XsdValidatorTest {
                 .build()
                 .writeToFile(invoice, file);
 
-        new CiiEn16931XsdValidator().validate(file);
+        SUT.validate(file);
     }
 
     @Test
@@ -44,7 +46,7 @@ public class CiiEn16931XsdValidatorTest {
                 .build()
                 .writeToFile(invoice, file);
 
-        new CiiEn16931XsdValidator().validate(file);
+        SUT.validate(file);
     }
 
     @Test(expected = XsdValidationException.class)
@@ -53,7 +55,7 @@ public class CiiEn16931XsdValidatorTest {
 
         InputStream in = new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8));
 
-        new CiiEn16931XsdValidator().validate(in);
+        SUT.validate(in);
     }
 
     @Test(expected = XsdValidationException.class)
@@ -65,7 +67,7 @@ public class CiiEn16931XsdValidatorTest {
 
         InputStream in = new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8));
 
-        new CiiEn16931XsdValidator().validate(in);
+        SUT.validate(in);
     }
 
     @Test
@@ -76,7 +78,7 @@ public class CiiEn16931XsdValidatorTest {
                 .build()
                 .writeToString(invoice);
 
-        new CiiEn16931XsdValidator().validate(xml);
+        SUT.validate(xml);
     }
 
     @Test
@@ -89,21 +91,21 @@ public class CiiEn16931XsdValidatorTest {
 
         InputStream in = new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8));
 
-        new CiiEn16931XsdValidator().validate(in);
+        SUT.validate(in);
     }
 
     @Test(expected = NullPointerException.class)
     public void shouldRejectNullFile() {
-        new CiiEn16931XsdValidator().validate((File) null);
+        SUT.validate((File) null);
     }
 
     @Test(expected = NullPointerException.class)
     public void shouldRejectNullInputStream() {
-        new CiiEn16931XsdValidator().validate((InputStream) null);
+        SUT.validate((InputStream) null);
     }
 
     @Test(expected = NullPointerException.class)
     public void shouldRejectNullString() {
-        new CiiEn16931XsdValidator().validate((String) null);
+        SUT.validate((String) null);
     }
 }
