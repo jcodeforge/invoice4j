@@ -104,15 +104,30 @@ Run the example to see how to create an invoice and calculate its totals using t
 ## Examples
 
 ```
+// Create and calculate an invoice
 Invoice invoice = InvoiceCalculator.calculate(
         TestInvoiceFactory.createMinimalInvoice());
 
+// Create a CII writer
 CiiInvoiceWriter writer = CiiInvoiceWriter.builder()
         .profile(CiiProfile.EN16931)
         .prettyPrint(true)
         .build();
 
-writer.writeToFile(invoice, new File("invoice.xml"));
+// Write the invoice to XML
+File file = new File("invoice.xml");
+writer.writeToFile(invoice, file);
+
+// Create a CII reader
+CiiInvoiceReader reader = CiiInvoiceReader.builder()
+        .build();
+
+// Read the invoice back
+Invoice parsedInvoice = reader.readFromFile(file);
+
+System.out.println("Invoice number: " + parsedInvoice.getInvoiceNumber());
+System.out.println("Seller: " + parsedInvoice.getSeller().getName());
+System.out.println("Buyer: " + parsedInvoice.getBuyer().getName());
         
 ```
 
@@ -152,8 +167,8 @@ The test suite covers:
 | Version   | Milestone                               | Status      |
 |-----------|-----------------------------------------|-------------|
 | v0.1.0    | Core Model - Invoice calculation engine | Finished    |
-| v0.2.0    | CII XML                                 | In Progress |
-| v0.3.0    | ZUGFeRD                                 | Planned     |
+| v0.2.0    | CII XML                                 | Finished    |
+| v0.3.0    | ZUGFeRD                                 | In Progress |
 | v0.4.0    | XRechnung                               | Planned     |
 | v1.0.0    | Public Release                          | Planned     |
 | v1.1.0    | PEPPOL Support                          | Planned     |
