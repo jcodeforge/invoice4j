@@ -2,6 +2,7 @@ package io.github.jcodeforge.invoice4jzugferd.examples;
 
 import io.github.jcodeforge.invoice4jbase.calculation.InvoiceCalculator;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
+import io.github.jcodeforge.invoice4jzugferd.cii.CiiInvoiceReader;
 import io.github.jcodeforge.invoice4jzugferd.cii.CiiInvoiceWriter;
 import io.github.jcodeforge.invoice4jzugferd.cii.CiiProfile;
 import java.io.File;
@@ -15,10 +16,8 @@ public final class QuickStart {
         // Create an invoice
         Invoice invoice = MinimalInvoiceFactory.createMinimalInvoice();
 
-        InvoiceCalculator calculator = new InvoiceCalculator();
-
         // Calculate totals and taxes
-        Invoice calculatedInvoice = calculator.calculate(invoice);
+        Invoice calculatedInvoice = new InvoiceCalculator().calculate(invoice);
 
         // Create a writer
         CiiInvoiceWriter writer = CiiInvoiceWriter.builder()
@@ -27,8 +26,26 @@ public final class QuickStart {
                 .build();
 
         // Write the invoice
-        writer.writeToFile(calculatedInvoice, new File("minimal-invoice.xml"));
+        File file = new File("minimal-invoice.xml");
+        writer.writeToFile(calculatedInvoice, file);
 
         System.out.println("Invoice written to minimal-invoice.xml");
+
+        // Create a CII reader
+        CiiInvoiceReader reader = CiiInvoiceReader.builder().build();
+
+        // Read the invoice back
+        Invoice parsedInvoice = reader.readFromFile(file);
+
+        System.out.println("Invoice successfully read.");
+        System.out.println("Invoice number: " + parsedInvoice.getInvoiceNumber());
+        System.out.println("Seller: " + parsedInvoice.getSeller().getName());
+        System.out.println("Buyer: " + parsedInvoice.getBuyer().getName());
+        System.out.println("Payable amount: "
+                + parsedInvoice.getMonetarySummation()
+                .getPayableAmount()
+                .getAmount()
+                + " "
+                + parsedInvoice.getCurrency());
     }
 }

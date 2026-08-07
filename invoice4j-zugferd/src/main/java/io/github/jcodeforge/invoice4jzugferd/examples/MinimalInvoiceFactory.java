@@ -29,12 +29,12 @@ public final class MinimalInvoiceFactory {
                 .build();
     }
 
-    public static Delivery createDelivery() {
+    private static Delivery createDelivery() {
         return Delivery.builder()
+                .shipTo(createShipTo())
                 .actualDeliveryDate(LocalDate.of(2026, 1, 15))
                 .deliveryPeriodStartDate(LocalDate.of(2026, 1, 1))
                 .deliveryPeriodEndDate(LocalDate.of(2026, 1, 31))
-                .address(createAddress())
                 .build();
     }
 
@@ -59,7 +59,7 @@ public final class MinimalInvoiceFactory {
                 .build();
     }
 
-    public static PaymentMeans createPaymentMeans() {
+    private static PaymentMeans createPaymentMeans() {
         return PaymentMeans.builder()
                 .meansCode(PaymentMeansCode.CREDIT_TRANSFER)
                 .meansDescription("SEPA Credit Transfer")
@@ -68,7 +68,7 @@ public final class MinimalInvoiceFactory {
                 .build();
     }
 
-    public static BankAccount createBankAccount() {
+    private static BankAccount createBankAccount() {
         return BankAccount.builder()
                 .iban("DE89370400440532013000")
                 .bic("COBADEFFXXX")
@@ -76,21 +76,21 @@ public final class MinimalInvoiceFactory {
                 .build();
     }
 
-    public static PaymentTerms createPaymentTerms() {
+    private static PaymentTerms createPaymentTerms() {
         return PaymentTerms.builder()
                 .description("Payment due within 30 days.")
                 .dueDate(LocalDate.of(2026, 1, 31))
                 .build();
     }
 
-    public static PartyIdentifier createPartyIdentifier() {
+    private static PartyIdentifier createPartyIdentifier() {
         return PartyIdentifier.builder()
                 .value("1234567890123")
                 .scheme(IdentifierScheme.GLN)
                 .build();
     }
 
-    public static Address createAddress() {
+    private static Address createAddress() {
         return Address.builder()
                 .street("Example Street 1")
                 .city("Leipzig")
@@ -114,14 +114,14 @@ public final class MinimalInvoiceFactory {
                 .build();
     }
 
-    public static InvoicePeriod createInvoicePeriod() {
+    private static InvoicePeriod createInvoicePeriod() {
         return InvoicePeriod.builder()
                 .startDate(LocalDate.of(2026, 1, 1))
                 .endDate(LocalDate.of(2026, 1, 31))
                 .build();
     }
 
-    public static InvoiceLine createFirstInvoiceLine() {
+    private static InvoiceLine createFirstInvoiceLine() {
         return InvoiceLine.builder()
                 .id("1")
                 .itemName("Item")
@@ -140,7 +140,7 @@ public final class MinimalInvoiceFactory {
                 .build();
     }
 
-    public static Tax createTax() {
+    private static Tax createTax() {
         return Tax.builder()
                 .categoryCode(TaxCategoryCode.STANDARD)
                 .rate(new BigDecimal("19"))
@@ -162,7 +162,7 @@ public final class MinimalInvoiceFactory {
                 .build();
     }
 
-    public static MonetarySummation createMonetarySummation() {
+    private static MonetarySummation createMonetarySummation() {
         return MonetarySummation.builder()
                 .lineExtensionAmount(createEUMoney("100.00"))
                 .allowanceTotalAmount(createEUMoney("0.00"))
@@ -173,6 +173,13 @@ public final class MinimalInvoiceFactory {
                 .prepaidAmount(createEUMoney("0.00"))
                 .roundingAmount(createEUMoney("0.00"))
                 .payableAmount(createEUMoney("119.00"))
+                .build();
+    }
+
+    private static ShipTo createShipTo() {
+        return ShipTo.builder()
+                .name("Warehouse Leipzig")
+                .address(createAddress())
                 .build();
     }
 }
