@@ -33,7 +33,7 @@ import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.Collections;
 
-public abstract class XmlUtils {
+public final class XmlUtils {
 
     public static <T> T unmarshal(Class<T> clazz, String xmlFile, Schema schema) throws UnmarshalException,
             FileNotFoundException {
