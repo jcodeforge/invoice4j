@@ -92,6 +92,12 @@ public final class InvoiceParser implements XmlParser<Invoice> {
                                 + "/ram:ApplicableHeaderTradeAgreement"
                                 + "/ram:SpecifiedProcuringProject"
                                 + "/ram:ID"))
+                .projectName(reader.readString(
+                        basePath
+                                + "/rsm:SupplyChainTradeTransaction"
+                                + "/ram:ApplicableHeaderTradeAgreement"
+                                + "/ram:SpecifiedProcuringProject"
+                                + "/ram:Name"))
                 .tenderReference(reader.readString(
                         basePath
                                 + "/rsm:SupplyChainTradeTransaction"
@@ -246,7 +252,7 @@ public final class InvoiceParser implements XmlParser<Invoice> {
         for (String path : reader.readPaths(
                 basePath
                         + "/rsm:SupplyChainTradeTransaction"
-                        + "/ram:ApplicableHeaderTradeSettlement"
+                        + "/ram:ApplicableHeaderTradeAgreement"
                         + "/ram:AdditionalReferencedDocument")) {
 
             documents.add(documentReferenceParser.parse(reader, path));

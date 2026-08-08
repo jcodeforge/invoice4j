@@ -14,21 +14,13 @@ public final class DeliveryParser implements XmlParser<Delivery> {
         }
 
         return Delivery.builder()
-                .shipTo(shipToParser.parse(reader, basePath + "/ram:ShipToTradeParty"))
+                .shipTo(shipToParser.parse(
+                        reader,
+                        basePath + "/ram:ShipToTradeParty"))
                 .actualDeliveryDate(reader.readDate(
                         basePath
                                 + "/ram:ActualDeliverySupplyChainEvent"
                                 + "/ram:OccurrenceDateTime"
-                                + "/udt:DateTimeString"))
-                .deliveryPeriodStartDate(reader.readDate(
-                        basePath
-                                + "/ram:BillingSpecifiedPeriod"
-                                + "/ram:StartDateTime"
-                                + "/udt:DateTimeString"))
-                .deliveryPeriodEndDate(reader.readDate(
-                        basePath
-                                + "/ram:BillingSpecifiedPeriod"
-                                + "/ram:EndDateTime"
                                 + "/udt:DateTimeString"))
                 .build();
     }

@@ -31,30 +31,5 @@ public final class DeliverySerializer implements XmlSerializer<Delivery> {
             writer.endElement();
             writer.endElement();
         }
-
-        // BT-73 / BT-74
-        if (delivery.getDeliveryPeriodStartDate() != null || delivery.getDeliveryPeriodEndDate() != null) {
-            writer.startElement(XmlNamespaces.RAM, "BillingSpecifiedPeriod");
-
-            if (delivery.getDeliveryPeriodStartDate() != null) {
-                writer.startElement(XmlNamespaces.RAM, "StartDateTime");
-                writer.startElement(XmlNamespaces.UDT, "DateTimeString");
-                writer.writeAttribute("format", "102");
-                writer.writeCharacters(delivery.getDeliveryPeriodStartDate().format(DATE_FORMAT));
-                writer.endElement();
-                writer.endElement();
-            }
-
-            if (delivery.getDeliveryPeriodEndDate() != null) {
-                writer.startElement(XmlNamespaces.RAM, "EndDateTime");
-                writer.startElement(XmlNamespaces.UDT, "DateTimeString");
-                writer.writeAttribute("format", "102");
-                writer.writeCharacters(delivery.getDeliveryPeriodEndDate().format(DATE_FORMAT));
-                writer.endElement();
-                writer.endElement();
-            }
-
-            writer.endElement();
-        }
     }
 }
