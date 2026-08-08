@@ -42,6 +42,7 @@ public final class TestInvoiceFactory {
                 .buyerReference("BUYER-REF-001")
                 .contractReference("CONTRACT-2026")
                 .projectReference("PROJECT-42")
+                .projectName("My Project")
                 .purchaseOrderReference("PO-4711")
                 .salesOrderReference("SO-12345")
                 .tenderReference("TENDER-01")
