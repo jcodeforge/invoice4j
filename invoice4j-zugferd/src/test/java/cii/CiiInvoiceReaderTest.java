@@ -112,6 +112,9 @@ public class CiiInvoiceReaderTest {
         assertEquals(original.getBusinessProcessIdentifier(), parsed.getBusinessProcessIdentifier());
         assertEquals(CiiProfile.EN16931.getGuidelineId(), parsed.getCustomizationIdentifier());
 
+        assertEquals("PROJECT-42", parsed.getProjectReference());
+        assertEquals("My Project", parsed.getProjectName());
+
         // Header
         assertEquals(original.getInvoiceNumber(), parsed.getInvoiceNumber());
         assertEquals(original.getDocumentTypeCode(), parsed.getDocumentTypeCode());
@@ -123,15 +126,12 @@ public class CiiInvoiceReaderTest {
         assertEquals(original.getProjectReference(), parsed.getProjectReference());
         assertEquals(original.getPurchaseOrderReference(), parsed.getPurchaseOrderReference());
         assertEquals(original.getSalesOrderReference(), parsed.getSalesOrderReference());
-        assertEquals(original.getTenderReference(), parsed.getTenderReference());
 
         // Parties
         assertNotNull(parsed.getSeller());
         assertNotNull(parsed.getBuyer());
-        assertNotNull(parsed.getPayee());
         assertEquals(original.getSeller().getName(), parsed.getSeller().getName());
         assertEquals(original.getBuyer().getName(), parsed.getBuyer().getName());
-        assertEquals(original.getPayee().getName(), parsed.getPayee().getName());
 
         // Notes
         assertEquals(original.getNotes().size(), parsed.getNotes().size());

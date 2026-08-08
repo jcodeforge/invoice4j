@@ -1,8 +1,10 @@
 package io.github.jcodeforge.invoice4jzugferd.cii;
 
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
+import io.github.jcodeforge.invoice4jbase.validation.XsdValidator;
 import io.github.jcodeforge.invoice4jzugferd.cii.serializer.InvoiceSerializer;
 import io.github.jcodeforge.invoice4jbase.exceptions.SerializationException;
+import io.github.jcodeforge.invoice4jzugferd.validation.CiiEn16931XsdValidator;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlWriter;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlWriterFactory;
 import javax.xml.transform.OutputKeys;
@@ -16,9 +18,11 @@ import java.util.Objects;
 
 public final class CiiInvoiceWriter {
 
-    private final CiiSerializationContext context;
+    private final CiiConfigurationOptions options;
 
     private final InvoiceSerializer invoiceSerializer;
+
+    private final XsdValidator validator;
 
     /**
      * Writes {@link Invoice} instances as UN/CEFACT Cross Industry Invoice (CII)
@@ -36,9 +40,10 @@ public final class CiiInvoiceWriter {
      * writer.writeToFile(invoice, new File("invoice.xml"));
      * }</pre>
      */
-    private CiiInvoiceWriter(CiiSerializationContext context) {
-        this.context = context;
-        this.invoiceSerializer = new InvoiceSerializer(context);
+    private CiiInvoiceWriter(CiiConfigurationOptions options) {
+        this.options = options;
+        this.invoiceSerializer = new InvoiceSerializer(options);
+        this.validator = this.options.shouldValidateAgainstXsd() ? new CiiEn16931XsdValidator() : null;
     }
 
     /**
@@ -74,6 +79,17 @@ public final class CiiInvoiceWriter {
             return this;
         }
 
+        /**
+         * Enables or disables XSD validation after serialization.
+         *
+         * @param validateAgainstXsd {@code true} to validate the generated XML
+         *                           against the official EN16931 schema
+         * @return this builder
+         */
+        public Builder validateAgainstXsd(boolean validateAgainstXsd) {
+            options.validateAgainstXsd(validateAgainstXsd);
+            return this;
+        }
 
         /**
          * Builds a new {@link CiiInvoiceWriter}.
@@ -81,7 +97,7 @@ public final class CiiInvoiceWriter {
          * @return a configured writer instance
          */
         public CiiInvoiceWriter build() {
-            return new CiiInvoiceWriter(new CiiSerializationContext(options.build()));
+            return new CiiInvoiceWriter(options.build());
         }
     }
 
@@ -116,10 +132,15 @@ public final class CiiInvoiceWriter {
         Objects.requireNonNull(file, "file must not be null");
 
         try {
-            if (!context.isPrettyPrint()) {
+            if (!options.isPrettyPrint()) {
                 try (OutputStream out = new FileOutputStream(file)) {
                     write(invoice, out);
                 }
+
+                if (validator != null) {
+                    validator.validate(file);
+                }
+
                 return;
             }
 
@@ -145,7 +166,13 @@ public final class CiiInvoiceWriter {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         write(invoice, out);
 
-        return out.toString(StandardCharsets.UTF_8);
+        String xml = out.toString(StandardCharsets.UTF_8);
+
+        if (validator != null) {
+            validator.validate(xml);
+        }
+
+        return xml;
     }
 
     /**
