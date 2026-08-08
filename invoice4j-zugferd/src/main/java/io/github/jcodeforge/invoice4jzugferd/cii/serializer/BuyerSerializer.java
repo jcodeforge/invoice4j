@@ -23,17 +23,15 @@ public final class BuyerSerializer implements XmlSerializer<Buyer> {
             return;
         }
 
-        writer.startElement(XmlNamespaces.RAM, "BuyerTradeParty");
-        // BT-44
-        writer.writeElement(XmlNamespaces.RAM, "Name", buyer.getName());
-        writer.writeOptionalElement(XmlNamespaces.RAM, "Description", buyer.getTradingName());
         // BT-45
         for (PartyIdentifier identifier : buyer.getIdentifiers()) {
             partyIdentifierSerializer.serialize(writer, identifier);
         }
 
-        // BT-48
-        taxIdentifierSerializer.serialize(writer, buyer.getVatIdentifier());
+        writer.startElement(XmlNamespaces.RAM, "BuyerTradeParty");
+        // BT-44
+        writer.writeElement(XmlNamespaces.RAM, "Name", buyer.getName());
+        writer.writeOptionalElement(XmlNamespaces.RAM, "Description", buyer.getTradingName());
 
         // BT-47
         if (buyer.getLegalRegistrationIdentifier() != null) {
@@ -42,9 +40,12 @@ public final class BuyerSerializer implements XmlSerializer<Buyer> {
             writer.endElement();
         }
 
-        electronicAddressSerializer.serialize(writer, buyer.getElectronicAddress());
-        addressSerializer.serialize(writer, buyer.getAddress());
+        // BT-48
+        taxIdentifierSerializer.serialize(writer, buyer.getVatIdentifier());
+
         contactSerializer.serialize(writer, buyer.getContact());
+        addressSerializer.serialize(writer, buyer.getAddress());
+        electronicAddressSerializer.serialize(writer, buyer.getElectronicAddress());
 
         writer.endElement();
     }

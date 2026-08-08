@@ -23,16 +23,16 @@ public final class MonetarySummationSerializer implements XmlSerializer<Monetary
                 .getAmount().toPlainString());
         writer.writeElement(XmlNamespaces.RAM, "TaxTotalAmount", monetarySummation.getTaxAmount().getAmount()
                 .toPlainString());
-        writer.writeElement(XmlNamespaces.RAM, "GrandTotalAmount", monetarySummation.getTaxInclusiveAmount()
-                .getAmount().toPlainString());
-        writer.writeElement(XmlNamespaces.RAM, "TotalPrepaidAmount", monetarySummation.getPrepaidAmount()
-                .getAmount().toPlainString());
 
         if (monetarySummation.getRoundingAmount() != null) {
             writer.writeElement(XmlNamespaces.RAM, "RoundingAmount", monetarySummation.getRoundingAmount()
                     .getAmount().toPlainString());
         }
 
+        writer.writeElement(XmlNamespaces.RAM, "GrandTotalAmount", monetarySummation.getTaxInclusiveAmount()
+                .getAmount().toPlainString());
+        writer.writeElement(XmlNamespaces.RAM, "TotalPrepaidAmount", monetarySummation.getPrepaidAmount()
+                .getAmount().toPlainString());
         writer.writeElement(XmlNamespaces.RAM, "DuePayableAmount", monetarySummation.getPayableAmount()
                 .getAmount().toPlainString());
 

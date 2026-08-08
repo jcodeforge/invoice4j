@@ -24,16 +24,15 @@ public final class SellerSerializer implements XmlSerializer<Seller> {
         }
 
         writer.startElement(XmlNamespaces.RAM, "SellerTradeParty");
-        // BT-27
-        writer.writeElement(XmlNamespaces.RAM, "Name", seller.getName());
-        writer.writeOptionalElement(XmlNamespaces.RAM, "Description", seller.getTradingName());
+
         // BT-29
         for (PartyIdentifier identifier : seller.getIdentifiers()) {
             partyIdentifierSerializer.serialize(writer, identifier);
         }
 
-        // BT-31
-        taxIdentifierSerializer.serialize(writer, seller.getVatIdentifier());
+        // BT-27
+        writer.writeElement(XmlNamespaces.RAM, "Name", seller.getName());
+        writer.writeOptionalElement(XmlNamespaces.RAM, "Description", seller.getTradingName());
 
         // BT-30
         if (seller.getLegalRegistrationIdentifier() != null) {
@@ -42,16 +41,19 @@ public final class SellerSerializer implements XmlSerializer<Seller> {
             writer.endElement();
         }
 
+        contactSerializer.serialize(writer, seller.getContact());
+        addressSerializer.serialize(writer, seller.getAddress());
+        electronicAddressSerializer.serialize(writer, seller.getElectronicAddress());
+
+        // BT-31
+        taxIdentifierSerializer.serialize(writer, seller.getVatIdentifier());
+
         // BT-32
         if (seller.getTaxRegistrationIdentifier() != null) {
             writer.startElement(XmlNamespaces.RAM, "SpecifiedTaxRegistration");
             writer.writeElement(XmlNamespaces.RAM, "ID", seller.getTaxRegistrationIdentifier());
             writer.endElement();
         }
-
-        electronicAddressSerializer.serialize(writer, seller.getElectronicAddress());
-        addressSerializer.serialize(writer, seller.getAddress());
-        contactSerializer.serialize(writer, seller.getContact());
 
         // BT-33
         writer.writeOptionalElement(XmlNamespaces.RAM, "Description", seller.getLegalInformation());

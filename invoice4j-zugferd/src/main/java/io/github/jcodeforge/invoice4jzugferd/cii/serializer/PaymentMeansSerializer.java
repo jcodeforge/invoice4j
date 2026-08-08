@@ -19,8 +19,6 @@ public final class PaymentMeansSerializer implements XmlSerializer<PaymentMeans>
         writer.writeElement(XmlNamespaces.RAM, "TypeCode", paymentMeans.getMeansCode().getCode());
         // Optional description
         writer.writeOptionalElement(XmlNamespaces.RAM, "Information", paymentMeans.getMeansDescription());
-        // BT-83
-        writer.writeOptionalElement(XmlNamespaces.RAM, "PaymentReference", paymentMeans.getRemittanceInformation());
         // BG-17
         bankAccountSerializer.serialize(writer, paymentMeans.getBankAccount());
 
