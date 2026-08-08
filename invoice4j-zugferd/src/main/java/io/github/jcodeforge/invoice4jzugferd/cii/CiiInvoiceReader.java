@@ -120,6 +120,10 @@ public final class CiiInvoiceReader {
     public Invoice readFromString(String xml) {
         Objects.requireNonNull(xml, "xml must not be null");
 
+        if (xml.isBlank()) {
+            throw new DeserializationException("XML document must not be empty.");
+        }
+
         try (InputStream in = new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8))) {
             return read(in);
 

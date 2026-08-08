@@ -8,8 +8,12 @@ import io.github.jcodeforge.invoice4jbase.exceptions.DeserializationException;
 import io.github.jcodeforge.invoice4jzugferd.cii.CiiInvoiceReader;
 import io.github.jcodeforge.invoice4jzugferd.cii.CiiInvoiceWriter;
 import io.github.jcodeforge.invoice4jzugferd.cii.CiiProfile;
+import io.github.jcodeforge.invoice4jzugferd.validation.CiiEn16931XsdValidator;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 
 import static org.junit.Assert.*;
 
@@ -127,6 +131,19 @@ public class CiiInvoiceReaderTest {
         assertEquals(original.getPurchaseOrderReference(), parsed.getPurchaseOrderReference());
         assertEquals(original.getSalesOrderReference(), parsed.getSalesOrderReference());
 
+        // Delivery
+        assertNotNull(parsed.getDelivery());
+        assertEquals(original.getDelivery().getActualDeliveryDate(), parsed.getDelivery().getActualDeliveryDate());
+
+        // Payment
+        assertNotNull(parsed.getPayment());
+        assertEquals(original.getPayment().getMeansCode(), parsed.getPayment().getMeansCode());
+        assertEquals(original.getPayment().getBankAccount().getIban(), parsed.getPayment().getBankAccount().getIban());
+        assertEquals(original.getPayment().getBankAccount().getBic(), parsed.getPayment().getBankAccount().getBic());
+
+        assertNotNull(parsed.getPaymentTerms());
+        assertEquals(original.getPaymentTerms().getDescription(), parsed.getPaymentTerms().getDescription());
+
         // Parties
         assertNotNull(parsed.getSeller());
         assertNotNull(parsed.getBuyer());
@@ -161,6 +178,49 @@ public class CiiInvoiceReaderTest {
                 parsed.getMonetarySummation().getPayableAmount().getAmount());
     }
 
+    @Test
+    public void shouldReadMultipleTaxes() {
+        Invoice original = TestInvoiceFactory.createInvoiceWithMultipleTaxes();
+        CiiInvoiceWriter writer = CiiInvoiceWriter.builder().build();
+
+        String xml = writer.writeToString(original);
+
+        Invoice parsed = SUT.readFromString(xml);
+
+        assertNotNull(parsed);
+
+        assertEquals(2, original.getTaxes().size());
+        assertEquals(2, parsed.getTaxes().size());
+
+        Tax originalFirstTax = original.getTaxes().getFirst();
+        Tax parsedFirstTax = parsed.getTaxes().getFirst();
+
+        assertEquals(originalFirstTax.getCategoryCode(), parsedFirstTax.getCategoryCode());
+        assertEquals(originalFirstTax.getRate(), parsedFirstTax.getRate());
+        assertEquals(originalFirstTax.getTaxableAmount().getAmount(), parsedFirstTax.getTaxableAmount().getAmount());
+        assertEquals(originalFirstTax.getTaxAmount().getAmount(), parsedFirstTax.getTaxAmount().getAmount());
+
+        Tax originalSecondTax = original.getTaxes().get(1);
+        Tax parsedSecondTax = parsed.getTaxes().get(1);
+
+        assertEquals(originalSecondTax.getCategoryCode(), parsedSecondTax.getCategoryCode());
+
+        assertEquals(originalSecondTax.getRate(), parsedSecondTax.getRate());
+        assertEquals(originalSecondTax.getTaxableAmount().getAmount(), parsedSecondTax.getTaxableAmount().getAmount());
+        assertEquals(originalSecondTax.getTaxAmount().getAmount(), parsedSecondTax.getTaxAmount().getAmount());
+    }
+
+    @Test
+    public void shouldRoundTripInvoice() {
+        Invoice original = TestInvoiceFactory.createCompleteInvoice();
+        CiiInvoiceWriter writer = CiiInvoiceWriter.builder().build();
+        String xml1 = writer.writeToString(original);
+        Invoice parsed = SUT.readFromString(xml1);
+        String xml2 = writer.writeToString(parsed);
+
+        new CiiEn16931XsdValidator().validate(new ByteArrayInputStream(xml2.getBytes(StandardCharsets.UTF_8)));
+    }
+
     @Test(expected = DeserializationException.class)
     public void shouldThrowExceptionForNonCiiXml() {
         SUT.readFromString("""
@@ -168,5 +228,20 @@ public class CiiInvoiceReaderTest {
             <test>Hello</test>
         </root>
         """);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void shouldRejectNullString() {
+        SUT.readFromString(null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void shouldRejectNullFile() {
+        SUT.readFromFile(null);
+    }
+
+    @Test(expected = DeserializationException.class)
+    public void shouldRejectEmptyXml() {
+        SUT.readFromString("");
     }
 }

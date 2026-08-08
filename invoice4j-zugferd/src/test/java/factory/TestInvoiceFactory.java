@@ -119,4 +119,36 @@ public final class TestInvoiceFactory {
                 .monetarySummation(TestMonetarySummationFactory.createMonetarySummation())
                 .build();
     }
+
+    public static Invoice createInvoiceWithMultipleTaxes() {
+        return Invoice.builder()
+                .invoiceNumber("INV-2026-0004")
+                .documentTypeCode(DocumentTypeCode.COMMERCIAL_INVOICE)
+                .issueDate(ISSUE_DATE)
+                .currency(CurrencyCode.EUR)
+                .taxCurrency(CurrencyCode.EUR)
+                // Parties
+                .seller(TestPartyFactory.createSeller())
+                .buyer(TestPartyFactory.createBuyer())
+                // Delivery
+                .delivery(TestDeliveryFactory.createDelivery())
+                // Payment
+                .paymentMeans(TestPaymentFactory.createPaymentMeans())
+                .paymentTerms(TestPaymentFactory.createPaymentTerms())
+                // Period
+                .invoicePeriod(TestInvoicePeriodFactory.createInvoicePeriod())
+                // Invoice lines
+                .lines(List.of(
+                        TestInvoiceLineFactory.createFirstInvoiceLine(),
+                        TestInvoiceLineFactory.createSecoundInvoiceLine()
+                ))
+                // Multiple taxes
+                .taxes(List.of(
+                        TestTaxFactory.createTax(),
+                        TestTaxFactory.createSecondTax()
+                ))
+                // Totals
+                .monetarySummation(TestMonetarySummationFactory.createMonetarySummation())
+                .build();
+    }
 }

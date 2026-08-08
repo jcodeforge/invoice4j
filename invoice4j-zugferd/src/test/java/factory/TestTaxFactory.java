@@ -22,4 +22,19 @@ public final class TestTaxFactory {
                         .build())
                 .build();
     }
+
+    public static Tax createSecondTax() {
+        return Tax.builder()
+                .categoryCode(TaxCategoryCode.STANDARD)
+                .rate(new BigDecimal("7"))
+                .taxableAmount(MonetaryAmount.builder()
+                        .amount(new BigDecimal("50.00"))
+                        .currency(CurrencyCode.EUR)
+                        .build())
+                .taxAmount(MonetaryAmount.builder()
+                        .amount(new BigDecimal("3.50"))
+                        .currency(CurrencyCode.EUR)
+                        .build())
+                .build();
+    }
 }
