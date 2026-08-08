@@ -61,6 +61,8 @@ public final class Invoice {
      */
     private final String projectReference;
 
+    private final String projectName;
+
     /**
      * BT-12
      */
@@ -192,6 +194,7 @@ public final class Invoice {
         this.dueDate = builder.dueDate;
         this.buyerReference = builder.buyerReference;
         this.projectReference = builder.projectReference;
+        this.projectName = builder.projectName;
         this.contractReference = builder.contractReference;
         this.purchaseOrderReference = builder.purchaseOrderReference;
         this.salesOrderReference = builder.salesOrderReference;
@@ -256,6 +259,10 @@ public final class Invoice {
 
     public String getProjectReference() {
         return projectReference;
+    }
+
+    public String getProjectName() {
+        return projectName;
     }
 
     public String getContractReference() {
@@ -370,6 +377,7 @@ public final class Invoice {
         private LocalDate dueDate;
         private String buyerReference;
         private String projectReference;
+        private String projectName;
         private String contractReference;
         private String purchaseOrderReference;
         private String salesOrderReference;
@@ -445,6 +453,11 @@ public final class Invoice {
 
         public Builder projectReference(String projectReference) {
             this.projectReference = projectReference;
+            return this;
+        }
+
+        public Builder projectName(String projectName) {
+            this.projectName = projectName;
             return this;
         }
 
@@ -705,6 +718,7 @@ public final class Invoice {
             dueDate(invoice.getDueDate());
             buyerReference(invoice.getBuyerReference());
             projectReference(invoice.getProjectReference());
+            projectName(invoice.getProjectName());
             contractReference(invoice.getContractReference());
             purchaseOrderReference(invoice.getPurchaseOrderReference());
             salesOrderReference(invoice.getSalesOrderReference());
@@ -749,18 +763,8 @@ public final class Invoice {
             if (delivery == null) {
                 throw new InvoiceValidationException("BT-72 BT-75 Delivery should not be null.");
             }
-            if (delivery.getActualDeliveryDate() == null || delivery.getDeliveryPeriodStartDate() == null ||
-                    delivery.getDeliveryPeriodEndDate() == null) {
-                throw new InvoiceValidationException("BT-72 BT-75 Actual delivery date, delivery period start and delivery period end date should not be null.");
-            }
-            if (delivery.getActualDeliveryDate().isBefore(delivery.getDeliveryPeriodStartDate())) {
-                throw new InvoiceValidationException("BT-72 Actual delivery date should not be before BT-75 delivery period start.");
-            }
-            if (delivery.getActualDeliveryDate().isAfter(delivery.getDeliveryPeriodEndDate())) {
-                throw new InvoiceValidationException("BT-72 Actual delivery date should not be after BT-76 delivery period end.");
-            }
-            if (delivery.getDeliveryPeriodStartDate().isAfter(delivery.getDeliveryPeriodEndDate())) {
-                throw new InvoiceValidationException("BT-75 Delivery period start date must not be after BT-76 delivery period end date.");
+            if (delivery.getActualDeliveryDate() == null) {
+                throw new InvoiceValidationException("BT-72 Actual delivery date must not be null.");
             }
             if (dueDate != null && dueDate.isBefore(issueDate)) {
                 throw new InvoiceValidationException("BT-9 Payment due date must not be before BT-2 issue date.");
@@ -797,6 +801,9 @@ public final class Invoice {
             }
             if (invoicePeriod.getStartDate().isAfter(invoicePeriod.getEndDate())) {
                 throw new InvoiceValidationException("BT-73 Invoice period start date must not be after BT-74 invoice period end date.");
+            }
+            if (projectReference != null && projectName == null) {
+                throw new InvoiceValidationException("Project name must not be null when project reference is specified.");
             }
 
             for (Tax tax : taxes) {
