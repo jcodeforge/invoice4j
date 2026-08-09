@@ -163,6 +163,7 @@ public final class CiiInvoiceWriter {
      */
     public String writeToString(Invoice invoice) {
         Objects.requireNonNull(invoice, "invoice must not be null");
+
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         write(invoice, out);
 
@@ -170,6 +171,10 @@ public final class CiiInvoiceWriter {
 
         if (validator != null) {
             validator.validate(xml);
+        }
+
+        if (options.isPrettyPrint()) {
+            return prettyPrintToString(xml);
         }
 
         return xml;
@@ -191,6 +196,25 @@ public final class CiiInvoiceWriter {
             transformer.setOutputProperty(OutputKeys.METHOD, "xml");
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
             transformer.transform(new StreamSource(new StringReader(xml)), new StreamResult(file));
+
+        } catch (Exception e) {
+            throw new SerializationException("Unable to pretty print XML.", e);
+        }
+    }
+
+    private String prettyPrintToString(String xml) {
+        try {
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+
+            StringWriter result = new StringWriter();
+
+            transformer.transform(new StreamSource(new StringReader(xml)), new StreamResult(result));
+
+            return result.toString();
 
         } catch (Exception e) {
             throw new SerializationException("Unable to pretty print XML.", e);
