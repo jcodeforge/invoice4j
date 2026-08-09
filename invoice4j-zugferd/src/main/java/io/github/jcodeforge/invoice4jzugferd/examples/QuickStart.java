@@ -31,6 +31,7 @@ public final class QuickStart {
         CiiInvoiceWriter writer = CiiInvoiceWriter.builder()
                 .profile(CiiProfile.EN16931)
                 .prettyPrint(true)
+                .validateAgainstXsd(true)
                 .build();
 
         // Write the invoice
@@ -40,7 +41,9 @@ public final class QuickStart {
         System.out.println("Invoice written to minimal-invoice.xml");
 
         // Create a CII reader
-        CiiInvoiceReader reader = CiiInvoiceReader.builder().build();
+        CiiInvoiceReader reader = CiiInvoiceReader.builder()
+                .validateAgainstXsd(true)
+                .build();
 
         // Read the invoice back
         Invoice parsedInvoice = reader.readFromFile(file);
