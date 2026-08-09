@@ -112,6 +112,7 @@ Invoice invoice = InvoiceCalculator.calculate(
 CiiInvoiceWriter writer = CiiInvoiceWriter.builder()
         .profile(CiiProfile.EN16931)
         .prettyPrint(true)
+        .validateAgainstXsd(true)
         .build();
 
 // Write the invoice to XML
