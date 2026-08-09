@@ -151,4 +151,24 @@ public final class TestInvoiceFactory {
                 .monetarySummation(TestMonetarySummationFactory.createMonetarySummation())
                 .build();
     }
+
+    public static Invoice createInvoiceWithoutHeaderTaxes() {
+        return Invoice.builder()
+                .invoiceNumber("INV-2026-0001")
+                .documentTypeCode(DocumentTypeCode.COMMERCIAL_INVOICE)
+                .issueDate(LocalDate.of(2026, 1, 1))
+                .currency(CurrencyCode.EUR)
+                .seller(TestPartyFactory.createSeller())
+                .buyer(TestPartyFactory.createBuyer())
+                .delivery(TestDeliveryFactory.createDelivery())
+                .paymentMeans(TestPaymentFactory.createPaymentMeans())
+                .paymentTerms(TestPaymentFactory.createPaymentTerms())
+                .invoicePeriod(TestPartyFactory.createInvoicePeriod())
+                .allowanceCharges(List.of())
+                .lines(List.of(TestInvoiceLineFactory.createFirstInvoiceLine()))
+                .taxes(List.of())
+                .monetarySummation(
+                        TestMonetarySummationFactory.createMonetarySummation())
+                .build();
+    }
 }

@@ -15,6 +15,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import static org.junit.Assert.*;
+
 public class CiiEn16931XsdValidatorTest {
 
     private final CiiEn16931XsdValidator SUT = new CiiEn16931XsdValidator();
@@ -107,5 +109,32 @@ public class CiiEn16931XsdValidatorTest {
     @Test(expected = NullPointerException.class)
     public void shouldRejectNullString() {
         SUT.validate((String) null);
+    }
+
+    @Test
+    public void shouldValidateInvoiceWhenWriterValidationIsEnabled() {
+        Invoice invoice = new InvoiceCalculator()
+                .calculate(TestInvoiceFactory.createMinimalInvoice());
+
+        CiiInvoiceWriter writer = CiiInvoiceWriter.builder()
+                .prettyPrint(true)
+                .validateAgainstXsd(true)
+                .build();
+
+        String xml = writer.writeToString(invoice);
+
+        // If validation failed, writeToString() would already have thrown.
+        assertNotNull(xml);
+    }
+
+    @Test(expected = XsdValidationException.class)
+    public void shouldRejectInvalidInvoiceWhenWriterValidationIsEnabled() {
+        Invoice invoice = TestInvoiceFactory.createInvoiceWithoutHeaderTaxes();
+
+        CiiInvoiceWriter writer = CiiInvoiceWriter.builder()
+                .validateAgainstXsd(true)
+                .build();
+
+        writer.writeToString(invoice);
     }
 }
