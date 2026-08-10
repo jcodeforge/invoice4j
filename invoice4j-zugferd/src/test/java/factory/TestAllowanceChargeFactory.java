@@ -17,6 +17,7 @@ public final class TestAllowanceChargeFactory {
                         .build())
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
+                .reason("Discount")
                 .build();
     }
 
@@ -29,6 +30,7 @@ public final class TestAllowanceChargeFactory {
                         .build())
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
+                .reason("Discount")
                 .build();
     }
 }

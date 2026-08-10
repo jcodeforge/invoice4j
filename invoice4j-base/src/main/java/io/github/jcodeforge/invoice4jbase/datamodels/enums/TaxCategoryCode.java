@@ -7,7 +7,10 @@ public enum TaxCategoryCode {
     EXEMPT("E"),
     REVERSE_CHARGE("AE"),
     OUTSIDE_SCOPE("O"),
-    REDUCED_RATE("AA");
+    EXPORT("G"),
+    INTRA_COMMUNITY("K"),
+    CANARY_ISLANDS("L"),
+    CEUTA_MELILLA("M");
 
     private final String code;
 

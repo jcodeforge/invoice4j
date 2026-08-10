@@ -1,4 +1,4 @@
-package io.github.jcodeforge.invoice4jzugferd.zugferd;
+package io.github.jcodeforge.invoice4jzugferd.zugferd.validation;
 
 import io.github.jcodeforge.invoice4jbase.exceptions.XsdValidationException;
 import java.io.File;

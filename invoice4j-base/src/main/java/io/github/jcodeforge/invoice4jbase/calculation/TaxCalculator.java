@@ -124,12 +124,12 @@ public final class TaxCalculator {
                 return false;
             }
 
-            return Objects.equals(category, other.category) && Objects.equals(rate, other.rate);
+            return category == other.category && rate.compareTo(other.rate) == 0;
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(category, rate);
+            return Objects.hash(category, rate.stripTrailingZeros());
         }
     }
 
@@ -154,12 +154,14 @@ public final class TaxCalculator {
                         MonetaryAmount.builder()
                                 .amount(Money.round(taxableAmount))
                                 .currency(currency)
-                                .build())
+                                .build()
+                )
                 .taxAmount(
                         MonetaryAmount.builder()
                                 .amount(Money.round(taxAmount))
                                 .currency(currency)
-                                .build())
+                                .build()
+                )
                 .build();
     }
 }

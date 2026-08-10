@@ -18,20 +18,20 @@ public final class AllowanceChargeSerializer implements XmlSerializer<AllowanceC
         writer.writeElement(XmlNamespaces.UDT, "Indicator", Boolean.toString(allowanceCharge.isCharge()));
         writer.endElement();
 
-        writer.writeOptionalElement(XmlNamespaces.RAM, "ReasonCode", allowanceCharge.getReasonCode());
-        writer.writeOptionalElement(XmlNamespaces.RAM, "Reason", allowanceCharge.getReason());
-        writer.writeElement(XmlNamespaces.RAM, "ActualAmount", allowanceCharge.getAmount().getAmount()
-                .toPlainString());
+        if (allowanceCharge.getPercentage() != null) {
+            writer.writeElement(XmlNamespaces.RAM, "CalculationPercent", allowanceCharge.getPercentage()
+                    .toPlainString());
+        }
 
         if (allowanceCharge.getBaseAmount() != null) {
             writer.writeElement(XmlNamespaces.RAM, "BasisAmount", allowanceCharge.getBaseAmount().getAmount()
                     .toPlainString());
         }
 
-        if (allowanceCharge.getPercentage() != null) {
-            writer.writeElement(XmlNamespaces.RAM, "CalculationPercent", allowanceCharge.getPercentage()
-                    .toPlainString());
-        }
+        writer.writeElement(XmlNamespaces.RAM, "ActualAmount", allowanceCharge.getAmount().getAmount()
+                .toPlainString());
+        writer.writeOptionalElement(XmlNamespaces.RAM, "Reason", allowanceCharge.getReason());
+        writer.writeOptionalElement(XmlNamespaces.RAM, "ReasonCode", allowanceCharge.getReasonCode());
 
         // VAT information
         writer.startElement(XmlNamespaces.RAM, "CategoryTradeTax");

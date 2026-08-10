@@ -19,6 +19,7 @@ public final class TestPartyFactory {
                 .address(createAddress())
                 .electronicAddress(createElectronicAddress())
                 .contact(createContact())
+                .addIdentifier(createPartyIdentifier())
                 .build();
     }
 

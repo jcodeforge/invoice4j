@@ -53,7 +53,7 @@ public final class CalculationUtils {
                 .quantity(BigDecimal.ONE)
                 .unitCode(UnitCode.ONE)
                 .netPrice(createEUMoney(lineExtensionAmount))
-                .taxCategory(TaxCategoryCode.REDUCED_RATE)
+                .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("7"))
                 .lineExtensionAmount(createEUMoney(lineExtensionAmount))
                 .build();
@@ -371,7 +371,7 @@ public final class CalculationUtils {
 
     public static Tax createReducedRateTax(String taxableAmount, String taxAmount) {
         return Tax.builder()
-                .categoryCode(TaxCategoryCode.REDUCED_RATE)
+                .categoryCode(TaxCategoryCode.STANDARD)
                 .rate(new BigDecimal("7"))
                 .taxableAmount(createEUMoney(taxableAmount))
                 .taxAmount(createEUMoney(taxAmount))
