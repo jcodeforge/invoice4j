@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?><rsm:CrossIndustryInvoice xmlns:rsm="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100" xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100" xmlns:qdt="urn:un:unece:uncefact:data:standard:QualifiedDataType:100">
+        
+    <rsm:ExchangedDocumentContext>
+                
+        <ram:GuidelineSpecifiedDocumentContextParameter>
+                        
+            <ram:ID>urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic</ram:ID>
+                    
+        </ram:GuidelineSpecifiedDocumentContextParameter>
+            
+    </rsm:ExchangedDocumentContext>
+        
+    <rsm:ExchangedDocument>
+                
+        <ram:ID>INV-2026-0002</ram:ID>
+                
+        <ram:TypeCode>380</ram:TypeCode>
+                
+        <ram:IssueDateTime>
+                        
+            <udt:DateTimeString format="102">20260101</udt:DateTimeString>
+                    
+        </ram:IssueDateTime>
+                
+        <ram:IncludedNote>
+                        
+            <ram:Content>Thank you for your business.</ram:Content>
+                    
+        </ram:IncludedNote>
+                
+        <ram:IncludedNote>
+                        
+            <ram:Content>Payment due within 30 days.</ram:Content>
+                        
+            <ram:SubjectCode>AAI</ram:SubjectCode>
+                    
+        </ram:IncludedNote>
+            
+    </rsm:ExchangedDocument>
+        
+    <rsm:SupplyChainTradeTransaction>
+                
+        <ram:IncludedSupplyChainTradeLineItem>
+                        
+            <ram:AssociatedDocumentLineDocument>
+                                
+                <ram:LineID>1</ram:LineID>
+                            
+            </ram:AssociatedDocumentLineDocument>
+                        
+            <ram:SpecifiedTradeProduct>
+                                
+                <ram:Name>Item</ram:Name>
+                            
+            </ram:SpecifiedTradeProduct>
+                        
+            <ram:SpecifiedLineTradeAgreement>
+                                
+                <ram:NetPriceProductTradePrice>
+                                        
+                    <ram:ChargeAmount>100.00</ram:ChargeAmount>
+                                    
+                </ram:NetPriceProductTradePrice>
+                            
+            </ram:SpecifiedLineTradeAgreement>
+                        
+            <ram:SpecifiedLineTradeDelivery>
+                                
+                <ram:BilledQuantity unitCode="C62">1</ram:BilledQuantity>
+                            
+            </ram:SpecifiedLineTradeDelivery>
+                        
+            <ram:SpecifiedLineTradeSettlement>
+                                
+                <ram:ApplicableTradeTax>
+                                        
+                    <ram:TypeCode>VAT</ram:TypeCode>
+                                        
+                    <ram:CategoryCode>S</ram:CategoryCode>
+                                        
+                    <ram:RateApplicablePercent>19</ram:RateApplicablePercent>
+                                    
+                </ram:ApplicableTradeTax>
+                                
+                <ram:SpecifiedTradeSettlementLineMonetarySummation>
+                                        
+                    <ram:LineTotalAmount>100.00</ram:LineTotalAmount>
+                                    
+                </ram:SpecifiedTradeSettlementLineMonetarySummation>
+                            
+            </ram:SpecifiedLineTradeSettlement>
+                    
+        </ram:IncludedSupplyChainTradeLineItem>
+                
+        <ram:IncludedSupplyChainTradeLineItem>
+                        
+            <ram:AssociatedDocumentLineDocument>
+                                
+                <ram:LineID>2</ram:LineID>
+                            
+            </ram:AssociatedDocumentLineDocument>
+                        
+            <ram:SpecifiedTradeProduct>
+                                
+                <ram:Name>Item</ram:Name>
+                            
+            </ram:SpecifiedTradeProduct>
+                        
+            <ram:SpecifiedLineTradeAgreement>
+                                
+                <ram:NetPriceProductTradePrice>
+                                        
+                    <ram:ChargeAmount>100.00</ram:ChargeAmount>
+                                    
+                </ram:NetPriceProductTradePrice>
+                            
+            </ram:SpecifiedLineTradeAgreement>
+                        
+            <ram:SpecifiedLineTradeDelivery>
+                                
+                <ram:BilledQuantity unitCode="C62">1</ram:BilledQuantity>
+                            
+            </ram:SpecifiedLineTradeDelivery>
+                        
+            <ram:SpecifiedLineTradeSettlement>
+                                
+                <ram:ApplicableTradeTax>
+                                        
+                    <ram:TypeCode>VAT</ram:TypeCode>
+                                        
+                    <ram:CategoryCode>S</ram:CategoryCode>
+                                        
+                    <ram:RateApplicablePercent>7</ram:RateApplicablePercent>
+                                    
+                </ram:ApplicableTradeTax>
+                                
+                <ram:SpecifiedTradeSettlementLineMonetarySummation>
+                                        
+                    <ram:LineTotalAmount>100.00</ram:LineTotalAmount>
+                                    
+                </ram:SpecifiedTradeSettlementLineMonetarySummation>
+                            
+            </ram:SpecifiedLineTradeSettlement>
+                    
+        </ram:IncludedSupplyChainTradeLineItem>
+                
+        <ram:ApplicableHeaderTradeAgreement>
+                        
+            <ram:BuyerReference>BUYER-REF-001</ram:BuyerReference>
+                        
+            <ram:SellerTradeParty>
+                                
+                <ram:Name>Müller &amp; Söhne GmbH</ram:Name>
+                                
+                <ram:PostalTradeAddress>
+                                        
+                    <ram:PostcodeCode>04109</ram:PostcodeCode>
+                                        
+                    <ram:LineOne>Example Street 1</ram:LineOne>
+                                        
+                    <ram:CityName>Leipzig</ram:CityName>
+                                        
+                    <ram:CountryID>DE</ram:CountryID>
+                                    
+                </ram:PostalTradeAddress>
+                                
+                <ram:URIUniversalCommunication>
+                                        
+                    <ram:URIID schemeID="EM">info@example.com</ram:URIID>
+                                    
+                </ram:URIUniversalCommunication>
+                                
+                <ram:SpecifiedTaxRegistration>
+                                        
+                    <ram:ID schemeID="VA">DE123456789</ram:ID>
+                                    
+                </ram:SpecifiedTaxRegistration>
+                            
+            </ram:SellerTradeParty>
+                        
+            <ram:BuyerTradeParty>
+                                
+                <ram:Name>Müller &amp; Söhne GmbH</ram:Name>
+                                
+                <ram:PostalTradeAddress>
+                                        
+                    <ram:PostcodeCode>04109</ram:PostcodeCode>
+                                        
+                    <ram:LineOne>Example Street 1</ram:LineOne>
+                                        
+                    <ram:CityName>Leipzig</ram:CityName>
+                                        
+                    <ram:CountryID>DE</ram:CountryID>
+                                    
+                </ram:PostalTradeAddress>
+                                
+                <ram:URIUniversalCommunication>
+                                        
+                    <ram:URIID schemeID="EM">info@example.com</ram:URIID>
+                                    
+                </ram:URIUniversalCommunication>
+                            
+            </ram:BuyerTradeParty>
+                        
+            <ram:BuyerOrderReferencedDocument>
+                                
+                <ram:IssuerAssignedID>PO-4711</ram:IssuerAssignedID>
+                            
+            </ram:BuyerOrderReferencedDocument>
+                        
+            <ram:ContractReferencedDocument>
+                                
+                <ram:IssuerAssignedID>CONTRACT-2026</ram:IssuerAssignedID>
+                            
+            </ram:ContractReferencedDocument>
+                    
+        </ram:ApplicableHeaderTradeAgreement>
+                
+        <ram:ApplicableHeaderTradeDelivery>
+                        
+            <ram:ShipToTradeParty>
+                                
+                <ram:Name>Warehouse Leipzig</ram:Name>
+                                
+                <ram:PostalTradeAddress>
+                                        
+                    <ram:PostcodeCode>04109</ram:PostcodeCode>
+                                        
+                    <ram:LineOne>Example Street 1</ram:LineOne>
+                                        
+                    <ram:CityName>Leipzig</ram:CityName>
+                                        
+                    <ram:CountryID>DE</ram:CountryID>
+                                    
+                </ram:PostalTradeAddress>
+                            
+            </ram:ShipToTradeParty>
+                        
+            <ram:ActualDeliverySupplyChainEvent>
+                                
+                <ram:OccurrenceDateTime>
+                                        
+                    <udt:DateTimeString format="102">20260115</udt:DateTimeString>
+                                    
+                </ram:OccurrenceDateTime>
+                            
+            </ram:ActualDeliverySupplyChainEvent>
+                    
+        </ram:ApplicableHeaderTradeDelivery>
+                
+        <ram:ApplicableHeaderTradeSettlement>
+                        
+            <ram:InvoiceCurrencyCode>EUR</ram:InvoiceCurrencyCode>
+                        
+            <ram:SpecifiedTradeSettlementPaymentMeans>
+                                
+                <ram:TypeCode>30</ram:TypeCode>
+                                
+                <ram:PayeePartyCreditorFinancialAccount>
+                                        
+                    <ram:IBANID>DE89370400440532013000</ram:IBANID>
+                                    
+                </ram:PayeePartyCreditorFinancialAccount>
+                            
+            </ram:SpecifiedTradeSettlementPaymentMeans>
+                        
+            <ram:ApplicableTradeTax>
+                                
+                <ram:CalculatedAmount>17.10</ram:CalculatedAmount>
+                                
+                <ram:TypeCode>VAT</ram:TypeCode>
+                                
+                <ram:BasisAmount>90.00</ram:BasisAmount>
+                                
+                <ram:CategoryCode>S</ram:CategoryCode>
+                                
+                <ram:RateApplicablePercent>19</ram:RateApplicablePercent>
+                            
+            </ram:ApplicableTradeTax>
+                        
+            <ram:ApplicableTradeTax>
+                                
+                <ram:CalculatedAmount>7.00</ram:CalculatedAmount>
+                                
+                <ram:TypeCode>VAT</ram:TypeCode>
+                                
+                <ram:BasisAmount>100.00</ram:BasisAmount>
+                                
+                <ram:CategoryCode>S</ram:CategoryCode>
+                                
+                <ram:RateApplicablePercent>7</ram:RateApplicablePercent>
+                            
+            </ram:ApplicableTradeTax>
+                        
+            <ram:BillingSpecifiedPeriod>
+                                
+                <ram:StartDateTime>
+                                        
+                    <udt:DateTimeString format="102">20260101</udt:DateTimeString>
+                                    
+                </ram:StartDateTime>
+                                
+                <ram:EndDateTime>
+                                        
+                    <udt:DateTimeString format="102">20260131</udt:DateTimeString>
+                                    
+                </ram:EndDateTime>
+                            
+            </ram:BillingSpecifiedPeriod>
+                        
+            <ram:SpecifiedTradeAllowanceCharge>
+                                
+                <ram:ChargeIndicator>
+                                        
+                    <udt:Indicator>false</udt:Indicator>
+                                    
+                </ram:ChargeIndicator>
+                                
+                <ram:ActualAmount>10.00</ram:ActualAmount>
+                                
+                <ram:Reason>Discount</ram:Reason>
+                                
+                <ram:CategoryTradeTax>
+                                        
+                    <ram:TypeCode>VAT</ram:TypeCode>
+                                        
+                    <ram:CategoryCode>S</ram:CategoryCode>
+                                        
+                    <ram:RateApplicablePercent>19</ram:RateApplicablePercent>
+                                    
+                </ram:CategoryTradeTax>
+                            
+            </ram:SpecifiedTradeAllowanceCharge>
+                        
+            <ram:SpecifiedTradePaymentTerms>
+                                
+                <ram:Description>Payment due within 30 days.</ram:Description>
+                                
+                <ram:DueDateDateTime>
+                                        
+                    <udt:DateTimeString format="102">20260131</udt:DateTimeString>
+                                    
+                </ram:DueDateDateTime>
+                            
+            </ram:SpecifiedTradePaymentTerms>
+                        
+            <ram:SpecifiedTradeSettlementHeaderMonetarySummation>
+                                
+                <ram:LineTotalAmount>200.00</ram:LineTotalAmount>
+                                
+                <ram:ChargeTotalAmount>0.00</ram:ChargeTotalAmount>
+                                
+                <ram:AllowanceTotalAmount>10.00</ram:AllowanceTotalAmount>
+                                
+                <ram:TaxBasisTotalAmount>190.00</ram:TaxBasisTotalAmount>
+                                
+                <ram:TaxTotalAmount currencyID="EUR">24.10</ram:TaxTotalAmount>
+                                
+                <ram:GrandTotalAmount>214.10</ram:GrandTotalAmount>
+                                
+                <ram:TotalPrepaidAmount>0.00</ram:TotalPrepaidAmount>
+                                
+                <ram:DuePayableAmount>214.10</ram:DuePayableAmount>
+                            
+            </ram:SpecifiedTradeSettlementHeaderMonetarySummation>
+                        
+            <ram:InvoiceReferencedDocument>
+                                
+                <ram:IssuerAssignedID>INV-2025-0001</ram:IssuerAssignedID>
+                            
+            </ram:InvoiceReferencedDocument>
+                    
+        </ram:ApplicableHeaderTradeSettlement>
+            
+    </rsm:SupplyChainTradeTransaction>
+    
+</rsm:CrossIndustryInvoice>
