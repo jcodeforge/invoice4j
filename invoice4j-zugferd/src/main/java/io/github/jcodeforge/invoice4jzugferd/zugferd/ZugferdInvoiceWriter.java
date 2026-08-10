@@ -18,7 +18,6 @@ public final class ZugferdInvoiceWriter {
         this.ciiWriter = CiiInvoiceWriter.builder()
                 .profile(toCiiProfile(profile))
                 .prettyPrint(builder.prettyPrint)
-                .validateAgainstXsd(builder.validateAgainstXsd)
                 .build();
     }
 
@@ -70,12 +69,10 @@ public final class ZugferdInvoiceWriter {
 
         return switch (profile) {
             case EN16931 -> CiiProfile.ZUGFERD_EN16931;
-
-            case MINIMUM,
-                 BASIC_WL,
-                 BASIC,
-                 EXTENDED ->
-                    throw new UnsupportedOperationException("ZUGFeRD profile " + profile + " is not implemented yet.");
+            case BASIC -> CiiProfile.ZUGFERD_BASIC;
+            case BASIC_WL -> throw new UnsupportedOperationException("ZUGFeRD BASIC-WL profile is not implemented yet.");
+            case MINIMUM -> throw new UnsupportedOperationException("ZUGFeRD MINIMUM profile is not implemented yet.");
+            case EXTENDED -> throw new UnsupportedOperationException("ZUGFeRD EXTENDED profile is not implemented yet.");
         };
     }
 
@@ -86,7 +83,6 @@ public final class ZugferdInvoiceWriter {
 
         private ZugferdProfile profile = ZugferdProfile.EN16931;
         private boolean prettyPrint;
-        private boolean validateAgainstXsd;
 
         /**
          * Sets the ZUGFeRD profile.
@@ -95,9 +91,7 @@ public final class ZugferdInvoiceWriter {
          * @return this builder
          */
         public Builder profile(ZugferdProfile profile) {
-            this.profile = Objects.requireNonNull(
-                    profile,
-                    "profile must not be null");
+            this.profile = Objects.requireNonNull(profile, "profile must not be null");
             return this;
         }
 
@@ -109,17 +103,6 @@ public final class ZugferdInvoiceWriter {
          */
         public Builder prettyPrint(boolean prettyPrint) {
             this.prettyPrint = prettyPrint;
-            return this;
-        }
-
-        /**
-         * Enables or disables XSD validation.
-         *
-         * @param validateAgainstXsd whether generated XML should be validated
-         * @return this builder
-         */
-        public Builder validateAgainstXsd(boolean validateAgainstXsd) {
-            this.validateAgainstXsd = validateAgainstXsd;
             return this;
         }
 
