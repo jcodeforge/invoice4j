@@ -19,16 +19,75 @@ public final class DocumentReferenceSerializer implements XmlSerializer<Document
 
         writer.startElement(XmlNamespaces.RAM, elementName);
         writer.writeElement(XmlNamespaces.RAM, "IssuerAssignedID", reference.getId());
-        writer.writeElement(XmlNamespaces.RAM, "TypeCode", reference.getTypeCode().getCode());
-        writer.writeElement(XmlNamespaces.RAM, "Name", reference.getName());
 
-        if (reference.getIssueDate() != null) {
-            writer.startElement(XmlNamespaces.RAM, "FormattedIssueDateTime");
-            writer.startElement(XmlNamespaces.UDT, "DateTimeString");
-            writer.writeAttribute("format", "102");
-            writer.writeCharacters(reference.getIssueDate().format(DateTimeFormatter.BASIC_ISO_DATE));
-            writer.endElement();
-            writer.endElement();
+
+        if ("InvoiceReferencedDocument".equals(elementName)) {
+
+            if (reference.getIssueDate() != null) {
+                writer.startElement(
+                        XmlNamespaces.RAM,
+                        "FormattedIssueDateTime"
+                );
+
+                writer.startElement(
+                        XmlNamespaces.UDT,
+                        "DateTimeString"
+                );
+
+                writer.writeAttribute(
+                        "format",
+                        "102"
+                );
+
+                writer.writeCharacters(
+                        reference.getIssueDate()
+                                .format(DateTimeFormatter.BASIC_ISO_DATE)
+                );
+
+                writer.endElement(); // DateTimeString
+                writer.endElement(); // FormattedIssueDateTime
+            }
+
+        } else {
+            // AdditionalReferencedDocument
+            if (reference.getTypeCode() != null) {
+                writer.writeElement(
+                        XmlNamespaces.RAM,
+                        "TypeCode",
+                        reference.getTypeCode().getCode()
+                );
+            }
+
+            writer.writeOptionalElement(
+                    XmlNamespaces.RAM,
+                    "Name",
+                    reference.getName()
+            );
+
+            if (reference.getIssueDate() != null) {
+                writer.startElement(
+                        XmlNamespaces.RAM,
+                        "FormattedIssueDateTime"
+                );
+
+                writer.startElement(
+                        XmlNamespaces.UDT,
+                        "DateTimeString"
+                );
+
+                writer.writeAttribute(
+                        "format",
+                        "102"
+                );
+
+                writer.writeCharacters(
+                        reference.getIssueDate()
+                                .format(DateTimeFormatter.BASIC_ISO_DATE)
+                );
+
+                writer.endElement();
+                writer.endElement();
+            }
         }
 
         writer.endElement();
