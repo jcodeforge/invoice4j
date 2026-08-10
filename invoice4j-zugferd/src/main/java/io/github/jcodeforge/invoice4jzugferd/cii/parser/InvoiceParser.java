@@ -117,11 +117,6 @@ public final class InvoiceParser implements XmlParser<Invoice> {
                                 + "/rsm:SupplyChainTradeTransaction"
                                 + "/ram:ApplicableHeaderTradeAgreement"
                                 + "/ram:BuyerTradeParty"))
-                .payee(payeeParser.parse(reader,
-                        basePath
-                                + "/rsm:SupplyChainTradeTransaction"
-                                + "/ram:ApplicableHeaderTradeAgreement"
-                                + "/ram:PayeeTradeParty"))
                 // Delivery
                 .delivery(deliveryParser.parse(reader,
                         basePath
@@ -129,6 +124,11 @@ public final class InvoiceParser implements XmlParser<Invoice> {
                                 + "/ram:ApplicableHeaderTradeDelivery"))
                 // Settlement
                 .currency(readCurrency(reader, basePath))
+                .payee(payeeParser.parse(reader,
+                        basePath
+                                + "/rsm:SupplyChainTradeTransaction"
+                                + "/ram:ApplicableHeaderTradeSettlement"
+                                + "/ram:PayeeTradeParty"))
                 .paymentMeans(paymentMeansParser.parse(reader,
                         basePath
                                 + "/rsm:SupplyChainTradeTransaction"
