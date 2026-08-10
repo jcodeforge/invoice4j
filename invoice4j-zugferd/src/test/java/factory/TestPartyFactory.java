@@ -62,7 +62,7 @@ public final class TestPartyFactory {
 
     private static Contact createContact() {
         return Contact.builder()
-                .name("Müller Sühne")
+                .name("Müller & Söhne GmbH")
                 .email("info@example.com")
                 .telephone("+49 341 123456")
                 .build();
