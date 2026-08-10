@@ -2,7 +2,6 @@ package io.github.jcodeforge.invoice4jzugferd.cii.serializer;
 
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.MonetarySummation;
 import io.github.jcodeforge.invoice4jzugferd.cii.CiiConfigurationOptions;
-import io.github.jcodeforge.invoice4jzugferd.cii.CiiProfile;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlNamespaces;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlWriter;
 
@@ -31,8 +30,13 @@ public final class MonetarySummationSerializer implements XmlSerializer<Monetary
                 .getAmount().toPlainString());
         writer.writeElement(XmlNamespaces.RAM, "TaxBasisTotalAmount", monetarySummation.getTaxExclusiveAmount()
                 .getAmount().toPlainString());
-        writer.writeElement(XmlNamespaces.RAM, "TaxTotalAmount", monetarySummation.getTaxAmount().getAmount()
-                .toPlainString());
+
+        // BT-110
+        writer.startElement(XmlNamespaces.RAM, "TaxTotalAmount");
+        writer.writeAttribute("currencyID", monetarySummation.getTaxAmount().getCurrency().getCode());
+        writer.writeCharacters(monetarySummation.getTaxAmount().getAmount().toPlainString());
+
+        writer.endElement();
 
         writer.writeElement(XmlNamespaces.RAM, "GrandTotalAmount", monetarySummation.getTaxInclusiveAmount()
                 .getAmount().toPlainString());

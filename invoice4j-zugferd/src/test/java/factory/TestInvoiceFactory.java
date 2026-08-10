@@ -37,7 +37,6 @@ public final class TestInvoiceFactory {
                 .documentTypeCode(DocumentTypeCode.COMMERCIAL_INVOICE)
                 .issueDate(ISSUE_DATE)
                 .currency(CurrencyCode.EUR)
-                .taxCurrency(CurrencyCode.EUR)
                 // References
                 .buyerReference("BUYER-REF-001")
                 .contractReference("CONTRACT-2026")

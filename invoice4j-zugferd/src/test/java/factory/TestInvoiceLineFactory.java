@@ -38,7 +38,7 @@ public final class TestInvoiceLineFactory {
                         .amount(new BigDecimal("100.00"))
                         .currency(CurrencyCode.EUR)
                         .build())
-                .taxCategory(TaxCategoryCode.REDUCED_RATE)
+                .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("7"))
                 .lineExtensionAmount(MonetaryAmount.builder()
                         .amount(new BigDecimal("100.00"))
