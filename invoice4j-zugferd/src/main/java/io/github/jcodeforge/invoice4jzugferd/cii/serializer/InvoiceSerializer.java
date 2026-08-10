@@ -310,7 +310,7 @@ public final class InvoiceSerializer implements XmlSerializer<Invoice> {
         );
 
         // BT-6
-        if (invoice.getTaxCurrency() != null) {
+        if (invoice.getTaxCurrency() != null && invoice.getTaxCurrency() != invoice.getCurrency()) {
             writer.writeElement(
                     XmlNamespaces.RAM,
                     "TaxCurrencyCode",
