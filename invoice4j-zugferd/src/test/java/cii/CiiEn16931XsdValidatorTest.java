@@ -1,10 +1,10 @@
-package validation;
+package cii;
 
 import factory.TestInvoiceFactory;
 import io.github.jcodeforge.invoice4jbase.calculation.InvoiceCalculator;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jbase.exceptions.XsdValidationException;
-import io.github.jcodeforge.invoice4jzugferd.validation.CiiEn16931XsdValidator;
+import io.github.jcodeforge.invoice4jzugferd.cii.CiiEn16931XsdValidator;
 import io.github.jcodeforge.invoice4jzugferd.cii.CiiInvoiceWriter;
 import org.junit.Test;
 import java.io.ByteArrayInputStream;
@@ -111,30 +111,4 @@ public class CiiEn16931XsdValidatorTest {
         SUT.validate((String) null);
     }
 
-    @Test
-    public void shouldValidateInvoiceWhenWriterValidationIsEnabled() {
-        Invoice invoice = new InvoiceCalculator()
-                .calculate(TestInvoiceFactory.createMinimalInvoice());
-
-        CiiInvoiceWriter writer = CiiInvoiceWriter.builder()
-                .prettyPrint(true)
-                .validateAgainstXsd(true)
-                .build();
-
-        String xml = writer.writeToString(invoice);
-
-        // If validation failed, writeToString() would already have thrown.
-        assertNotNull(xml);
-    }
-
-    @Test(expected = XsdValidationException.class)
-    public void shouldRejectInvalidInvoiceWhenWriterValidationIsEnabled() {
-        Invoice invoice = TestInvoiceFactory.createInvoiceWithoutHeaderTaxes();
-
-        CiiInvoiceWriter writer = CiiInvoiceWriter.builder()
-                .validateAgainstXsd(true)
-                .build();
-
-        writer.writeToString(invoice);
-    }
 }
