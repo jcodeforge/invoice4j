@@ -10,6 +10,12 @@ public final class TestPartyFactory {
         return Seller.builder()
                 .name("Müller & Söhne GmbH")
                 .tradingName("JCodeForge")
+                .vatIdentifier(
+                        TaxIdentifier.builder()
+                                .value("DE123456789")
+                                .type(TaxRegistrationScheme.VAT_REGISTRATION_NUMBER)
+                                .build()
+                )
                 .address(createAddress())
                 .electronicAddress(createElectronicAddress())
                 .contact(createContact())
