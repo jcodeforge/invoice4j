@@ -793,15 +793,17 @@ public final class Invoice {
             if (paymentTerms != null && paymentTerms.getDueDate() != null && paymentTerms.getDueDate().isBefore(issueDate)) {
                 throw new InvoiceValidationException("BT-9 Payment due date must not be before BT-2 Issue date.");
             }
-            if (invoicePeriod == null) {
-                throw new InvoiceValidationException("Invoice period must not be null.");
+
+            if (invoicePeriod != null) {
+                if (invoicePeriod.getStartDate() == null || invoicePeriod.getEndDate() == null) {
+                    throw new InvoiceValidationException("Invoice period start date and invoice period end date must not be null.");
+                }
+
+                if (invoicePeriod.getStartDate().isAfter(invoicePeriod.getEndDate())) {
+                    throw new InvoiceValidationException("BT-73 Invoice period start date must not be after BT-74 invoice period end date.");
+                }
             }
-            if (invoicePeriod.getStartDate() == null || invoicePeriod.getEndDate() == null) {
-                throw new InvoiceValidationException("Invoice period start date and invoice period end date must not be null.");
-            }
-            if (invoicePeriod.getStartDate().isAfter(invoicePeriod.getEndDate())) {
-                throw new InvoiceValidationException("BT-73 Invoice period start date must not be after BT-74 invoice period end date.");
-            }
+
             if (projectReference != null && projectName == null) {
                 throw new InvoiceValidationException("Project name must not be null when project reference is specified.");
             }
