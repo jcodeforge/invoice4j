@@ -104,6 +104,7 @@ public class InvoiceLineCalculatorTest {
                 .amount(CalculationUtils.createEUMoney("10.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
+                .reason("Discount")
                 .build();
 
         InvoiceLine line = InvoiceLine.builder()
@@ -129,6 +130,7 @@ public class InvoiceLineCalculatorTest {
                 .amount(CalculationUtils.createEUMoney("10.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
+                .reason("Discount")
                 .build();
 
         InvoiceLine line = InvoiceLine.builder()
@@ -154,6 +156,7 @@ public class InvoiceLineCalculatorTest {
                 .amount(CalculationUtils.createEUMoney("10.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
+                .reason("Discount")
                 .build();
 
         AllowanceCharge allowance2 = AllowanceCharge.builder()
@@ -161,6 +164,7 @@ public class InvoiceLineCalculatorTest {
                 .amount(CalculationUtils.createEUMoney("5.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
+                .reason("Discount")
                 .build();
 
         InvoiceLine line = InvoiceLine.builder()
@@ -187,6 +191,7 @@ public class InvoiceLineCalculatorTest {
                 .amount(CalculationUtils.createEUMoney("10.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
+                .reason("Discount")
                 .build();
 
         AllowanceCharge charge2 = AllowanceCharge.builder()
@@ -194,6 +199,7 @@ public class InvoiceLineCalculatorTest {
                 .amount(CalculationUtils.createEUMoney("5.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
+                .reason("Discount")
                 .build();
 
         InvoiceLine line = InvoiceLine.builder()
@@ -299,6 +305,7 @@ public class InvoiceLineCalculatorTest {
                 .amount(CalculationUtils.createEUMoney("0.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
+                .reason("Discount")
                 .build();
 
         InvoiceLine line = InvoiceLine.builder()
@@ -324,6 +331,7 @@ public class InvoiceLineCalculatorTest {
                 .amount(CalculationUtils.createEUMoney("0.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
+                .reason("Discount")
                 .build();
 
         InvoiceLine line = InvoiceLine.builder()

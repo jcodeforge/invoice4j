@@ -172,7 +172,7 @@ public class TaxCalculatorTest {
 
         Tax tax = taxes.getFirst();
 
-        assertEquals(TaxCategoryCode.REDUCED_RATE, tax.getCategoryCode());
+        assertEquals(TaxCategoryCode.STANDARD, tax.getCategoryCode());
         assertEquals(new BigDecimal("7"), tax.getRate());
         assertEquals(new BigDecimal("7.00"), tax.getTaxAmount().getAmount());
     }
@@ -301,8 +301,8 @@ public class TaxCalculatorTest {
         Invoice invoice = Invoice.builder()
                 .from(this.invoice)
                 .lines(List.of(
-                        CalculationUtils.createStandardLine( "100.00"),
-                        CalculationUtils.createStandardLine( "50.00"),
+                        CalculationUtils.createStandardLine("100.00"),
+                        CalculationUtils.createStandardLine("50.00"),
                         CalculationUtils.createReducedRateLine("25.00")))
                 .build();
 
@@ -312,11 +312,13 @@ public class TaxCalculatorTest {
 
         Tax standardTax = taxes.stream()
                 .filter(t -> t.getCategoryCode() == TaxCategoryCode.STANDARD)
+                .filter(t -> t.getRate().compareTo(new BigDecimal("19")) == 0)
                 .findFirst()
                 .orElseThrow();
 
         Tax reducedTax = taxes.stream()
-                .filter(t -> t.getCategoryCode() == TaxCategoryCode.REDUCED_RATE)
+                .filter(t -> t.getCategoryCode() == TaxCategoryCode.STANDARD)
+                .filter(t -> t.getRate().compareTo(new BigDecimal("7")) == 0)
                 .findFirst()
                 .orElseThrow();
 

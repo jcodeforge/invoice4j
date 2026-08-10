@@ -77,7 +77,7 @@ public class ZugferdInvoiceBasicWriterTest {
 
         assertTrue(xml.contains("<ram:LineTotalAmount>200.00</ram:LineTotalAmount>"));
         assertTrue(xml.contains("<ram:TaxBasisTotalAmount>190.00</ram:TaxBasisTotalAmount>"));
-        assertTrue(xml.contains("<ram:TaxTotalAmount>24.10</ram:TaxTotalAmount>"));
+        assertTrue(xml.contains("<ram:TaxTotalAmount currencyID=\"EUR\">24.10</ram:TaxTotalAmount>"));
         assertTrue(xml.contains("<ram:GrandTotalAmount>214.10</ram:GrandTotalAmount>"));
     }
 }
