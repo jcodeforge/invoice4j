@@ -12,17 +12,18 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class ZugferdInvoiceWriterTest {
+public class ZugferdInvoiceEn16931WriterTest {
+
+    private final ZugferdInvoiceWriter SUT = ZugferdInvoiceWriter.builder()
+            .profile(ZugferdProfile.EN16931)
+            .prettyPrint(true)
+            .build();
 
     @Test
     public void shouldWriteEn16931InvoiceToString() {
         Invoice invoice = new InvoiceCalculator().calculate(TestInvoiceFactory.createMinimalInvoice());
 
-        ZugferdInvoiceWriter writer = ZugferdInvoiceWriter.builder()
-                .profile(ZugferdProfile.EN16931)
-                .build();
-
-        String xml = writer.writeToString(invoice);
+        String xml = SUT.writeToString(invoice);
 
         Assert.assertNotNull(xml);
         Assert.assertFalse(xml.isBlank());
@@ -37,12 +38,7 @@ public class ZugferdInvoiceWriterTest {
         Path path = Files.createTempFile("invoice4j-zugferd-", ".xml");
         File file = path.toFile();
 
-        ZugferdInvoiceWriter writer = ZugferdInvoiceWriter.builder()
-                .profile(ZugferdProfile.EN16931)
-                .prettyPrint(true)
-                .build();
-
-        writer.writeToFile(invoice, file);
+        SUT.writeToFile(invoice, file);
 
         Assert.assertTrue(file.exists());
         Assert.assertTrue(file.length() > 0);
@@ -56,13 +52,7 @@ public class ZugferdInvoiceWriterTest {
     @Test
     public void shouldPrettyPrintXml() {
         Invoice invoice = new InvoiceCalculator().calculate(TestInvoiceFactory.createMinimalInvoice());
-
-        ZugferdInvoiceWriter writer = ZugferdInvoiceWriter.builder()
-                .profile(ZugferdProfile.EN16931)
-                .prettyPrint(true)
-                .build();
-
-        String xml = writer.writeToString(invoice);
+        String xml = SUT.writeToString(invoice);
 
         Assert.assertTrue(xml.contains("\n"));
     }
@@ -71,68 +61,28 @@ public class ZugferdInvoiceWriterTest {
     public void shouldValidateGeneratedXml() {
         Invoice invoice = new InvoiceCalculator().calculate(TestInvoiceFactory.createMinimalInvoice());
 
-        ZugferdInvoiceWriter writer = ZugferdInvoiceWriter.builder()
-                .profile(ZugferdProfile.EN16931)
-                 .build();
-
-        String xml = writer.writeToString(invoice);
+        String xml = SUT.writeToString(invoice);
         Assert.assertNotNull(xml);
     }
 
     @Test
     public void shouldReturnConfiguredProfile() {
-        ZugferdInvoiceWriter writer = ZugferdInvoiceWriter.builder()
-                .profile(ZugferdProfile.EN16931)
-                .build();
-
-        Assert.assertEquals(ZugferdProfile.EN16931, writer.getProfile());
+        Assert.assertEquals(ZugferdProfile.EN16931, SUT.getProfile());
     }
 
     @Test(expected = NullPointerException.class)
     public void shouldRejectNullInvoiceForString() {
-        ZugferdInvoiceWriter writer = ZugferdInvoiceWriter.builder()
-                .profile(ZugferdProfile.EN16931)
-                .build();
-
-        writer.writeToString(null);
+        SUT.writeToString(null);
     }
 
     @Test(expected = NullPointerException.class)
     public void shouldRejectNullInvoiceForFile() {
-        ZugferdInvoiceWriter writer = ZugferdInvoiceWriter.builder()
-                .profile(ZugferdProfile.EN16931)
-                .build();
-
-        writer.writeToFile(null, new File("invoice.xml"));
+        SUT.writeToFile(null, new File("invoice.xml"));
     }
 
     @Test(expected = NullPointerException.class)
     public void shouldRejectNullFile() {
         Invoice invoice = new InvoiceCalculator().calculate(TestInvoiceFactory.createMinimalInvoice());
-
-        ZugferdInvoiceWriter writer = ZugferdInvoiceWriter.builder()
-                .profile(ZugferdProfile.EN16931)
-                .build();
-
-        writer.writeToFile(invoice, null);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void shouldRejectNullProfile() {
-        ZugferdInvoiceWriter.builder()
-                .profile(null);
-    }
-
-    @Test
-    public void shouldWriteBasicProfile() {
-        Invoice invoice = new InvoiceCalculator().calculate(TestInvoiceFactory.createCompleteInvoice());
-
-        ZugferdInvoiceWriter writer = ZugferdInvoiceWriter.builder()
-                .profile(ZugferdProfile.BASIC)
-                .build();
-
-        String xml = writer.writeToString(invoice);
-
-        Assert.assertNotNull(xml);
+        SUT.writeToFile(invoice, null);
     }
 }
