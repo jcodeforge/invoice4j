@@ -73,8 +73,7 @@ public class ZugferdInvoiceWriterTest {
 
         ZugferdInvoiceWriter writer = ZugferdInvoiceWriter.builder()
                 .profile(ZugferdProfile.EN16931)
-                .validateAgainstXsd(true)
-                .build();
+                 .build();
 
         String xml = writer.writeToString(invoice);
         Assert.assertNotNull(xml);
@@ -122,5 +121,18 @@ public class ZugferdInvoiceWriterTest {
     public void shouldRejectNullProfile() {
         ZugferdInvoiceWriter.builder()
                 .profile(null);
+    }
+
+    @Test
+    public void shouldWriteBasicProfile() {
+        Invoice invoice = new InvoiceCalculator().calculate(TestInvoiceFactory.createCompleteInvoice());
+
+        ZugferdInvoiceWriter writer = ZugferdInvoiceWriter.builder()
+                .profile(ZugferdProfile.BASIC)
+                .build();
+
+        String xml = writer.writeToString(invoice);
+
+        Assert.assertNotNull(xml);
     }
 }
