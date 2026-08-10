@@ -2,9 +2,7 @@ package io.github.jcodeforge.invoice4jzugferd.cii;
 
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jbase.exceptions.DeserializationException;
-import io.github.jcodeforge.invoice4jbase.validation.XsdValidator;
 import io.github.jcodeforge.invoice4jzugferd.cii.parser.InvoiceParser;
-import io.github.jcodeforge.invoice4jzugferd.validation.CiiEn16931XsdValidator;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlReader;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlReaderFactory;
 import java.io.ByteArrayInputStream;
@@ -27,12 +25,9 @@ public final class CiiInvoiceReader {
 
     private final InvoiceParser invoiceParser;
 
-    private final XsdValidator validator;
-
     private CiiInvoiceReader(CiiConfigurationOptions options) {
         this.invoiceParser = new InvoiceParser();
         this.options = options;
-        this.validator = this.options.shouldValidateAgainstXsd() ? new CiiEn16931XsdValidator() : null;
     }
 
     /**
@@ -50,11 +45,6 @@ public final class CiiInvoiceReader {
     public static final class Builder {
 
         private final CiiConfigurationOptions.Builder options = CiiConfigurationOptions.builder();
-
-        public CiiInvoiceReader.Builder validateAgainstXsd(boolean validateAgainstXsd) {
-            options.validateAgainstXsd(validateAgainstXsd);
-            return this;
-        }
 
         /**
          * Builds a new {@link CiiInvoiceReader}.
@@ -76,10 +66,6 @@ public final class CiiInvoiceReader {
     private Invoice read(InputStream inputStream) {
         try {
             byte[] bytes = inputStream.readAllBytes();
-
-            if (validator != null) {
-                validator.validate(new ByteArrayInputStream(bytes));
-            }
 
             XmlReader reader = XmlReaderFactory.create(new ByteArrayInputStream(bytes));
 

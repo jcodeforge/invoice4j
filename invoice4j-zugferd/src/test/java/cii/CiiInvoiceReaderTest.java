@@ -1,7 +1,6 @@
 package cii;
 
 import factory.TestInvoiceFactory;
-import io.github.jcodeforge.invoice4jbase.calculation.InvoiceCalculator;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.InvoiceLine;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Tax;
@@ -9,7 +8,7 @@ import io.github.jcodeforge.invoice4jbase.exceptions.DeserializationException;
 import io.github.jcodeforge.invoice4jzugferd.cii.CiiInvoiceReader;
 import io.github.jcodeforge.invoice4jzugferd.cii.CiiInvoiceWriter;
 import io.github.jcodeforge.invoice4jzugferd.cii.CiiProfile;
-import io.github.jcodeforge.invoice4jzugferd.validation.CiiEn16931XsdValidator;
+import io.github.jcodeforge.invoice4jzugferd.cii.CiiEn16931XsdValidator;
 import org.junit.Before;
 import org.junit.Test;
 import java.io.ByteArrayInputStream;
@@ -23,9 +22,7 @@ public class CiiInvoiceReaderTest {
 
     @Before
     public void setUp() {
-        SUT = CiiInvoiceReader.builder()
-                .validateAgainstXsd(true)
-                .build();
+        SUT = CiiInvoiceReader.builder().build();
     }
 
     @Test
@@ -230,38 +227,6 @@ public class CiiInvoiceReaderTest {
             <test>Hello</test>
         </root>
         """);
-    }
-
-    @Test(expected = DeserializationException.class)
-    public void shouldRejectInvalidXmlWithXsdValidation() {
-        String xml = """
-            <rsm:CrossIndustryInvoice
-                xmlns:rsm="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100"/>
-            """;
-
-        CiiInvoiceReader reader = CiiInvoiceReader.builder()
-                .validateAgainstXsd(true)
-                .build();
-
-        reader.readFromString(xml);
-    }
-
-    @Test
-    public void shouldReadValidInvoiceWithXsdValidation() {
-        Invoice invoice = new InvoiceCalculator()
-                .calculate(TestInvoiceFactory.createMinimalInvoice());
-
-        String xml = CiiInvoiceWriter.builder()
-                .build()
-                .writeToString(invoice);
-
-        Invoice parsed = CiiInvoiceReader.builder()
-                .validateAgainstXsd(true)
-                .build()
-                .readFromString(xml);
-
-        org.junit.Assert.assertNotNull(parsed);
-        org.junit.Assert.assertEquals(invoice.getInvoiceNumber(), parsed.getInvoiceNumber());
     }
 
     @Test(expected = NullPointerException.class)

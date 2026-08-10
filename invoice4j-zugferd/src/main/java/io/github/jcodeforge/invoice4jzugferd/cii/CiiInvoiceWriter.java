@@ -1,10 +1,8 @@
 package io.github.jcodeforge.invoice4jzugferd.cii;
 
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
-import io.github.jcodeforge.invoice4jbase.validation.XsdValidator;
 import io.github.jcodeforge.invoice4jzugferd.cii.serializer.InvoiceSerializer;
 import io.github.jcodeforge.invoice4jbase.exceptions.SerializationException;
-import io.github.jcodeforge.invoice4jzugferd.validation.CiiEn16931XsdValidator;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlWriter;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlWriterFactory;
 import javax.xml.transform.OutputKeys;
@@ -21,9 +19,6 @@ public final class CiiInvoiceWriter {
     private final CiiConfigurationOptions options;
 
     private final InvoiceSerializer invoiceSerializer;
-
-    private final XsdValidator validator;
-
     /**
      * Writes {@link Invoice} instances as UN/CEFACT Cross Industry Invoice (CII)
      * XML documents.
@@ -41,9 +36,8 @@ public final class CiiInvoiceWriter {
      * }</pre>
      */
     private CiiInvoiceWriter(CiiConfigurationOptions options) {
-        this.options = options;
+        this.options = Objects.requireNonNull(options, "options must not be null");
         this.invoiceSerializer = new InvoiceSerializer(options);
-        this.validator = this.options.shouldValidateAgainstXsd() ? new CiiEn16931XsdValidator() : null;
     }
 
     /**
@@ -76,18 +70,6 @@ public final class CiiInvoiceWriter {
          */
         public Builder prettyPrint(boolean prettyPrint) {
             options.prettyPrint(prettyPrint);
-            return this;
-        }
-
-        /**
-         * Enables or disables XSD validation after serialization.
-         *
-         * @param validateAgainstXsd {@code true} to validate the generated XML
-         *                           against the official EN16931 schema
-         * @return this builder
-         */
-        public Builder validateAgainstXsd(boolean validateAgainstXsd) {
-            options.validateAgainstXsd(validateAgainstXsd);
             return this;
         }
 
@@ -137,10 +119,6 @@ public final class CiiInvoiceWriter {
                     write(invoice, out);
                 }
 
-                if (validator != null) {
-                    validator.validate(file);
-                }
-
                 return;
             }
 
@@ -168,10 +146,6 @@ public final class CiiInvoiceWriter {
         write(invoice, out);
 
         String xml = out.toString(StandardCharsets.UTF_8);
-
-        if (validator != null) {
-            validator.validate(xml);
-        }
 
         if (options.isPrettyPrint()) {
             return prettyPrintToString(xml);

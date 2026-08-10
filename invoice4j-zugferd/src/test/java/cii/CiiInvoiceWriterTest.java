@@ -357,16 +357,18 @@ public class CiiInvoiceWriterTest {
     public void shouldProduceUtf8() throws Exception {
         Invoice invoice = TestInvoiceFactory.createMinimalInvoice();
         String xml = SUT.writeToString(invoice);
+        System.out.println(xml);
+
         Document document = parse(xml);
         XPath xpath = TestXPathFactory.createXPath();
 
-        String value = xpath.evaluate("/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction"
-                        + "/ram:ApplicableHeaderTradeAgreement"
-                        + "/ram:SellerTradeParty"
-                        + "/ram:DefinedTradeContact"
-                        + "/ram:PersonName", document);
+        String value = xpath.evaluate("/rsm:CrossIndustryInvoice"
+                + "/rsm:SupplyChainTradeTransaction"
+                + "/ram:ApplicableHeaderTradeAgreement"
+                + "/ram:SellerTradeParty"
+                + "/ram:Name", document);
 
-        assertEquals("Müller Sühne", value);
+        assertEquals("Müller & Söhne GmbH", value);
     }
 
     @Test
