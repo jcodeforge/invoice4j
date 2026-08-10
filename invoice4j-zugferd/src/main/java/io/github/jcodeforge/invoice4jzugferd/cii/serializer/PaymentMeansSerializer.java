@@ -1,12 +1,22 @@
 package io.github.jcodeforge.invoice4jzugferd.cii.serializer;
 
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.PaymentMeans;
+import io.github.jcodeforge.invoice4jzugferd.cii.CiiConfigurationOptions;
+import io.github.jcodeforge.invoice4jzugferd.cii.CiiProfile;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlNamespaces;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlWriter;
+import java.util.Objects;
 
 public final class PaymentMeansSerializer implements XmlSerializer<PaymentMeans> {
 
-    private final BankAccountSerializer bankAccountSerializer = new BankAccountSerializer();
+    private final BankAccountSerializer bankAccountSerializer;
+
+    private final CiiConfigurationOptions options;
+
+    public PaymentMeansSerializer(CiiConfigurationOptions options) {
+        this.options = Objects.requireNonNull(options, "options must not be null");
+        this.bankAccountSerializer = new BankAccountSerializer(options);
+    }
 
     @Override
     public void serialize(XmlWriter writer, PaymentMeans paymentMeans) {
@@ -14,13 +24,33 @@ public final class PaymentMeansSerializer implements XmlSerializer<PaymentMeans>
             return;
         }
 
-        writer.startElement(XmlNamespaces.RAM, "SpecifiedTradeSettlementPaymentMeans");
+        writer.startElement(
+                XmlNamespaces.RAM,
+                "SpecifiedTradeSettlementPaymentMeans"
+        );
+
         // BT-81
-        writer.writeElement(XmlNamespaces.RAM, "TypeCode", paymentMeans.getMeansCode().getCode());
-        // Optional description
-        writer.writeOptionalElement(XmlNamespaces.RAM, "Information", paymentMeans.getMeansDescription());
+        writer.writeElement(
+                XmlNamespaces.RAM,
+                "TypeCode",
+                paymentMeans.getMeansCode().getCode()
+        );
+
+        // Payment means description
+        // Not supported by ZUGFeRD BASIC.
+        if (options.getProfile() != CiiProfile.ZUGFERD_BASIC) {
+            writer.writeOptionalElement(
+                    XmlNamespaces.RAM,
+                    "Information",
+                    paymentMeans.getMeansDescription()
+            );
+        }
+
         // BG-17
-        bankAccountSerializer.serialize(writer, paymentMeans.getBankAccount());
+        bankAccountSerializer.serialize(
+                writer,
+                paymentMeans.getBankAccount()
+        );
 
         writer.endElement();
     }

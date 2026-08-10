@@ -9,100 +9,133 @@ import java.time.format.DateTimeFormatter;
 
 public final class InvoiceSerializer implements XmlSerializer<Invoice> {
 
-    private final SellerSerializer sellerSerializer = new SellerSerializer();
-
-    private final BuyerSerializer buyerSerializer = new BuyerSerializer();
-
-    private final PayeeSerializer payeeSerializer = new PayeeSerializer();
-
-    private final DeliverySerializer deliverySerializer = new DeliverySerializer();
-
-    private final PaymentMeansSerializer paymentMeansSerializer = new PaymentMeansSerializer();
-
-    private final PaymentTermsSerializer paymentTermsSerializer = new PaymentTermsSerializer();
-
-    private final TaxSerializer taxSerializer = new TaxSerializer();
-
-    private final MonetarySummationSerializer monetarySummationSerializer = new MonetarySummationSerializer();
-
-    private final InvoiceLineSerializer invoiceLineSerializer = new InvoiceLineSerializer();
-
-    private final AllowanceChargeSerializer allowanceChargeSerializer = new AllowanceChargeSerializer();
-
-    private final DocumentReferenceSerializer documentReferenceSerializer = new DocumentReferenceSerializer();
-
-    private final NoteSerializer noteSerializer = new NoteSerializer();
-
-    private final InvoicePeriodSerializer invoicePeriodSerializer = new InvoicePeriodSerializer();
+    private final SellerSerializer sellerSerializer;
+    private final BuyerSerializer buyerSerializer;
+    private final PayeeSerializer payeeSerializer;
+    private final DeliverySerializer deliverySerializer;
+    private final PaymentMeansSerializer paymentMeansSerializer;
+    private final PaymentTermsSerializer paymentTermsSerializer;
+    private final TaxSerializer taxSerializer;
+    private final MonetarySummationSerializer monetarySummationSerializer;
+    private final InvoiceLineSerializer invoiceLineSerializer;
+    private final AllowanceChargeSerializer allowanceChargeSerializer;
+    private final DocumentReferenceSerializer documentReferenceSerializer;
+    private final NoteSerializer noteSerializer;
+    private final InvoicePeriodSerializer invoicePeriodSerializer;
 
     private final CiiConfigurationOptions options;
 
     public InvoiceSerializer(CiiConfigurationOptions options) {
         this.options = options;
+
+        this.sellerSerializer = new SellerSerializer(options);
+        this.buyerSerializer = new BuyerSerializer(options);
+        this.payeeSerializer = new PayeeSerializer(options);
+        this.deliverySerializer = new DeliverySerializer(options);
+        this.paymentMeansSerializer = new PaymentMeansSerializer(options);
+        this.paymentTermsSerializer = new PaymentTermsSerializer();
+        this.taxSerializer = new TaxSerializer();
+        this.monetarySummationSerializer = new MonetarySummationSerializer(options);
+        this.invoiceLineSerializer = new InvoiceLineSerializer();
+        this.allowanceChargeSerializer = new AllowanceChargeSerializer();
+        this.documentReferenceSerializer = new DocumentReferenceSerializer();
+        this.noteSerializer = new NoteSerializer();
+        this.invoicePeriodSerializer = new InvoicePeriodSerializer();
     }
 
     @Override
     public void serialize(XmlWriter writer, Invoice invoice) {
         writer.startDocument();
-        writer.startElement(XmlNamespaces.RSM, "CrossIndustryInvoice");
+
+        writer.startElement(
+                XmlNamespaces.RSM,
+                "CrossIndustryInvoice");
+
         writer.writeNamespace("rsm", XmlNamespaces.RSM);
         writer.writeNamespace("ram", XmlNamespaces.RAM);
         writer.writeNamespace("udt", XmlNamespaces.UDT);
         writer.writeNamespace("qdt", XmlNamespaces.QDT);
+
         writeExchangedDocumentContext(writer);
         writeExchangedDocument(writer, invoice);
         writeSupplyChainTradeTransaction(writer, invoice);
+
         writer.endElement();
         writer.endDocument();
     }
 
     private void writeExchangedDocumentContext(XmlWriter writer) {
-        writer.startElement(XmlNamespaces.RSM, "ExchangedDocumentContext");
+        writer.startElement(
+                XmlNamespaces.RSM,
+                "ExchangedDocumentContext");
 
         CiiProfile profile = options.getProfile();
 
         if (profile.hasBusinessProcessId()) {
-            writer.startElement(XmlNamespaces.RAM, "BusinessProcessSpecifiedDocumentContextParameter");
-            writer.writeElement(XmlNamespaces.RAM, "ID", profile.getBusinessProcessId());
+            writer.startElement(
+                    XmlNamespaces.RAM,
+                    "BusinessProcessSpecifiedDocumentContextParameter");
+
+            writer.writeElement(
+                    XmlNamespaces.RAM,
+                    "ID",
+                    profile.getBusinessProcessId());
+
             writer.endElement();
         }
 
-        writer.startElement(XmlNamespaces.RAM, "GuidelineSpecifiedDocumentContextParameter");
-        writer.writeElement(XmlNamespaces.RAM, "ID", profile.getGuidelineId());
+        writer.startElement(
+                XmlNamespaces.RAM,
+                "GuidelineSpecifiedDocumentContextParameter");
+
+        writer.writeElement(
+                XmlNamespaces.RAM,
+                "ID",
+                profile.getGuidelineId());
+
         writer.endElement();
         writer.endElement();
     }
 
-    private void writeExchangedDocument(XmlWriter writer, Invoice invoice) {
-        writer.startElement(XmlNamespaces.RSM, "ExchangedDocument");
+    private void writeExchangedDocument(
+            XmlWriter writer,
+            Invoice invoice) {
 
-        /*
-         * BT-1
-         * Invoice number
-         */
-        writer.writeElement(XmlNamespaces.RAM, "ID", invoice.getInvoiceNumber());
+        writer.startElement(
+                XmlNamespaces.RSM,
+                "ExchangedDocument");
 
-        /*
-         * BT-3
-         * Invoice type code
-         */
-        writer.writeElement(XmlNamespaces.RAM, "TypeCode", invoice.getDocumentTypeCode().getCode());
+        // BT-1
+        writer.writeElement(
+                XmlNamespaces.RAM,
+                "ID",
+                invoice.getInvoiceNumber());
 
-        /*
-         * BT-2
-         * Issue date
-         */
-        writer.startElement(XmlNamespaces.RAM, "IssueDateTime");
-        writer.startElement(XmlNamespaces.UDT, "DateTimeString");
+        // BT-3
+        writer.writeElement(
+                XmlNamespaces.RAM,
+                "TypeCode",
+                invoice.getDocumentTypeCode().getCode());
+
+        // BT-2
+        writer.startElement(
+                XmlNamespaces.RAM,
+                "IssueDateTime");
+
+        writer.startElement(
+                XmlNamespaces.UDT,
+                "DateTimeString");
+
         writer.writeAttribute("format", "102");
-        writer.writeCharacters(invoice.getIssueDate().format(DateTimeFormatter.BASIC_ISO_DATE));
+
+        writer.writeCharacters(
+                invoice.getIssueDate()
+                        .format(DateTimeFormatter.BASIC_ISO_DATE));
+
         writer.endElement();
         writer.endElement();
 
-        /*
-         * BG-1
-         * Invoice notes
-         */
+        // BG-1
         for (Note note : invoice.getNotes()) {
             noteSerializer.serialize(writer, note);
         }
@@ -110,13 +143,15 @@ public final class InvoiceSerializer implements XmlSerializer<Invoice> {
         writer.endElement();
     }
 
-    private void writeSupplyChainTradeTransaction(XmlWriter writer, Invoice invoice) {
-        writer.startElement(XmlNamespaces.RSM, "SupplyChainTradeTransaction");
+    private void writeSupplyChainTradeTransaction(
+            XmlWriter writer,
+            Invoice invoice) {
 
-        /*
-         * BG-25
-         * Invoice lines
-         */
+        writer.startElement(
+                XmlNamespaces.RSM,
+                "SupplyChainTradeTransaction");
+
+        // BG-25
         for (InvoiceLine line : invoice.getLines()) {
             invoiceLineSerializer.serialize(writer, line);
         }
@@ -129,152 +164,213 @@ public final class InvoiceSerializer implements XmlSerializer<Invoice> {
     }
 
     private void writeApplicableHeaderTradeAgreement(XmlWriter writer, Invoice invoice) {
-        writer.startElement(XmlNamespaces.RAM, "ApplicableHeaderTradeAgreement");
+        writer.startElement(
+                XmlNamespaces.RAM,
+                "ApplicableHeaderTradeAgreement"
+        );
+
         // BT-10
-        writer.writeElement(XmlNamespaces.RAM, "BuyerReference", invoice.getBuyerReference());
+        writer.writeOptionalElement(
+                XmlNamespaces.RAM,
+                "BuyerReference",
+                invoice.getBuyerReference()
+        );
+
         // BG-4
-        sellerSerializer.serialize(writer, invoice.getSeller());
+        sellerSerializer.serialize(
+                writer,
+                invoice.getSeller()
+        );
+
         // BG-7
-        buyerSerializer.serialize(writer, invoice.getBuyer());
+        buyerSerializer.serialize(
+                writer,
+                invoice.getBuyer()
+        );
 
         // BG-10
-        // Not supported by the EN16931 CII profile.
-        if (options.getProfile() != CiiProfile.EN16931) {
-            payeeSerializer.serialize(writer, invoice.getPayee());
+        if (options.getProfile() != CiiProfile.EN16931
+                && options.getProfile() != CiiProfile.ZUGFERD_BASIC) {
+
+            payeeSerializer.serialize(
+                    writer,
+                    invoice.getPayee()
+            );
         }
 
         // BT-13
-        if (invoice.getSalesOrderReference() != null) {
-            writer.startElement(XmlNamespaces.RAM, "SellerOrderReferencedDocument");
-            writer.writeElement(XmlNamespaces.RAM, "IssuerAssignedID", invoice.getSalesOrderReference());
+        if (invoice.getSalesOrderReference() != null
+                && options.getProfile() != CiiProfile.ZUGFERD_BASIC) {
+
+            writer.startElement(
+                    XmlNamespaces.RAM,
+                    "SellerOrderReferencedDocument"
+            );
+
+            writer.writeElement(
+                    XmlNamespaces.RAM,
+                    "IssuerAssignedID",
+                    invoice.getSalesOrderReference()
+            );
+
             writer.endElement();
         }
 
         // BT-14
         if (invoice.getPurchaseOrderReference() != null) {
-            writer.startElement(XmlNamespaces.RAM, "BuyerOrderReferencedDocument");
-            writer.writeElement(XmlNamespaces.RAM, "IssuerAssignedID", invoice.getPurchaseOrderReference());
+            writer.startElement(
+                    XmlNamespaces.RAM,
+                    "BuyerOrderReferencedDocument"
+            );
+
+            writer.writeElement(
+                    XmlNamespaces.RAM,
+                    "IssuerAssignedID",
+                    invoice.getPurchaseOrderReference()
+            );
+
             writer.endElement();
         }
 
         // BT-12
         if (invoice.getContractReference() != null) {
-            writer.startElement(XmlNamespaces.RAM, "ContractReferencedDocument");
-            writer.writeElement(XmlNamespaces.RAM, "IssuerAssignedID", invoice.getContractReference());
+            writer.startElement(
+                    XmlNamespaces.RAM,
+                    "ContractReferencedDocument"
+            );
+
+            writer.writeElement(
+                    XmlNamespaces.RAM,
+                    "IssuerAssignedID",
+                    invoice.getContractReference()
+            );
+
             writer.endElement();
         }
 
-        // BG-24
-        for (DocumentReference reference : invoice.getAdditionalDocuments()) {
-            documentReferenceSerializer.serialize(writer, "AdditionalReferencedDocument", reference);
+        // BG-24 / AdditionalReferencedDocument
+        if (options.getProfile() != CiiProfile.ZUGFERD_BASIC) {
+            for (DocumentReference reference : invoice.getAdditionalDocuments()) {
+                documentReferenceSerializer.serialize(
+                        writer,
+                        reference
+                );
+            }
         }
 
         // BT-11
-        if (invoice.getProjectReference() != null) {
-            writer.startElement(XmlNamespaces.RAM, "SpecifiedProcuringProject");
-            writer.writeElement(XmlNamespaces.RAM, "ID", invoice.getProjectReference());
-            writer.writeElement(XmlNamespaces.RAM, "Name", invoice.getProjectName());
-            writer.endElement();
-        }
+        if (invoice.getProjectReference() != null && options.getProfile() != CiiProfile.ZUGFERD_BASIC) {
+            writer.startElement(
+                    XmlNamespaces.RAM,
+                    "SpecifiedProcuringProject"
+            );
 
-        // BT-17
-        if (options.getProfile() != CiiProfile.EN16931 && invoice.getTenderReference() != null) {
-            writer.startElement(XmlNamespaces.RAM, "TenderReferencedDocument");
-            writer.writeElement(XmlNamespaces.RAM, "IssuerAssignedID", invoice.getTenderReference());
+            writer.writeElement(
+                    XmlNamespaces.RAM,
+                    "ID",
+                    invoice.getProjectReference()
+            );
+
+            writer.writeElement(
+                    XmlNamespaces.RAM,
+                    "Name",
+                    invoice.getProjectName()
+            );
+
             writer.endElement();
         }
 
         writer.endElement();
     }
 
-    private void writeApplicableHeaderTradeDelivery(XmlWriter writer, Invoice invoice) {
-        writer.startElement(XmlNamespaces.RAM, "ApplicableHeaderTradeDelivery");
+    private void writeApplicableHeaderTradeDelivery(
+            XmlWriter writer,
+            Invoice invoice) {
+
+        writer.startElement(
+                XmlNamespaces.RAM,
+                "ApplicableHeaderTradeDelivery");
 
         if (invoice.getDelivery() != null) {
-            deliverySerializer.serialize(writer, invoice.getDelivery());
+            deliverySerializer.serialize(
+                    writer,
+                    invoice.getDelivery());
         }
 
         writer.endElement();
     }
 
-    private void writeApplicableHeaderTradeSettlement(XmlWriter writer, Invoice invoice) {
-        writer.startElement(XmlNamespaces.RAM, "ApplicableHeaderTradeSettlement");
+    private void writeApplicableHeaderTradeSettlement(
+            XmlWriter writer,
+            Invoice invoice) {
 
-        // BT-90
-        // CreditorReferenceID (not yet implemented)
-
-        // BT-83
-        if (invoice.getPayment() != null) {
-            writer.writeOptionalElement(
-                    XmlNamespaces.RAM,
-                    "PaymentReference",
-                    invoice.getPayment().getRemittanceInformation());
-        }
+        writer.startElement(
+                XmlNamespaces.RAM,
+                "ApplicableHeaderTradeSettlement"
+        );
 
         // BT-6
         if (invoice.getTaxCurrency() != null) {
             writer.writeElement(
                     XmlNamespaces.RAM,
                     "TaxCurrencyCode",
-                    invoice.getTaxCurrency().getCode());
+                    invoice.getTaxCurrency().getCode()
+            );
         }
 
         // BT-5
         writer.writeElement(
                 XmlNamespaces.RAM,
                 "InvoiceCurrencyCode",
-                invoice.getCurrency().getCode());
-
-        // BG-10
-        // Not supported by the EN16931 CII profile.
-        if (options.getProfile() != CiiProfile.EN16931) {
-            payeeSerializer.serialize(writer, invoice.getPayee());
-        }
+                invoice.getCurrency().getCode()
+        );
 
         // BG-16
-        paymentMeansSerializer.serialize(writer, invoice.getPayment());
+        paymentMeansSerializer.serialize(
+                writer,
+                invoice.getPayment()
+        );
 
         // BG-23
         for (Tax tax : invoice.getTaxes()) {
-            taxSerializer.serialize(writer, tax);
+            taxSerializer.serialize(
+                    writer,
+                    tax
+            );
         }
 
-        // BG-14
-        if (invoice.getInvoicePeriod() != null) {
-            invoicePeriodSerializer.serialize(writer, invoice.getInvoicePeriod());
-        }
+        // BG-18
+        invoicePeriodSerializer.serialize(
+                writer,
+                invoice.getInvoicePeriod()
+        );
 
         // BG-20 / BG-21
         for (AllowanceCharge allowanceCharge : invoice.getAllowanceCharges()) {
-            allowanceChargeSerializer.serialize(writer, allowanceCharge);
+            allowanceChargeSerializer.serialize(
+                    writer,
+                    allowanceCharge
+            );
         }
 
         // BG-19
-        if (invoice.getPaymentTerms() != null) {
-            paymentTermsSerializer.serialize(writer, invoice.getPaymentTerms());
-        }
+        paymentTermsSerializer.serialize(
+                writer,
+                invoice.getPaymentTerms()
+        );
 
         // BG-22
-        monetarySummationSerializer.serialize(writer, invoice.getMonetarySummation());
+        monetarySummationSerializer.serialize(
+                writer,
+                invoice.getMonetarySummation()
+        );
 
-        // BG-3
+        // Billing references
         for (DocumentReference reference : invoice.getBillingReferences()) {
             documentReferenceSerializer.serialize(
                     writer,
-                    "InvoiceReferencedDocument",
-                    reference);
-        }
-
-        // BT-19
-        if (invoice.getBuyerAccountingReference() != null) {
-            writer.startElement(
-                    XmlNamespaces.RAM,
-                    "ReceivableSpecifiedTradeAccountingAccount");
-            writer.writeElement(
-                    XmlNamespaces.RAM,
-                    "ID",
-                    invoice.getBuyerAccountingReference());
-            writer.endElement();
+                    "InvoiceReferencedDocument", reference
+            );
         }
 
         writer.endElement();

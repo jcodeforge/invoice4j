@@ -2,20 +2,28 @@ package io.github.jcodeforge.invoice4jzugferd.cii.serializer;
 
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Buyer;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.PartyIdentifier;
+import io.github.jcodeforge.invoice4jzugferd.cii.CiiConfigurationOptions;
+import io.github.jcodeforge.invoice4jzugferd.cii.CiiProfile;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlNamespaces;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlWriter;
+import java.util.Objects;
 
 public final class BuyerSerializer implements XmlSerializer<Buyer> {
 
-    private final PartyIdentifierSerializer partyIdentifierSerializer = new PartyIdentifierSerializer();
+    private final PartyIdentifierSerializer partyIdentifierSerializer;
 
     private final ElectronicAddressSerializer electronicAddressSerializer = new ElectronicAddressSerializer();
 
     private final AddressSerializer addressSerializer = new AddressSerializer();
 
-    private final ContactSerializer contactSerializer = new ContactSerializer();
-
     private final TaxIdentifierSerializer taxIdentifierSerializer = new TaxIdentifierSerializer();
+
+    private final CiiConfigurationOptions options;
+
+    public BuyerSerializer(CiiConfigurationOptions options) {
+        this.options = Objects.requireNonNull(options, "options must not be null");
+        this.partyIdentifierSerializer = new PartyIdentifierSerializer(options);
+    }
 
     @Override
     public void serialize(XmlWriter writer, Buyer buyer) {
@@ -23,27 +31,34 @@ public final class BuyerSerializer implements XmlSerializer<Buyer> {
             return;
         }
 
+        writer.startElement(XmlNamespaces.RAM, "BuyerTradeParty");
+
         // BT-45
         for (PartyIdentifier identifier : buyer.getIdentifiers()) {
             partyIdentifierSerializer.serialize(writer, identifier);
         }
 
-        writer.startElement(XmlNamespaces.RAM, "BuyerTradeParty");
         // BT-44
         writer.writeElement(XmlNamespaces.RAM, "Name", buyer.getName());
-        writer.writeOptionalElement(XmlNamespaces.RAM, "Description", buyer.getTradingName());
+        /*
+         * ZUGFeRD BASIC does not allow Description
+         * after Name in BuyerTradeParty.
+         */
+        if (options.getProfile() != CiiProfile.ZUGFERD_BASIC) {
+            writer.writeOptionalElement(XmlNamespaces.RAM, "Description", buyer.getTradingName());
+        }
 
         // BT-47
         if (buyer.getLegalRegistrationIdentifier() != null) {
             writer.startElement(XmlNamespaces.RAM, "SpecifiedLegalOrganization");
-            writer.writeElement(XmlNamespaces.RAM, "ID",buyer.getLegalRegistrationIdentifier());
+            writer.writeElement(XmlNamespaces.RAM, "ID", buyer.getLegalRegistrationIdentifier());
+
             writer.endElement();
         }
 
         // BT-48
         taxIdentifierSerializer.serialize(writer, buyer.getVatIdentifier());
 
-        contactSerializer.serialize(writer, buyer.getContact());
         addressSerializer.serialize(writer, buyer.getAddress());
         electronicAddressSerializer.serialize(writer, buyer.getElectronicAddress());
 

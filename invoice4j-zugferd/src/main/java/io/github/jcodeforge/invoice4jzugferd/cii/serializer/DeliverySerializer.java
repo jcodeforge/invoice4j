@@ -1,15 +1,24 @@
 package io.github.jcodeforge.invoice4jzugferd.cii.serializer;
 
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Delivery;
+import io.github.jcodeforge.invoice4jzugferd.cii.CiiConfigurationOptions;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlNamespaces;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlWriter;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public final class DeliverySerializer implements XmlSerializer<Delivery> {
 
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.BASIC_ISO_DATE;
 
-    private final ShipToSerializer shipToSerializer = new ShipToSerializer();
+    private final ShipToSerializer shipToSerializer;
+
+    private final CiiConfigurationOptions options;
+
+    public DeliverySerializer(CiiConfigurationOptions options) {
+        this.options = Objects.requireNonNull(options, "options must not be null");
+        this.shipToSerializer = new ShipToSerializer(options);
+    }
 
     @Override
     public void serialize(XmlWriter writer, Delivery delivery) {
