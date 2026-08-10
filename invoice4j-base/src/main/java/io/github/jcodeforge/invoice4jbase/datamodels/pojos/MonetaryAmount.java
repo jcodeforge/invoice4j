@@ -3,6 +3,7 @@ package io.github.jcodeforge.invoice4jbase.datamodels.pojos;
 import io.github.jcodeforge.invoice4jbase.datamodels.enums.CurrencyCode;
 import io.github.jcodeforge.invoice4jbase.exceptions.InvoiceValidationException;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class MonetaryAmount {
 
@@ -58,5 +59,23 @@ public class MonetaryAmount {
 
             return monetaryAmount;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (!(o instanceof MonetaryAmount other)) {
+            return false;
+        }
+
+        return Objects.equals(amount, other.amount) && Objects.equals(currency, other.currency);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(amount, currency);
     }
 }
