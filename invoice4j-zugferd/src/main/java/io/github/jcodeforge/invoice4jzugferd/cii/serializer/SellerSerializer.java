@@ -3,7 +3,6 @@ package io.github.jcodeforge.invoice4jzugferd.cii.serializer;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.PartyIdentifier;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Seller;
 import io.github.jcodeforge.invoice4jzugferd.cii.CiiConfigurationOptions;
-import io.github.jcodeforge.invoice4jzugferd.cii.CiiProfile;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlNamespaces;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlWriter;
 import java.util.Objects;
@@ -31,9 +30,6 @@ public final class SellerSerializer implements XmlSerializer<Seller> {
         if (seller == null) {
             return;
         }
-
-        System.out.println("Profile: " + options.getProfile());
-        System.out.println("Contact: " + seller.getContact());
 
         writer.startElement(XmlNamespaces.RAM, "SellerTradeParty");
 
