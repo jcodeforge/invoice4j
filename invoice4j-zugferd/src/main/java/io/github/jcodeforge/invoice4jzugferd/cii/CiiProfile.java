@@ -3,9 +3,9 @@ package io.github.jcodeforge.invoice4jzugferd.cii;
 /**
  * Supported Cross Industry Invoice (CII) profiles.
  *
- * Each profile defines the Guideline ID (BT-24) and, if applicable,
+ * <p>Each profile defines the Guideline ID (BT-24) and, if applicable,
  * the Business Process ID (BT-23) that are written into the
- * ExchangedDocumentContext.
+ * ExchangedDocumentContext.</p>
  */
 public enum CiiProfile {
 
@@ -38,6 +38,14 @@ public enum CiiProfile {
      */
     ZUGFERD_EN16931(
             "urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:en16931",
+            null
+    ),
+
+    /**
+     * ZUGFeRD BASIC profile.
+     */
+    ZUGFERD_BASIC(
+            "urn:factur-x.eu:1p0:basic",
             null
     );
 
