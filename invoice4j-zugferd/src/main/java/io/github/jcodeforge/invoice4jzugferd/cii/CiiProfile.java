@@ -45,7 +45,7 @@ public enum CiiProfile {
      * ZUGFeRD BASIC profile.
      */
     ZUGFERD_BASIC(
-            "urn:factur-x.eu:1p0:basic",
+            "urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic",
             null
     );
 
