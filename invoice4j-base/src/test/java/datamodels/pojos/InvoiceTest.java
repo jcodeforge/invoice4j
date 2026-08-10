@@ -140,9 +140,10 @@ public class InvoiceTest {
         SUT.monetarySummation(null).build();
     }
 
-    @Test(expected = InvoiceValidationException.class)
-    public void shouldRejectMissingInvoicePeriod() {
-        SUT.invoicePeriod(null).build();
+    @Test
+    public void shouldAllowMissingInvoicePeriod() {
+        Invoice invoice = SUT.invoicePeriod(null).build();
+        assertNull(invoice.getInvoicePeriod());
     }
 
     @Test(expected = InvoiceValidationException.class)
