@@ -13,12 +13,9 @@ public final class CiiConfigurationOptions {
 
     private final boolean prettyPrint;
 
-    private final boolean validateAgainstXsd;
-
     private CiiConfigurationOptions(Builder builder) {
         this.prettyPrint = builder.prettyPrint;
         this.profile = builder.profile;
-        this.validateAgainstXsd = builder.validateAgainstXsd;
     }
 
     /**
@@ -39,9 +36,6 @@ public final class CiiConfigurationOptions {
         return prettyPrint;
     }
 
-    public boolean shouldValidateAgainstXsd() {
-        return validateAgainstXsd;
-    }
 
     /**
      * Creates a new builder for configuring writer options.
@@ -69,8 +63,6 @@ public final class CiiConfigurationOptions {
          */
         private boolean prettyPrint;
 
-        private boolean validateAgainstXsd;
-
         /**
          * Sets the CII profile used during serialization.
          *
@@ -90,11 +82,6 @@ public final class CiiConfigurationOptions {
          */
         public Builder prettyPrint(boolean prettyPrint) {
             this.prettyPrint = prettyPrint;
-            return this;
-        }
-
-        public Builder validateAgainstXsd(boolean validateAgainstXsd) {
-            this.validateAgainstXsd = validateAgainstXsd;
             return this;
         }
 
