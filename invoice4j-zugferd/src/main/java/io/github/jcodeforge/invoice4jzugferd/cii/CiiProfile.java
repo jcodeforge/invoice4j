@@ -42,6 +42,14 @@ public enum CiiProfile {
     ),
 
     /**
+     * ZUGFeRD / Factur-X MINIMUM profile.
+     */
+    ZUGFERD_MINIMUM(
+            "urn:factur-x.eu:1p0:minimum",
+            null
+    ),
+
+    /**
      * ZUGFeRD BASIC profile.
      */
     ZUGFERD_BASIC(
