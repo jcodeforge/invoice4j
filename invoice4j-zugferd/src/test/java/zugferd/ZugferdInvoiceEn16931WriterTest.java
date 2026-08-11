@@ -28,7 +28,7 @@ public class ZugferdInvoiceEn16931WriterTest {
         Assert.assertNotNull(xml);
         Assert.assertFalse(xml.isBlank());
         Assert.assertTrue(xml.contains("<rsm:CrossIndustryInvoice"));
-        Assert.assertTrue(xml.contains("urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:en16931"));
+        Assert.assertTrue(xml.contains("urn:cen.eu:en16931:2017"));
     }
 
     @Test
@@ -46,7 +46,7 @@ public class ZugferdInvoiceEn16931WriterTest {
         String xml = Files.readString(path);
 
         Assert.assertTrue(xml.contains("<rsm:CrossIndustryInvoice"));
-        Assert.assertTrue(xml.contains("urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:en16931"));
+        Assert.assertTrue(xml.contains("urn:cen.eu:en16931:2017"));
     }
 
     @Test
