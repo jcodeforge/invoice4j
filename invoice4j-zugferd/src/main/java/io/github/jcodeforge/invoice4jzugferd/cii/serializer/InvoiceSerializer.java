@@ -190,6 +190,7 @@ public final class InvoiceSerializer implements XmlSerializer<Invoice> {
 
         // BG-10
         if (options.getProfile() != CiiProfile.EN16931
+                && options.getProfile() != CiiProfile.ZUGFERD_EN16931
                 && options.getProfile() != CiiProfile.ZUGFERD_BASIC) {
 
             payeeSerializer.serialize(
