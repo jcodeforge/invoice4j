@@ -135,9 +135,10 @@ public final class InvoiceSerializer implements XmlSerializer<Invoice> {
         writer.endElement();
         writer.endElement();
 
-        // BG-1
-        for (Note note : invoice.getNotes()) {
-            noteSerializer.serialize(writer, note);
+        if (options.getProfile() != CiiProfile.ZUGFERD_MINIMUM) {
+            for (Note note : invoice.getNotes()) {
+                noteSerializer.serialize(writer, note);
+            }
         }
 
         writer.endElement();
@@ -151,14 +152,20 @@ public final class InvoiceSerializer implements XmlSerializer<Invoice> {
                 XmlNamespaces.RSM,
                 "SupplyChainTradeTransaction");
 
-        // BG-25
-        for (InvoiceLine line : invoice.getLines()) {
-            invoiceLineSerializer.serialize(writer, line);
-        }
+        if (options.getProfile() == CiiProfile.ZUGFERD_MINIMUM) {
+            writeApplicableHeaderTradeAgreement(writer, invoice);
+            writeApplicableHeaderTradeDelivery(writer, invoice);
+            writeApplicableHeaderTradeSettlement(writer, invoice);
 
-        writeApplicableHeaderTradeAgreement(writer, invoice);
-        writeApplicableHeaderTradeDelivery(writer, invoice);
-        writeApplicableHeaderTradeSettlement(writer, invoice);
+        } else {
+            for (InvoiceLine line : invoice.getLines()) {
+                invoiceLineSerializer.serialize(writer, line);
+            }
+
+            writeApplicableHeaderTradeAgreement(writer, invoice);
+            writeApplicableHeaderTradeDelivery(writer, invoice);
+            writeApplicableHeaderTradeSettlement(writer, invoice);
+        }
 
         writer.endElement();
     }
@@ -191,7 +198,8 @@ public final class InvoiceSerializer implements XmlSerializer<Invoice> {
         // BG-10
         if (options.getProfile() != CiiProfile.EN16931
                 && options.getProfile() != CiiProfile.ZUGFERD_EN16931
-                && options.getProfile() != CiiProfile.ZUGFERD_BASIC) {
+                && options.getProfile() != CiiProfile.ZUGFERD_BASIC
+                && options.getProfile() != CiiProfile.ZUGFERD_MINIMUM) {
 
             payeeSerializer.serialize(
                     writer,
@@ -199,42 +207,69 @@ public final class InvoiceSerializer implements XmlSerializer<Invoice> {
             );
         }
 
-        // BT-13
-        if (invoice.getSalesOrderReference() != null
-                && options.getProfile() != CiiProfile.ZUGFERD_BASIC) {
+        /*
+         * ZUGFeRD MINIMUM
+         *
+         * The schema expects BuyerOrderReferencedDocument before
+         * SellerOrderReferencedDocument.
+         */
+        if (options.getProfile() == CiiProfile.ZUGFERD_MINIMUM) {
 
-            writer.startElement(
-                    XmlNamespaces.RAM,
-                    "SellerOrderReferencedDocument"
-            );
+            // BT-14
+            if (invoice.getPurchaseOrderReference() != null) {
+                writer.startElement(
+                        XmlNamespaces.RAM,
+                        "BuyerOrderReferencedDocument"
+                );
 
-            writer.writeElement(
-                    XmlNamespaces.RAM,
-                    "IssuerAssignedID",
-                    invoice.getSalesOrderReference()
-            );
+                writer.writeElement(
+                        XmlNamespaces.RAM,
+                        "IssuerAssignedID",
+                        invoice.getPurchaseOrderReference()
+                );
 
-            writer.endElement();
-        }
+                writer.endElement();
+            }
 
-        // BT-14
-        if (invoice.getPurchaseOrderReference() != null) {
-            writer.startElement(
-                    XmlNamespaces.RAM,
-                    "BuyerOrderReferencedDocument"
-            );
+        } else {
+            // BT-13
+            if (invoice.getSalesOrderReference() != null
+                    && options.getProfile() != CiiProfile.ZUGFERD_BASIC) {
 
-            writer.writeElement(
-                    XmlNamespaces.RAM,
-                    "IssuerAssignedID",
-                    invoice.getPurchaseOrderReference()
-            );
+                writer.startElement(
+                        XmlNamespaces.RAM,
+                        "SellerOrderReferencedDocument"
+                );
 
-            writer.endElement();
+                writer.writeElement(
+                        XmlNamespaces.RAM,
+                        "IssuerAssignedID",
+                        invoice.getSalesOrderReference()
+                );
+
+                writer.endElement();
+            }
+
+            // BT-14
+            if (invoice.getPurchaseOrderReference() != null) {
+                writer.startElement(
+                        XmlNamespaces.RAM,
+                        "BuyerOrderReferencedDocument"
+                );
+
+                writer.writeElement(
+                        XmlNamespaces.RAM,
+                        "IssuerAssignedID",
+                        invoice.getPurchaseOrderReference()
+                );
+
+                writer.endElement();
+            }
         }
 
         // BT-12
-        if (invoice.getContractReference() != null) {
+        if (invoice.getContractReference() != null
+                && options.getProfile() != CiiProfile.ZUGFERD_MINIMUM) {
             writer.startElement(
                     XmlNamespaces.RAM,
                     "ContractReferencedDocument"
@@ -250,7 +285,8 @@ public final class InvoiceSerializer implements XmlSerializer<Invoice> {
         }
 
         // BG-24 / AdditionalReferencedDocument
-        if (options.getProfile() != CiiProfile.ZUGFERD_BASIC) {
+        if (options.getProfile() != CiiProfile.ZUGFERD_BASIC
+                && options.getProfile() != CiiProfile.ZUGFERD_MINIMUM) {
             for (DocumentReference reference : invoice.getAdditionalDocuments()) {
                 documentReferenceSerializer.serialize(
                         writer,
@@ -260,7 +296,8 @@ public final class InvoiceSerializer implements XmlSerializer<Invoice> {
         }
 
         // BT-11
-        if (invoice.getProjectReference() != null && options.getProfile() != CiiProfile.ZUGFERD_BASIC) {
+        if (invoice.getProjectReference() != null && options.getProfile() != CiiProfile.ZUGFERD_BASIC
+                && options.getProfile() != CiiProfile.ZUGFERD_MINIMUM) {
             writer.startElement(
                     XmlNamespaces.RAM,
                     "SpecifiedProcuringProject"
@@ -292,26 +329,27 @@ public final class InvoiceSerializer implements XmlSerializer<Invoice> {
                 XmlNamespaces.RAM,
                 "ApplicableHeaderTradeDelivery");
 
-        if (invoice.getDelivery() != null) {
-            deliverySerializer.serialize(
-                    writer,
-                    invoice.getDelivery());
+        if (options.getProfile() != CiiProfile.ZUGFERD_MINIMUM) {
+            if (invoice.getDelivery() != null) {
+                deliverySerializer.serialize(
+                        writer,
+                        invoice.getDelivery());
+            }
         }
 
         writer.endElement();
     }
 
-    private void writeApplicableHeaderTradeSettlement(
-            XmlWriter writer,
-            Invoice invoice) {
-
+    private void writeApplicableHeaderTradeSettlement(XmlWriter writer, Invoice invoice) {
         writer.startElement(
                 XmlNamespaces.RAM,
                 "ApplicableHeaderTradeSettlement"
         );
 
         // BT-6
-        if (invoice.getTaxCurrency() != null && invoice.getTaxCurrency() != invoice.getCurrency()) {
+        if (invoice.getTaxCurrency() != null
+                && invoice.getTaxCurrency() != invoice.getCurrency()) {
+
             writer.writeElement(
                     XmlNamespaces.RAM,
                     "TaxCurrencyCode",
@@ -326,52 +364,75 @@ public final class InvoiceSerializer implements XmlSerializer<Invoice> {
                 invoice.getCurrency().getCode()
         );
 
-        // BG-16
-        paymentMeansSerializer.serialize(
-                writer,
-                invoice.getPayment()
-        );
+        if (options.getProfile() == CiiProfile.ZUGFERD_MINIMUM) {
 
-        // BG-23
-        for (Tax tax : invoice.getTaxes()) {
-            taxSerializer.serialize(
+            /*
+             * ZUGFeRD MINIMUM
+             *
+             * The MINIMUM schema expects the monetary summation
+             * before payment means.
+             */
+
+            // BG-22
+            monetarySummationSerializer.serialize(
                     writer,
-                    tax
+                    invoice.getMonetarySummation()
             );
-        }
 
-        // BG-18
-        invoicePeriodSerializer.serialize(
-                writer,
-                invoice.getInvoicePeriod()
-        );
+        } else {
 
-        // BG-20 / BG-21
-        for (AllowanceCharge allowanceCharge : invoice.getAllowanceCharges()) {
-            allowanceChargeSerializer.serialize(
+            /*
+             * Existing order for all other profiles.
+             */
+
+            // BG-16
+            paymentMeansSerializer.serialize(
                     writer,
-                    allowanceCharge
+                    invoice.getPayment()
             );
-        }
 
-        // BG-19
-        paymentTermsSerializer.serialize(
-                writer,
-                invoice.getPaymentTerms()
-        );
+            // BG-23
+            for (Tax tax : invoice.getTaxes()) {
+                taxSerializer.serialize(
+                        writer,
+                        tax
+                );
+            }
 
-        // BG-22
-        monetarySummationSerializer.serialize(
-                writer,
-                invoice.getMonetarySummation()
-        );
-
-        // Billing references
-        for (DocumentReference reference : invoice.getBillingReferences()) {
-            documentReferenceSerializer.serialize(
+            // BG-18
+            invoicePeriodSerializer.serialize(
                     writer,
-                    "InvoiceReferencedDocument", reference
+                    invoice.getInvoicePeriod()
             );
+
+            // BG-20 / BG-21
+            for (AllowanceCharge allowanceCharge : invoice.getAllowanceCharges()) {
+                allowanceChargeSerializer.serialize(
+                        writer,
+                        allowanceCharge
+                );
+            }
+
+            // BG-19
+            paymentTermsSerializer.serialize(
+                    writer,
+                    invoice.getPaymentTerms()
+            );
+
+            // BG-22
+            monetarySummationSerializer.serialize(
+                    writer,
+                    invoice.getMonetarySummation()
+            );
+
+            // Billing references
+            for (DocumentReference reference : invoice.getBillingReferences()) {
+                documentReferenceSerializer.serialize(
+                        writer,
+                        "InvoiceReferencedDocument",
+                        reference
+                );
+            }
         }
 
         writer.endElement();

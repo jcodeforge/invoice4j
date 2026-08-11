@@ -16,8 +16,7 @@ public final class ShipToSerializer implements XmlSerializer<ShipTo> {
     private final ElectronicAddressSerializer electronicAddressSerializer =
             new ElectronicAddressSerializer();
 
-    private final AddressSerializer addressSerializer =
-            new AddressSerializer();
+    private final AddressSerializer addressSerializer;
 
     private final ContactSerializer contactSerializer =
             new ContactSerializer();
@@ -27,6 +26,7 @@ public final class ShipToSerializer implements XmlSerializer<ShipTo> {
     public ShipToSerializer(CiiConfigurationOptions options) {
         this.options = Objects.requireNonNull(options, "options must not be null");
         this.partyIdentifierSerializer = new PartyIdentifierSerializer(options);
+        this.addressSerializer = new AddressSerializer(options);
     }
 
     @Override

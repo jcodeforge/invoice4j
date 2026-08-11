@@ -2,6 +2,7 @@ package io.github.jcodeforge.invoice4jzugferd.cii.serializer;
 
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.MonetarySummation;
 import io.github.jcodeforge.invoice4jzugferd.cii.CiiConfigurationOptions;
+import io.github.jcodeforge.invoice4jzugferd.cii.CiiProfile;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlNamespaces;
 import io.github.jcodeforge.invoice4jzugferd.xml.XmlWriter;
 
@@ -21,29 +22,85 @@ public final class MonetarySummationSerializer implements XmlSerializer<Monetary
             return;
         }
 
-        writer.startElement(XmlNamespaces.RAM, "SpecifiedTradeSettlementHeaderMonetarySummation");
-        writer.writeElement(XmlNamespaces.RAM, "LineTotalAmount", monetarySummation.getLineExtensionAmount()
-                .getAmount().toPlainString());
-        writer.writeElement(XmlNamespaces.RAM, "ChargeTotalAmount", monetarySummation.getChargeTotalAmount()
-                .getAmount().toPlainString());
-        writer.writeElement(XmlNamespaces.RAM, "AllowanceTotalAmount", monetarySummation.getAllowanceTotalAmount()
-                .getAmount().toPlainString());
-        writer.writeElement(XmlNamespaces.RAM, "TaxBasisTotalAmount", monetarySummation.getTaxExclusiveAmount()
-                .getAmount().toPlainString());
+        writer.startElement(
+                XmlNamespaces.RAM,
+                "SpecifiedTradeSettlementHeaderMonetarySummation"
+        );
 
-        // BT-110
-        writer.startElement(XmlNamespaces.RAM, "TaxTotalAmount");
-        writer.writeAttribute("currencyID", monetarySummation.getTaxAmount().getCurrency().getCode());
-        writer.writeCharacters(monetarySummation.getTaxAmount().getAmount().toPlainString());
+        if (options.getProfile() == CiiProfile.ZUGFERD_MINIMUM) {
+            writer.writeElement(
+                    XmlNamespaces.RAM,
+                    "TaxBasisTotalAmount",
+                    monetarySummation
+                            .getTaxExclusiveAmount()
+                            .getAmount()
+                            .toPlainString()
+            );
 
-        writer.endElement();
+            writer.startElement(
+                    XmlNamespaces.RAM,
+                    "TaxTotalAmount"
+            );
 
-        writer.writeElement(XmlNamespaces.RAM, "GrandTotalAmount", monetarySummation.getTaxInclusiveAmount()
-                .getAmount().toPlainString());
-        writer.writeElement(XmlNamespaces.RAM, "TotalPrepaidAmount", monetarySummation.getPrepaidAmount()
-                .getAmount().toPlainString());
-        writer.writeElement(XmlNamespaces.RAM, "DuePayableAmount", monetarySummation.getPayableAmount()
-                .getAmount().toPlainString());
+            writer.writeAttribute(
+                    "currencyID",
+                    monetarySummation
+                            .getTaxAmount()
+                            .getCurrency()
+                            .getCode()
+            );
+
+            writer.writeCharacters(
+                    monetarySummation
+                            .getTaxAmount()
+                            .getAmount()
+                            .toPlainString()
+            );
+
+            writer.endElement();
+
+            writer.writeElement(
+                    XmlNamespaces.RAM,
+                    "GrandTotalAmount",
+                    monetarySummation
+                            .getTaxInclusiveAmount()
+                            .getAmount()
+                            .toPlainString()
+            );
+
+            writer.writeElement(
+                    XmlNamespaces.RAM,
+                    "DuePayableAmount",
+                    monetarySummation
+                            .getPayableAmount()
+                            .getAmount()
+                            .toPlainString()
+            );
+
+        } else {
+            writer.writeElement(XmlNamespaces.RAM, "LineTotalAmount", monetarySummation.getLineExtensionAmount()
+                    .getAmount().toPlainString());
+            writer.writeElement(XmlNamespaces.RAM, "ChargeTotalAmount", monetarySummation.getChargeTotalAmount()
+                    .getAmount().toPlainString());
+            writer.writeElement(XmlNamespaces.RAM, "AllowanceTotalAmount", monetarySummation.getAllowanceTotalAmount()
+                    .getAmount().toPlainString());
+            writer.writeElement(XmlNamespaces.RAM, "TaxBasisTotalAmount", monetarySummation.getTaxExclusiveAmount()
+                    .getAmount().toPlainString());
+
+            // BT-110
+            writer.startElement(XmlNamespaces.RAM, "TaxTotalAmount");
+            writer.writeAttribute("currencyID", monetarySummation.getTaxAmount().getCurrency().getCode());
+            writer.writeCharacters(monetarySummation.getTaxAmount().getAmount().toPlainString());
+
+            writer.endElement();
+
+            writer.writeElement(XmlNamespaces.RAM, "GrandTotalAmount", monetarySummation.getTaxInclusiveAmount()
+                    .getAmount().toPlainString());
+            writer.writeElement(XmlNamespaces.RAM, "TotalPrepaidAmount", monetarySummation.getPrepaidAmount()
+                    .getAmount().toPlainString());
+            writer.writeElement(XmlNamespaces.RAM, "DuePayableAmount", monetarySummation.getPayableAmount()
+                    .getAmount().toPlainString());
+        }
 
         writer.endElement();
     }

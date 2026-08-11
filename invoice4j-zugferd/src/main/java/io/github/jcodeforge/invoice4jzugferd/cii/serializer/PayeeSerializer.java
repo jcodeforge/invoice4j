@@ -14,13 +14,14 @@ public final class PayeeSerializer implements XmlSerializer<Payee> {
 
     private final ElectronicAddressSerializer electronicAddressSerializer = new ElectronicAddressSerializer();
 
-    private final AddressSerializer addressSerializer = new AddressSerializer();
+    private final AddressSerializer addressSerializer;
 
     private final CiiConfigurationOptions options;
 
     public PayeeSerializer(CiiConfigurationOptions options) {
         this.options = Objects.requireNonNull(options, "options must not be null");
         this.partyIdentifierSerializer = new PartyIdentifierSerializer(options);
+        this.addressSerializer = new AddressSerializer(options);
     }
 
     @Override

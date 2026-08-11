@@ -14,7 +14,7 @@ public final class BuyerSerializer implements XmlSerializer<Buyer> {
 
     private final ElectronicAddressSerializer electronicAddressSerializer = new ElectronicAddressSerializer();
 
-    private final AddressSerializer addressSerializer = new AddressSerializer();
+    private final AddressSerializer addressSerializer;
 
     private final TaxIdentifierSerializer taxIdentifierSerializer = new TaxIdentifierSerializer();
 
@@ -23,6 +23,7 @@ public final class BuyerSerializer implements XmlSerializer<Buyer> {
     public BuyerSerializer(CiiConfigurationOptions options) {
         this.options = Objects.requireNonNull(options, "options must not be null");
         this.partyIdentifierSerializer = new PartyIdentifierSerializer(options);
+        this.addressSerializer = new AddressSerializer(options);
     }
 
     @Override
@@ -33,18 +34,36 @@ public final class BuyerSerializer implements XmlSerializer<Buyer> {
 
         writer.startElement(XmlNamespaces.RAM, "BuyerTradeParty");
 
-        // BT-45
-        for (PartyIdentifier identifier : buyer.getIdentifiers()) {
-            partyIdentifierSerializer.serialize(writer, identifier);
+        if (options.getProfile() == CiiProfile.ZUGFERD_MINIMUM) {
+            writer.writeElement(
+                    XmlNamespaces.RAM,
+                    "Name",
+                    buyer.getName()
+            );
+
+            for (PartyIdentifier identifier : buyer.getIdentifiers()) {
+                partyIdentifierSerializer.serialize(writer, identifier);
+            }
+
+        } else {
+            // Existing order for the other profiles
+            for (PartyIdentifier identifier : buyer.getIdentifiers()) {
+                partyIdentifierSerializer.serialize(writer, identifier);
+            }
+
+            // BT-27
+            writer.writeElement(
+                    XmlNamespaces.RAM,
+                    "Name",
+                    buyer.getName()
+            );
         }
 
-        // BT-44
-        writer.writeElement(XmlNamespaces.RAM, "Name", buyer.getName());
         /*
          * ZUGFeRD BASIC does not allow Description
          * after Name in BuyerTradeParty.
          */
-        if (options.getProfile() != CiiProfile.ZUGFERD_BASIC) {
+        if (options.getProfile() != CiiProfile.ZUGFERD_BASIC && options.getProfile() != CiiProfile.ZUGFERD_MINIMUM) {
             writer.writeOptionalElement(XmlNamespaces.RAM, "Description", buyer.getTradingName());
         }
 
@@ -60,7 +79,15 @@ public final class BuyerSerializer implements XmlSerializer<Buyer> {
         taxIdentifierSerializer.serialize(writer, buyer.getVatIdentifier());
 
         addressSerializer.serialize(writer, buyer.getAddress());
-        electronicAddressSerializer.serialize(writer, buyer.getElectronicAddress());
+
+
+        // Electronic address
+        if (options.getProfile() != CiiProfile.ZUGFERD_MINIMUM) {
+            electronicAddressSerializer.serialize(
+                    writer,
+                    buyer.getElectronicAddress()
+            );
+        }
 
         writer.endElement();
     }
