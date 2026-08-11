@@ -763,9 +763,6 @@ public final class Invoice {
             if (delivery == null) {
                 throw new InvoiceValidationException("BT-72 BT-75 Delivery should not be null.");
             }
-            if (delivery.getActualDeliveryDate() == null) {
-                throw new InvoiceValidationException("BT-72 Actual delivery date must not be null.");
-            }
             if (dueDate != null && dueDate.isBefore(issueDate)) {
                 throw new InvoiceValidationException("BT-9 Payment due date must not be before BT-2 issue date.");
             }
@@ -778,17 +775,8 @@ public final class Invoice {
             if (buyer == null) {
                 throw new InvoiceValidationException("BG-7 Buyer is required.");
             }
-            if (lines.isEmpty()) {
-                throw new InvoiceValidationException("BG-25 At least one invoice line is required.");
-            }
             if (monetarySummation == null) {
                 throw new InvoiceValidationException("BG-22 Monetary summation is required.");
-            }
-            if (paymentMeans == null) {
-                throw new InvoiceValidationException("BG-16 payment Means is required.");
-            }
-            if (paymentTerms == null) {
-                throw new InvoiceValidationException("BG-19 payment Terms is required.");
             }
             if (paymentTerms != null && paymentTerms.getDueDate() != null && paymentTerms.getDueDate().isBefore(issueDate)) {
                 throw new InvoiceValidationException("BT-9 Payment due date must not be before BT-2 Issue date.");

@@ -177,48 +177,138 @@ public class MonetarySummation {
             if (actual.getCurrency() == null) {
                 throw new InvoiceValidationException(bt + " currency is required.");
             }
+            if (expected == null) {
+                return;
+            }
+            if (expected.getCurrency() == null) {
+                return;
+            }
             if (!expected.getCurrency().equals(actual.getCurrency())) {
                 throw new InvoiceValidationException(bt + " must use the same currency.");
             }
         }
 
         public MonetarySummation build() {
-            if (monetarySummation.lineExtensionAmount == null) {
-                throw new InvoiceValidationException("BT-106 Invoice line net amount total is required.");
-            }
+
             if (monetarySummation.taxAmount == null) {
-                throw new InvoiceValidationException("BT-110 VAT total amount is required.");
+                throw new InvoiceValidationException(
+                        "BT-110 VAT total amount is required."
+                );
             }
+
             if (monetarySummation.payableAmount == null) {
-                throw new InvoiceValidationException("BT-115 Payable amount is required.");
+                throw new InvoiceValidationException(
+                        "BT-115 Payable amount is required."
+                );
             }
 
-            // BT-113 may be positive or negative depending on implementation.
-            // Therefore only check for null if you decide to require it.
-
-            // Currency consistency
-
-            if (monetarySummation.lineExtensionAmount.getCurrency() == null || monetarySummation.taxAmount.getCurrency() == null
-                    || monetarySummation.payableAmount.getCurrency() == null) {
-                throw new InvoiceValidationException("Currency is required for monetary amounts.");
+            // Currency is required for amounts that are present.
+            if (monetarySummation.taxAmount.getCurrency() == null) {
+                throw new InvoiceValidationException(
+                        "BT-110 currency is required."
+                );
             }
 
-            validateNonNegative(monetarySummation.lineExtensionAmount, "BT-106", "Invoice line total amount");
-            validateNonNegative(monetarySummation.allowanceTotalAmount, "BT-107", "Allowance total amount");
-            validateNonNegative(monetarySummation.chargeTotalAmount, "BT-108", "Charge total amount");
-            validateNonNegative(monetarySummation.taxAmount, "BT-110", "VAT total amount");
-            validateNonNegative(monetarySummation.payableAmount, "BT-115", "Payable amount");
-            validateNonNegative(monetarySummation.taxExclusiveAmount, "BT-109", "Tax exclusive amount");
-            validateNonNegative(monetarySummation.taxInclusiveAmount, "BT-111", "Tax inclusive amount");
-            validateNonNegative(monetarySummation.prepaidAmount, "BT-112", "Prepaid amount");
+            if (monetarySummation.payableAmount.getCurrency() == null) {
+                throw new InvoiceValidationException(
+                        "BT-115 currency is required."
+                );
+            }
 
-            validateCurrency(monetarySummation.lineExtensionAmount, monetarySummation.allowanceTotalAmount, "BT-107");
-            validateCurrency(monetarySummation.lineExtensionAmount, monetarySummation.chargeTotalAmount, "BT-108");
-            validateCurrency(monetarySummation.lineExtensionAmount, monetarySummation.taxExclusiveAmount, "BT-109");
-            validateCurrency(monetarySummation.lineExtensionAmount, monetarySummation.taxInclusiveAmount, "BT-111");
-            validateCurrency(monetarySummation.lineExtensionAmount, monetarySummation.prepaidAmount, "BT-112");
-            validateCurrency(monetarySummation.lineExtensionAmount, monetarySummation.roundingAmount, "BT-113");
-            validateCurrency(monetarySummation.lineExtensionAmount, monetarySummation.payableAmount, "BT-115");
+            // BT-106 may be absent for ZUGFeRD MINIMUM.
+            validateNonNegative(
+                    monetarySummation.lineExtensionAmount,
+                    "BT-106",
+                    "Invoice line total amount"
+            );
+
+            validateNonNegative(
+                    monetarySummation.allowanceTotalAmount,
+                    "BT-107",
+                    "Allowance total amount"
+            );
+
+            validateNonNegative(
+                    monetarySummation.chargeTotalAmount,
+                    "BT-108",
+                    "Charge total amount"
+            );
+
+            validateNonNegative(
+                    monetarySummation.taxAmount,
+                    "BT-110",
+                    "VAT total amount"
+            );
+
+            validateNonNegative(
+                    monetarySummation.payableAmount,
+                    "BT-115",
+                    "Payable amount"
+            );
+
+            validateNonNegative(
+                    monetarySummation.taxExclusiveAmount,
+                    "BT-109",
+                    "Tax exclusive amount"
+            );
+
+            validateNonNegative(
+                    monetarySummation.taxInclusiveAmount,
+                    "BT-111",
+                    "Tax inclusive amount"
+            );
+
+            validateNonNegative(
+                    monetarySummation.prepaidAmount,
+                    "BT-112",
+                    "Prepaid amount"
+            );
+
+            // Currency consistency.
+            //
+            // The reference amount may itself be absent for MINIMUM,
+            // therefore validateCurrency() must be null-safe.
+            validateCurrency(
+                    monetarySummation.lineExtensionAmount,
+                    monetarySummation.allowanceTotalAmount,
+                    "BT-107"
+            );
+
+            validateCurrency(
+                    monetarySummation.lineExtensionAmount,
+                    monetarySummation.chargeTotalAmount,
+                    "BT-108"
+            );
+
+            validateCurrency(
+                    monetarySummation.lineExtensionAmount,
+                    monetarySummation.taxExclusiveAmount,
+                    "BT-109"
+            );
+
+            validateCurrency(
+                    monetarySummation.lineExtensionAmount,
+                    monetarySummation.taxInclusiveAmount,
+                    "BT-111"
+            );
+
+            validateCurrency(
+                    monetarySummation.lineExtensionAmount,
+                    monetarySummation.prepaidAmount,
+                    "BT-112"
+            );
+
+            validateCurrency(
+                    monetarySummation.lineExtensionAmount,
+                    monetarySummation.roundingAmount,
+                    "BT-113"
+            );
+
+            validateCurrency(
+                    monetarySummation.lineExtensionAmount,
+                    monetarySummation.payableAmount,
+                    "BT-115"
+            );
 
             return monetarySummation;
         }

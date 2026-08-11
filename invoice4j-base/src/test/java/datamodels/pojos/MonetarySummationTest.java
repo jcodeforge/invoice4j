@@ -20,14 +20,6 @@ public class MonetarySummationTest {
     }
 
     @Test(expected = InvoiceValidationException.class)
-    public void shouldRejectMissingLineExtensionAmount() {
-        MonetarySummation.builder()
-                .taxAmount(CalculationUtils.createEUMoney("19.00"))
-                .payableAmount(CalculationUtils.createEUMoney("119.00"))
-                .build();
-    }
-
-    @Test(expected = InvoiceValidationException.class)
     public void shouldRejectMissingTaxAmount() {
         MonetarySummation.builder()
                 .lineExtensionAmount(CalculationUtils.createEUMoney("100.00"))

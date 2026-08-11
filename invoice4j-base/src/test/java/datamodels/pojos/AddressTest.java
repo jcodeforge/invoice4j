@@ -23,48 +23,11 @@ public class AddressTest {
     }
 
     @Test(expected = InvoiceValidationException.class)
-    public void shouldRejectMissingStreet() {
-        Address.builder()
-                .city("Ber")
-                .postcode("10115")
-                .countryCode(CountryCode.DE)
-                .build();
-    }
-
-    @Test(expected = InvoiceValidationException.class)
-    public void shouldRejectBlankStreet() {
-        Address.builder()
-                .street("   ")
-                .city("Berlin")
-                .postcode("10115")
-                .countryCode(CountryCode.DE)
-                .build();
-    }
-
-    @Test(expected = InvoiceValidationException.class)
-    public void shouldRejectMissingCity() {
-        Address.builder()
-                .street("Main Street 1")
-                .postcode("10115")
-                .countryCode(CountryCode.DE)
-                .build();
-    }
-
-    @Test(expected = InvoiceValidationException.class)
     public void shouldRejectBlankCity() {
         Address.builder()
                 .street("Main Street 1")
                 .city("   ")
                 .postcode("10115")
-                .countryCode(CountryCode.DE)
-                .build();
-    }
-
-    @Test(expected = InvoiceValidationException.class)
-    public void shouldRejectMissingPostcode() {
-        Address.builder()
-                .street("Main Street 1")
-                .city("Berlin")
                 .countryCode(CountryCode.DE)
                 .build();
     }

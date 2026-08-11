@@ -312,4 +312,65 @@ public class ZugferdInvoiceReaderTest {
         assertEquals(original.getProjectReference(), parsed.getProjectReference());
         assertEquals(original.getProjectName(), parsed.getProjectName());
     }
+
+    @Test
+    public void shouldRoundTripMinimumInvoice() {
+        Invoice original = new InvoiceCalculator()
+                .calculate(TestInvoiceFactory.createCompleteInvoice());
+
+        String xml = ZugferdInvoiceWriter.builder()
+                .profile(ZugferdProfile.MINIMUM)
+                .build()
+                .writeToString(original);
+
+        Invoice parsed = SUT.readFromString(xml);
+
+        assertEquals(original.getInvoiceNumber(), parsed.getInvoiceNumber());
+        assertEquals(original.getIssueDate(), parsed.getIssueDate());
+        assertEquals(original.getCurrency(), parsed.getCurrency());
+        assertEquals(original.getSeller().getName(), parsed.getSeller().getName());
+        assertEquals(original.getBuyer().getName(), parsed.getBuyer().getName());
+        assertEquals(original.getMonetarySummation().getTaxExclusiveAmount(),
+                parsed.getMonetarySummation().getTaxExclusiveAmount());
+        assertEquals(original.getMonetarySummation().getTaxAmount(), parsed.getMonetarySummation().getTaxAmount());
+        assertEquals(original.getMonetarySummation().getTaxInclusiveAmount(),
+                parsed.getMonetarySummation().getTaxInclusiveAmount());
+        assertEquals(original.getMonetarySummation().getPayableAmount(),
+                parsed.getMonetarySummation().getPayableAmount());
+    }
+
+    @Test
+    public void shouldNotReadInvoiceLinesFromMinimumInvoice() {
+        Invoice original = new InvoiceCalculator()
+                .calculate(TestInvoiceFactory.createCompleteInvoice());
+
+        String xml = ZugferdInvoiceWriter.builder()
+                .profile(ZugferdProfile.MINIMUM)
+                .build()
+                .writeToString(original);
+
+        Invoice parsed = SUT.readFromString(xml);
+
+        assertNotNull(parsed.getLines());
+        assertTrue(parsed.getLines().isEmpty());
+    }
+
+    @Test
+    public void shouldReadMinimalMinimumInvoice() {
+        Invoice original = new InvoiceCalculator()
+                .calculate(TestInvoiceFactory.createMinimalInvoice());
+
+        String xml = ZugferdInvoiceWriter.builder()
+                .profile(ZugferdProfile.MINIMUM)
+                .build()
+                .writeToString(original);
+
+        Invoice parsed = SUT.readFromString(xml);
+
+        assertEquals(original.getInvoiceNumber(), parsed.getInvoiceNumber());
+        assertEquals(original.getIssueDate(), parsed.getIssueDate());
+        assertEquals(original.getCurrency(), parsed.getCurrency());
+        assertEquals(original.getSeller().getName(), parsed.getSeller().getName());
+        assertEquals(original.getBuyer().getName(), parsed.getBuyer().getName());
+    }
 }

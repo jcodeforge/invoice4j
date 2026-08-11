@@ -107,16 +107,6 @@ public class InvoiceTest {
     }
 
     @Test(expected = InvoiceValidationException.class)
-    public void shouldRejectMissingPaymentMeans() {
-        SUT.paymentMeans(null).build();
-    }
-
-    @Test(expected = InvoiceValidationException.class)
-    public void shouldRejectMissingPaymentTerms() {
-        SUT.paymentTerms(null).build();
-    }
-
-    @Test(expected = InvoiceValidationException.class)
     public void shouldRejectPaymentDueDateBeforeIssueDate() {
         SUT.issueDate(LocalDate.of(2026, 1, 10))
                 .dueDate(LocalDate.of(2026, 1, 9))
@@ -128,11 +118,6 @@ public class InvoiceTest {
         SUT.taxPointDate(LocalDate.of(2026, 1, 5))
                 .taxPointDateCode("35")
                 .build();
-    }
-
-    @Test(expected = InvoiceValidationException.class)
-    public void shouldRejectEmptyInvoiceLines() {
-        SUT.lines(Collections.emptyList()).build();
     }
 
     @Test(expected = InvoiceValidationException.class)
