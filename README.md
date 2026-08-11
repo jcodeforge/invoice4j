@@ -5,7 +5,7 @@
 
 **invoice4j** is a modular, open-source Java library for creating, reading, validating, and converting electronic invoices.
 
-The project provides a shared invoice domain model and support for multiple e-invoicing standards, including **ZUGFeRD**, **Factur-X**, **XRechnung**, and **PEPPOL BIS**.
+The project provides support for multiple e-invoicing standards, including **ZUGFeRD**, **Factur-X**, **XRechnung**, and **PEPPOL BIS**.
 
 > **Status:** Early development
 
