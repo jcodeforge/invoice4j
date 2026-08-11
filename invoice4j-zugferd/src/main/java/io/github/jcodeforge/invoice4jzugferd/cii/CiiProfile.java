@@ -37,7 +37,7 @@ public enum CiiProfile {
      * ZUGFeRD / Factur-X EN16931 profile.
      */
     ZUGFERD_EN16931(
-            "urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:en16931",
+            "urn:cen.eu:en16931:2017",
             null
     ),
 
