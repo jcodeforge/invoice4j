@@ -50,6 +50,14 @@ public enum CiiProfile {
     ),
 
     /**
+     * ZUGFeRD / Factur-X EXTENDED profile.
+     */
+    ZUGFERD_EXTENDED(
+            "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended",
+            null
+    ),
+
+    /**
      * ZUGFeRD / Factur-X BASIC WL profile.
      */
     ZUGFERD_BASIC_WL(
