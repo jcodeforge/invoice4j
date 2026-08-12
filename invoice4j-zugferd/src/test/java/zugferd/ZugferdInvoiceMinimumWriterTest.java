@@ -13,7 +13,7 @@ import java.io.StringReader;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class ZugferdMinimumWriterTest {
+public class ZugferdInvoiceMinimumWriterTest {
 
     private final ZugferdInvoiceWriter SUT = ZugferdInvoiceWriter.builder()
             .profile(ZugferdProfile.MINIMUM)

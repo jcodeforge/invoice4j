@@ -24,6 +24,9 @@ public class ZugferdInvoiceBasicWriterTest {
         String xml = SUT.writeToString(invoice);
 
         Assert.assertNotNull(xml);
+        assertTrue(xml.contains(
+                "<ram:ID>urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic</ram:ID>"
+        ));
     }
 
     @Test
