@@ -488,4 +488,141 @@ public class ZugferdInvoiceReaderTest {
         assertEquals(original.getInvoicePeriod().getStartDate(), parsed.getInvoicePeriod().getStartDate());
         assertEquals(original.getInvoicePeriod().getEndDate(), parsed.getInvoicePeriod().getEndDate());
     }
+
+    @Test
+    public void shouldRoundTripExtendedInvoice() {
+        Invoice original = new InvoiceCalculator()
+                .calculate(TestInvoiceFactory.createCompleteInvoice());
+
+        String xml = ZugferdInvoiceWriter.builder()
+                .profile(ZugferdProfile.EXTENDED)
+                .build()
+                .writeToString(original);
+
+        Invoice parsed = SUT.readFromString(xml);
+
+        assertEquals(original.getInvoiceNumber(), parsed.getInvoiceNumber());
+        assertEquals(original.getIssueDate(), parsed.getIssueDate());
+        assertEquals(original.getCurrency(), parsed.getCurrency());
+
+        assertEquals(original.getSeller().getName(), parsed.getSeller().getName());
+        assertEquals(original.getBuyer().getName(), parsed.getBuyer().getName());
+        assertEquals(original.getLines().size(), parsed.getLines().size());
+        assertEquals(original.getMonetarySummation().getTaxInclusiveAmount(),
+                parsed.getMonetarySummation().getTaxInclusiveAmount());
+    }
+
+    @Test
+    public void shouldReadMinimalExtendedInvoice() {
+        Invoice original = new InvoiceCalculator()
+                .calculate(TestInvoiceFactory.createMinimalInvoice());
+
+        String xml = ZugferdInvoiceWriter.builder()
+                .profile(ZugferdProfile.EXTENDED)
+                .build()
+                .writeToString(original);
+
+        Invoice parsed = SUT.readFromString(xml);
+
+        assertEquals(original.getInvoiceNumber(), parsed.getInvoiceNumber());
+        assertEquals(original.getIssueDate(), parsed.getIssueDate());
+        assertEquals(original.getCurrency(), parsed.getCurrency());
+
+        assertEquals(original.getSeller().getName(), parsed.getSeller().getName());
+        assertEquals(original.getBuyer().getName(), parsed.getBuyer().getName());
+    }
+
+    @Test
+    public void shouldReadExtendedInvoiceLines() {
+        Invoice original = new InvoiceCalculator()
+                .calculate(TestInvoiceFactory.createCompleteInvoice());
+
+        String xml = ZugferdInvoiceWriter.builder()
+                .profile(ZugferdProfile.EXTENDED)
+                .build()
+                .writeToString(original);
+
+        Invoice parsed = SUT.readFromString(xml);
+
+        assertEquals(original.getLines().size(), parsed.getLines().size());
+
+        for (int i = 0; i < original.getLines().size(); i++) {
+            assertEquals(original.getLines().get(i).getItemName(), parsed.getLines().get(i).getItemName());
+        }
+    }
+
+    @Test
+    public void shouldReadExtendedPaymentMeans() {
+        Invoice original = new InvoiceCalculator()
+                .calculate(TestInvoiceFactory.createCompleteInvoice());
+
+        String xml = ZugferdInvoiceWriter.builder()
+                .profile(ZugferdProfile.EXTENDED)
+                .build()
+                .writeToString(original);
+
+        Invoice parsed = SUT.readFromString(xml);
+
+        assertNotNull(parsed.getPayment());
+
+        assertEquals(original.getPayment().getMeansCode(), parsed.getPayment().getMeansCode());
+        assertNotNull(parsed.getPayment().getBankAccount());
+        assertEquals(original.getPayment().getBankAccount().getIban(), parsed.getPayment().getBankAccount().getIban());
+    }
+
+    @Test
+    public void shouldReadExtendedMonetarySummation() {
+        Invoice original = new InvoiceCalculator()
+                .calculate(TestInvoiceFactory.createCompleteInvoice());
+
+        String xml = ZugferdInvoiceWriter.builder()
+                .profile(ZugferdProfile.EXTENDED)
+                .build()
+                .writeToString(original);
+
+        Invoice parsed = SUT.readFromString(xml);
+
+        assertEquals(original.getMonetarySummation().getLineExtensionAmount(),
+                parsed.getMonetarySummation().getLineExtensionAmount());
+        assertEquals(original.getMonetarySummation().getTaxExclusiveAmount(),
+                parsed.getMonetarySummation().getTaxExclusiveAmount());
+        assertEquals(original.getMonetarySummation().getTaxAmount(), parsed.getMonetarySummation().getTaxAmount());
+        assertEquals(original.getMonetarySummation().getTaxInclusiveAmount(),
+                parsed.getMonetarySummation().getTaxInclusiveAmount());
+        assertEquals(original.getMonetarySummation().getPayableAmount(),
+                parsed.getMonetarySummation().getPayableAmount());
+    }
+
+    @Test
+    public void shouldReadExtendedInvoicePeriod() {
+        Invoice original = new InvoiceCalculator()
+                .calculate(TestInvoiceFactory.createCompleteInvoice());
+
+        String xml = ZugferdInvoiceWriter.builder()
+                .profile(ZugferdProfile.EXTENDED)
+                .build()
+                .writeToString(original);
+
+        Invoice parsed = SUT.readFromString(xml);
+
+        assertNotNull(parsed.getInvoicePeriod());
+        assertEquals(original.getInvoicePeriod().getStartDate(), parsed.getInvoicePeriod().getStartDate());
+        assertEquals(original.getInvoicePeriod().getEndDate(), parsed.getInvoicePeriod().getEndDate());
+    }
+
+    @Test
+    public void shouldReadExtendedProjectReferenceAndName() {
+        Invoice original = new InvoiceCalculator()
+                .calculate(TestInvoiceFactory.createCompleteInvoice());
+
+        String xml = ZugferdInvoiceWriter.builder()
+                .profile(ZugferdProfile.EXTENDED)
+                .build()
+                .writeToString(original);
+
+        Invoice parsed = SUT.readFromString(xml);
+
+        assertEquals(original.getProjectReference(), parsed.getProjectReference());
+        assertEquals(original.getProjectName(), parsed.getProjectName());
+    }
 }
