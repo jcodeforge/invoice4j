@@ -50,12 +50,21 @@ public enum CiiProfile {
     ),
 
     /**
+     * ZUGFeRD / Factur-X BASIC WL profile.
+     */
+    ZUGFERD_BASIC_WL(
+            "urn:factur-x.eu:1p0:basicwl",
+            null
+    ),
+
+    /**
      * ZUGFeRD BASIC profile.
      */
     ZUGFERD_BASIC(
             "urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic",
             null
     );
+
 
     /**
      * BT-24
