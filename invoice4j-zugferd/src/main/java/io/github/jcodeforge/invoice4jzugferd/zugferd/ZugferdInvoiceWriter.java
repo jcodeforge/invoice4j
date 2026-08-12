@@ -72,7 +72,7 @@ public final class ZugferdInvoiceWriter {
             case BASIC -> CiiProfile.ZUGFERD_BASIC;
             case BASIC_WL -> CiiProfile.ZUGFERD_BASIC_WL;
             case MINIMUM -> CiiProfile.ZUGFERD_MINIMUM;
-            case EXTENDED -> throw new UnsupportedOperationException("ZUGFeRD EXTENDED profile is not implemented yet.");
+            case EXTENDED -> CiiProfile.ZUGFERD_EXTENDED;
         };
     }
 
