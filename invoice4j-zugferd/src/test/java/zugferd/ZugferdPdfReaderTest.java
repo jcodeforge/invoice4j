@@ -38,9 +38,14 @@ public final class ZugferdPdfReaderTest {
             </invoice>
             """;
 
+        Invoice invoice = new InvoiceCalculator()
+                .calculate(TestInvoiceFactory.createCompleteInvoice());
+
         ZugferdPdfWriter.builder()
+                .invoice(invoice)
+                .profile(ZugferdProfile.EXTENDED)
                 .build()
-                .embedXml(inputPdf, xml, outputPdf);
+                .write(inputPdf, xml, outputPdf);
 
         String extractedXml = SUT.extractXml(outputPdf);
 
@@ -172,8 +177,11 @@ public final class ZugferdPdfReaderTest {
         File outputPdf = createOutputPdf();
 
         try {
-            ZugferdPdfWriter.builder().build()
-                    .embedXml(inputPdf, originalXml, outputPdf);
+            ZugferdPdfWriter.builder()
+                    .invoice(original)
+                    .profile(ZugferdProfile.EXTENDED)
+                    .build()
+                    .write(inputPdf, originalXml, outputPdf);
 
             String extractedXml = SUT.extractXml(outputPdf);
 

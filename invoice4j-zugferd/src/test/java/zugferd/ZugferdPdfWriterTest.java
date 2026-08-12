@@ -1,6 +1,10 @@
 package zugferd;
 
+import factory.TestInvoiceFactory;
+import io.github.jcodeforge.invoice4jbase.calculation.InvoiceCalculator;
+import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jzugferd.zugferd.ZugferdPdfWriter;
+import io.github.jcodeforge.invoice4jzugferd.zugferd.ZugferdProfile;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSDictionary;
@@ -11,6 +15,7 @@ import org.apache.pdfbox.pdmodel.PDEmbeddedFilesNameTreeNode;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.filespecification.PDComplexFileSpecification;
 import org.apache.pdfbox.pdmodel.common.filespecification.PDEmbeddedFile;
+import org.junit.Before;
 import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +26,17 @@ import static org.junit.Assert.*;
 
 public class ZugferdPdfWriterTest {
 
-    private final ZugferdPdfWriter SUT = ZugferdPdfWriter.builder().build();
+    private ZugferdPdfWriter SUT;
+
+    @Before
+    public void setUp() {
+        Invoice invoice = new InvoiceCalculator().calculate(TestInvoiceFactory.createCompleteInvoice());
+
+        SUT = ZugferdPdfWriter.builder()
+                .invoice(invoice)
+                .profile(ZugferdProfile.EXTENDED)
+                .build();
+    }
 
     @Test
     public void shouldEmbedXml() throws Exception {
@@ -33,7 +48,7 @@ public class ZugferdPdfWriterTest {
                 <test>Invoice XML</test>
                 """;
 
-        SUT.embedXml(inputPdf, xml, outputPdf);
+        SUT.write(inputPdf, xml, outputPdf);
 
         assertTrue(outputPdf.exists());
         assertTrue(outputPdf.length() > 0);
@@ -54,7 +69,7 @@ public class ZugferdPdfWriterTest {
             </invoice>
             """;
 
-        SUT.embedXml(inputPdf, xml, outputPdf);
+        SUT.write(inputPdf, xml, outputPdf);
 
         try (PDDocument document = Loader.loadPDF(outputPdf)) {
             PDDocumentNameDictionary names = document.getDocumentCatalog().getNames();
@@ -92,7 +107,7 @@ public class ZugferdPdfWriterTest {
 
         String xml = "<invoice><id>INV-001</id></invoice>";
 
-        SUT.embedXml(inputPdf, xml, outputPdf);
+        SUT.write(inputPdf, xml, outputPdf);
 
         try (PDDocument document = Loader.loadPDF(outputPdf)) {
             COSArray af = (COSArray) document.getDocumentCatalog()

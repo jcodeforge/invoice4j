@@ -1,11 +1,13 @@
 package io.github.jcodeforge.invoice4jzugferd.zugferd;
 
+import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentNameDictionary;
 import org.apache.pdfbox.pdmodel.PDEmbeddedFilesNameTreeNode;
+import org.apache.pdfbox.pdmodel.common.PDMetadata;
 import org.apache.pdfbox.pdmodel.common.filespecification.PDComplexFileSpecification;
 import org.apache.pdfbox.pdmodel.common.filespecification.PDEmbeddedFile;
 import java.io.ByteArrayInputStream;
@@ -18,10 +20,18 @@ import java.util.Objects;
 
 public final class ZugferdPdfWriter {
 
-    private ZugferdPdfWriter() {
+    private final ZugferdXmpMetadata xmp = new ZugferdXmpMetadata();
+
+    private final Invoice invoice;
+
+    private final ZugferdProfile profile;
+
+    private ZugferdPdfWriter(Invoice invoice, ZugferdProfile profile) {
+        this.invoice = invoice;
+        this.profile = profile;
     }
 
-    public void embedXml(File inputPdf, String xml, File outputPdf) {
+    public void write(File inputPdf, String xml, File outputPdf) {
         Objects.requireNonNull(inputPdf, "Input Pdf must not be null");
         Objects.requireNonNull(xml, "Xml must not be null");
         Objects.requireNonNull(outputPdf, "Output Pdf must not be null");
@@ -59,8 +69,7 @@ public final class ZugferdPdfWriter {
                 names.setEmbeddedFiles(embeddedFiles);
             }
 
-            Map<String, PDComplexFileSpecification> files =
-                    embeddedFiles.getNames();
+            Map<String, PDComplexFileSpecification> files = embeddedFiles.getNames();
 
             if (files == null) {
                 files = new HashMap<>();
@@ -83,6 +92,13 @@ public final class ZugferdPdfWriter {
 
             afArray.add(fileSpec.getCOSObject());
 
+            String xmpMetadata = xmp.create(invoice, profile);
+
+            PDMetadata metadata = new PDMetadata(document);
+
+            metadata.importXMPMetadata(xmpMetadata.getBytes(StandardCharsets.UTF_8));
+            document.getDocumentCatalog().setMetadata(metadata);
+
             document.save(outputPdf);
 
         } catch (IOException e) {
@@ -96,8 +112,30 @@ public final class ZugferdPdfWriter {
 
     public static final class Builder {
 
+        private Invoice invoice;
+
+        private ZugferdProfile profile;
+
+        public Builder invoice(Invoice invoice) {
+            this.invoice = Objects.requireNonNull(invoice, "invoice must not be null");
+            return this;
+        }
+
+        public Builder profile(ZugferdProfile profile) {
+            this.profile = Objects.requireNonNull(profile, "profile must not be null");
+            return this;
+        }
+
         public ZugferdPdfWriter build() {
-            return new ZugferdPdfWriter();
+            if (invoice == null) {
+                throw new IllegalStateException("invoice must be configured");
+            }
+
+            if (profile == null) {
+                throw new IllegalStateException("profile must be configured");
+            }
+
+            return new ZugferdPdfWriter(invoice, profile);
         }
     }
 }
