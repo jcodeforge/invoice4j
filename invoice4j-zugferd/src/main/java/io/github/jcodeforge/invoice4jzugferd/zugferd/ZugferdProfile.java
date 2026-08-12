@@ -2,28 +2,23 @@ package io.github.jcodeforge.invoice4jzugferd.zugferd;
 
 public enum ZugferdProfile {
 
-    /**
-     * ZUGFeRD MINIMUM profile.
-     */
-    MINIMUM,
+    MINIMUM("urn:factur-x.eu:1p0:minimum"),
 
-    /**
-     * ZUGFeRD BASIC-WL profile.
-     */
-    BASIC_WL,
+    BASIC_WL("urn:factur-x.eu:1p0:basicwl"),
 
-    /**
-     * ZUGFeRD BASIC profile.
-     */
-    BASIC,
+    BASIC("urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic"),
 
-    /**
-     * ZUGFeRD EN 16931 / COMFORT profile.
-     */
-    EN16931,
+    EN16931("urn:cen.eu:en16931:2017"),
 
-    /**
-     * ZUGFeRD EXTENDED profile.
-     */
-    EXTENDED
+    EXTENDED("urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended");
+
+    private final String guidelineId;
+
+    ZugferdProfile(String guidelineId) {
+        this.guidelineId = guidelineId;
+    }
+
+    public String getGuidelineId() {
+        return guidelineId;
+    }
 }
