@@ -1,0 +1,228 @@
+package zugferd;
+
+import factory.TestInvoiceFactory;
+import io.github.jcodeforge.invoice4jbase.calculation.InvoiceCalculator;
+import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
+import io.github.jcodeforge.invoice4jzugferd.zugferd.*;
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDDocumentNameDictionary;
+import org.apache.pdfbox.pdmodel.PDEmbeddedFilesNameTreeNode;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.common.filespecification.PDComplexFileSpecification;
+import org.apache.pdfbox.pdmodel.common.filespecification.PDEmbeddedFile;
+import org.junit.Test;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.Assert.*;
+
+public final class ZugferdPdfReaderTest {
+
+    private final ZugferdPdfReader SUT = ZugferdPdfReader.builder().build();
+
+    @Test
+    public void shouldExtractEmbeddedXml() throws Exception {
+        File inputPdf = createInputPdf();
+        File outputPdf = createOutputPdf();
+
+        String xml = """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <invoice>
+                <id>INV-001</id>
+            </invoice>
+            """;
+
+        ZugferdPdfWriter.builder()
+                .build()
+                .embedXml(inputPdf, xml, outputPdf);
+
+        String extractedXml = SUT.extractXml(outputPdf);
+
+        assertEquals(xml, extractedXml);
+
+        inputPdf.delete();
+        outputPdf.delete();
+    }
+
+    private File createInputPdf() throws IOException {
+        File file = File.createTempFile("zugferd-input-", ".pdf");
+
+        try (PDDocument document = new PDDocument()) {
+            document.addPage(new PDPage());
+            document.save(file);
+        }
+
+        return file;
+    }
+
+    private File createOutputPdf() throws IOException {
+        return File.createTempFile("zugferd-output-", ".pdf");
+    }
+
+    @Test(expected = ZugferdPdfException.class)
+    public void shouldRejectPdfWithoutEmbeddedFiles() throws Exception {
+        File inputPdf = createInputPdf();
+
+        try {
+            SUT.extractXml(inputPdf);
+        } finally {
+            inputPdf.delete();
+        }
+    }
+
+    @Test(expected = ZugferdPdfException.class)
+    public void shouldRejectPdfWithoutFacturXXml() throws Exception {
+        File inputPdf = createInputPdf();
+        File outputPdf = createOutputPdf();
+
+        try {
+            // Add an embedded file with a different name.
+            embedOtherFile(inputPdf, outputPdf);
+
+            SUT.extractXml(outputPdf);
+
+        } finally {
+            inputPdf.delete();
+            outputPdf.delete();
+        }
+    }
+
+    @Test(expected = ZugferdPdfException.class)
+    public void shouldRejectFacturXXmlWithoutEmbeddedData() throws Exception {
+        File inputPdf = createInputPdf();
+        File outputPdf = createOutputPdf();
+
+        try {
+            createEmptyFacturXAttachment(inputPdf, outputPdf);
+
+            SUT.extractXml(outputPdf);
+
+        } finally {
+            inputPdf.delete();
+            outputPdf.delete();
+        }
+    }
+
+    @Test(expected = ZugferdPdfException.class)
+    public void shouldRejectInvalidPdf() throws Exception {
+        File invalidPdf = createInputPdf();
+        try {
+            Files.writeString(invalidPdf.toPath(), "This is not a PDF");
+
+            SUT.extractXml(invalidPdf);
+
+        } finally {
+            invalidPdf.delete();
+        }
+    }
+
+    private void embedOtherFile(File inputPdf, File outputPdf) throws IOException {
+        try (PDDocument document = Loader.loadPDF(inputPdf)) {
+
+            PDDocumentNameDictionary names = document.getDocumentCatalog().getNames();
+
+            if (names == null) {
+                names = new PDDocumentNameDictionary(document.getDocumentCatalog());
+                document.getDocumentCatalog().setNames(names);
+            }
+
+            PDEmbeddedFilesNameTreeNode embeddedFiles = new PDEmbeddedFilesNameTreeNode();
+
+            names.setEmbeddedFiles(embeddedFiles);
+
+            PDComplexFileSpecification fileSpec = new PDComplexFileSpecification();
+
+            fileSpec.setFile("other.xml");
+
+            byte[] data = "<test/>".getBytes(StandardCharsets.UTF_8);
+
+            PDEmbeddedFile embeddedFile = new PDEmbeddedFile(document, new ByteArrayInputStream(data));
+
+            embeddedFile.setSubtype("application/xml");
+            embeddedFile.setSize(data.length);
+
+            fileSpec.setEmbeddedFile(embeddedFile);
+
+            Map<String, PDComplexFileSpecification> files = new HashMap<>();
+
+            files.put("other.xml", fileSpec);
+
+            embeddedFiles.setNames(files);
+
+            document.save(outputPdf);
+        }
+    }
+
+    @Test
+    public void shouldRoundTripInvoiceThroughPdf() throws Exception {
+        Invoice original = new InvoiceCalculator().calculate(TestInvoiceFactory.createCompleteInvoice());
+
+        String originalXml = ZugferdInvoiceWriter.builder()
+                .profile(ZugferdProfile.EXTENDED)
+                .build()
+                .writeToString(original);
+
+        File inputPdf = createInputPdf();
+        File outputPdf = createOutputPdf();
+
+        try {
+            ZugferdPdfWriter.builder().build()
+                    .embedXml(inputPdf, originalXml, outputPdf);
+
+            String extractedXml = SUT.extractXml(outputPdf);
+
+            assertEquals(originalXml, extractedXml);
+
+            Invoice parsed = ZugferdInvoiceReader.builder()
+                    .build()
+                    .readFromString(extractedXml);
+
+            assertNotNull(parsed);
+
+            // Verify important invoice data survived the round trip
+            assertEquals(original.getInvoiceNumber(), parsed.getInvoiceNumber());
+
+            assertEquals(original.getIssueDate(), parsed.getIssueDate());
+            assertEquals(original.getCurrency().getCode(), parsed.getCurrency().getCode());
+
+            assertEquals(original.getLines().size(), parsed.getLines().size());
+
+        } finally {
+            inputPdf.delete();
+            outputPdf.delete();
+        }
+    }
+
+    private void createEmptyFacturXAttachment(
+            File inputPdf,
+            File outputPdf) throws IOException {
+
+        try (PDDocument document = Loader.loadPDF(inputPdf)) {
+            PDDocumentNameDictionary names = new PDDocumentNameDictionary(document.getDocumentCatalog());
+
+            document.getDocumentCatalog().setNames(names);
+
+            PDEmbeddedFilesNameTreeNode embeddedFiles = new PDEmbeddedFilesNameTreeNode();
+
+            names.setEmbeddedFiles(embeddedFiles);
+
+            PDComplexFileSpecification fileSpec = new PDComplexFileSpecification();
+
+            fileSpec.setFile("factur-x.xml");
+
+            Map<String, PDComplexFileSpecification> files = new HashMap<>();
+
+            files.put("factur-x.xml", fileSpec);
+
+            embeddedFiles.setNames(files);
+
+            document.save(outputPdf);
+        }
+    }
+}
