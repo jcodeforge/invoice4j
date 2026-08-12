@@ -11,6 +11,8 @@ public class ZugferdInvoiceReader {
 
     private final CiiInvoiceReader ciiReader;
 
+    private final ZugferdProfileDetector profileDetector = new ZugferdProfileDetector();
+
     private ZugferdInvoiceReader() {
         this.ciiReader = CiiInvoiceReader.builder().build();
     }
@@ -63,5 +65,11 @@ public class ZugferdInvoiceReader {
         Objects.requireNonNull(xml, "xml must not be null");
 
         return ciiReader.readFromString(xml);
+    }
+
+    public ZugferdProfile detectProfile(String xml) {
+        Objects.requireNonNull(xml, "xml must not be null");
+
+        return profileDetector.detect(xml);
     }
 }
