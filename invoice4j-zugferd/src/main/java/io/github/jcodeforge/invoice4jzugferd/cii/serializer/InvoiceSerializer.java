@@ -165,6 +165,7 @@ public final class InvoiceSerializer implements XmlSerializer<Invoice> {
             writeApplicableHeaderTradeSettlement(writer, invoice);
         }
         else {
+            // EXTENDED, BASIC, EN16931, etc.
             for (InvoiceLine line : invoice.getLines()) {
                 invoiceLineSerializer.serialize(writer, line);
             }
@@ -207,7 +208,8 @@ public final class InvoiceSerializer implements XmlSerializer<Invoice> {
                 && options.getProfile() != CiiProfile.ZUGFERD_EN16931
                 && options.getProfile() != CiiProfile.ZUGFERD_BASIC
                 && options.getProfile() != CiiProfile.ZUGFERD_BASIC_WL
-                && options.getProfile() != CiiProfile.ZUGFERD_MINIMUM) {
+                && options.getProfile() != CiiProfile.ZUGFERD_MINIMUM
+                && options.getProfile() != CiiProfile.ZUGFERD_EXTENDED) {
 
             payeeSerializer.serialize(
                     writer,
