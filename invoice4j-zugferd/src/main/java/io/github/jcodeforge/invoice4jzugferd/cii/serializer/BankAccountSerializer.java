@@ -25,7 +25,7 @@ public final class BankAccountSerializer implements XmlSerializer<BankAccount> {
         writer.writeOptionalElement(XmlNamespaces.RAM, "IBANID", bankAccount.getIban());
 
         // Account name is not supported by ZUGFeRD BASIC.
-        if (options.getProfile() != CiiProfile.ZUGFERD_BASIC) {
+        if (options.getProfile() != CiiProfile.ZUGFERD_BASIC && options.getProfile() != CiiProfile.ZUGFERD_BASIC_WL) {
             writer.writeOptionalElement(
                     XmlNamespaces.RAM,
                     "AccountName",
@@ -49,7 +49,8 @@ public final class BankAccountSerializer implements XmlSerializer<BankAccount> {
         // BT-86
         // PayeeSpecifiedCreditorFinancialInstitution is a sibling
         // of PayeePartyCreditorFinancialAccount.
-        if (bankAccount.getBic() != null && options.getProfile() != CiiProfile.ZUGFERD_BASIC) {
+        if (bankAccount.getBic() != null && options.getProfile() != CiiProfile.ZUGFERD_BASIC
+                && options.getProfile() != CiiProfile.ZUGFERD_BASIC_WL) {
             writer.startElement(XmlNamespaces.RAM, "PayeeSpecifiedCreditorFinancialInstitution");
             writer.writeElement(XmlNamespaces.RAM, "BICID", bankAccount.getBic());
             writer.endElement();

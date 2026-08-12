@@ -157,7 +157,14 @@ public final class InvoiceSerializer implements XmlSerializer<Invoice> {
             writeApplicableHeaderTradeDelivery(writer, invoice);
             writeApplicableHeaderTradeSettlement(writer, invoice);
 
-        } else {
+        } else if (options.getProfile() == CiiProfile.ZUGFERD_BASIC_WL) {
+            // BASIC WL expects the header trade elements
+            // before the invoice line items.
+            writeApplicableHeaderTradeAgreement(writer, invoice);
+            writeApplicableHeaderTradeDelivery(writer, invoice);
+            writeApplicableHeaderTradeSettlement(writer, invoice);
+        }
+        else {
             for (InvoiceLine line : invoice.getLines()) {
                 invoiceLineSerializer.serialize(writer, line);
             }
@@ -199,6 +206,7 @@ public final class InvoiceSerializer implements XmlSerializer<Invoice> {
         if (options.getProfile() != CiiProfile.EN16931
                 && options.getProfile() != CiiProfile.ZUGFERD_EN16931
                 && options.getProfile() != CiiProfile.ZUGFERD_BASIC
+                && options.getProfile() != CiiProfile.ZUGFERD_BASIC_WL
                 && options.getProfile() != CiiProfile.ZUGFERD_MINIMUM) {
 
             payeeSerializer.serialize(
@@ -234,7 +242,8 @@ public final class InvoiceSerializer implements XmlSerializer<Invoice> {
         } else {
             // BT-13
             if (invoice.getSalesOrderReference() != null
-                    && options.getProfile() != CiiProfile.ZUGFERD_BASIC) {
+                    && options.getProfile() != CiiProfile.ZUGFERD_BASIC
+                    && options.getProfile() != CiiProfile.ZUGFERD_BASIC_WL) {
 
                 writer.startElement(
                         XmlNamespaces.RAM,
@@ -286,6 +295,7 @@ public final class InvoiceSerializer implements XmlSerializer<Invoice> {
 
         // BG-24 / AdditionalReferencedDocument
         if (options.getProfile() != CiiProfile.ZUGFERD_BASIC
+                && options.getProfile() != CiiProfile.ZUGFERD_BASIC_WL
                 && options.getProfile() != CiiProfile.ZUGFERD_MINIMUM) {
             for (DocumentReference reference : invoice.getAdditionalDocuments()) {
                 documentReferenceSerializer.serialize(
@@ -296,7 +306,9 @@ public final class InvoiceSerializer implements XmlSerializer<Invoice> {
         }
 
         // BT-11
-        if (invoice.getProjectReference() != null && options.getProfile() != CiiProfile.ZUGFERD_BASIC
+        if (invoice.getProjectReference() != null
+                && options.getProfile() != CiiProfile.ZUGFERD_BASIC
+                && options.getProfile() != CiiProfile.ZUGFERD_BASIC_WL
                 && options.getProfile() != CiiProfile.ZUGFERD_MINIMUM) {
             writer.startElement(
                     XmlNamespaces.RAM,

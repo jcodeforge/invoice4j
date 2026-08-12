@@ -38,7 +38,7 @@ public final class PaymentMeansSerializer implements XmlSerializer<PaymentMeans>
 
         // Payment means description
         // Not supported by ZUGFeRD BASIC.
-        if (options.getProfile() != CiiProfile.ZUGFERD_BASIC) {
+        if (options.getProfile() != CiiProfile.ZUGFERD_BASIC && options.getProfile() != CiiProfile.ZUGFERD_BASIC_WL) {
             writer.writeOptionalElement(
                     XmlNamespaces.RAM,
                     "Information",
@@ -47,10 +47,7 @@ public final class PaymentMeansSerializer implements XmlSerializer<PaymentMeans>
         }
 
         // BG-17
-        bankAccountSerializer.serialize(
-                writer,
-                paymentMeans.getBankAccount()
-        );
+        bankAccountSerializer.serialize(writer, paymentMeans.getBankAccount());
 
         writer.endElement();
     }

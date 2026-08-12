@@ -63,7 +63,8 @@ public final class BuyerSerializer implements XmlSerializer<Buyer> {
          * ZUGFeRD BASIC does not allow Description
          * after Name in BuyerTradeParty.
          */
-        if (options.getProfile() != CiiProfile.ZUGFERD_BASIC && options.getProfile() != CiiProfile.ZUGFERD_MINIMUM) {
+        if (options.getProfile() != CiiProfile.ZUGFERD_BASIC && options.getProfile() != CiiProfile.ZUGFERD_BASIC_WL
+                &&options.getProfile() != CiiProfile.ZUGFERD_MINIMUM) {
             writer.writeOptionalElement(XmlNamespaces.RAM, "Description", buyer.getTradingName());
         }
 
