@@ -23,7 +23,7 @@ public class ZugferdInvoiceExtendedWriterTest {
 
         Assert.assertNotNull(xml);
         Assert.assertFalse(xml.isBlank());
-        Assert.assertTrue(xml.contains("<ram:ID>urn:factur-x.eu:1p0:extended</ram:ID>"));
+        Assert.assertTrue(xml.contains("<ram:ID>urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended</ram:ID>"));
     }
 
     @Test
