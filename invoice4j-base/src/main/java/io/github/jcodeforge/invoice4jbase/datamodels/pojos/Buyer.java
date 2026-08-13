@@ -160,9 +160,6 @@ public class Buyer extends Party {
             if (buyer.name == null || buyer.name.isBlank()) {
                 throw new InvoiceValidationException("BT-44 Buyer name is required.");
             }
-            if (buyer.address == null) {
-                throw new InvoiceValidationException("BG-8 Buyer postal address is required.");
-            }
             if (buyer.legalRegistrationIdentifier != null && buyer.legalRegistrationIdentifier.isBlank()) {
                 throw new InvoiceValidationException("BT-47 Buyer legal registration identifier must not be blank.");
             }

@@ -38,13 +38,6 @@ public class BuyerTest {
     }
 
     @Test(expected = InvoiceValidationException.class)
-    public void shouldRejectMissingAddress() {
-        Buyer.builder()
-                .name("Customer GmbH")
-                .build();
-    }
-
-    @Test(expected = InvoiceValidationException.class)
     public void shouldRejectBlankTradingName() {
         Buyer.builder()
                 .name("Customer GmbH")
