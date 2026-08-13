@@ -27,7 +27,7 @@ public final class ZugferdPdfReaderTest {
     private final ZugferdPdfReader SUT = ZugferdPdfReader.builder().build();
 
     @Test
-    public void shouldExtractEmbeddedXml() throws Exception {
+    public void shouldReadInvoiceFromZugferdPdf() throws Exception {
         File inputPdf = createInputPdf();
         File outputPdf = createOutputPdf();
 
@@ -40,13 +40,10 @@ public final class ZugferdPdfReaderTest {
                 .build()
                 .write(inputPdf, outputPdf);
 
-        String extractedXml = SUT.extractXml(outputPdf);
+        Invoice readInvoice = SUT.read(outputPdf);
 
-        assertNotNull(extractedXml);
-        assertFalse(extractedXml.isBlank());
-        assertTrue(extractedXml.contains("CrossIndustryInvoice"));
-        assertTrue(extractedXml.contains(invoice.getInvoiceNumber()));
-
+        assertNotNull(readInvoice);
+        assertEquals(invoice.getInvoiceNumber(), readInvoice.getInvoiceNumber());
         assertTrue(inputPdf.delete());
         assertTrue(outputPdf.delete());
     }
@@ -71,9 +68,9 @@ public final class ZugferdPdfReaderTest {
         File inputPdf = createInputPdf();
 
         try {
-            SUT.extractXml(inputPdf);
+            SUT.read(inputPdf);
         } finally {
-            inputPdf.delete();
+            assertTrue(inputPdf.delete());
         }
     }
 
@@ -86,11 +83,11 @@ public final class ZugferdPdfReaderTest {
             // Add an embedded file with a different name.
             embedOtherFile(inputPdf, outputPdf);
 
-            SUT.extractXml(outputPdf);
+            SUT.read(outputPdf);
 
         } finally {
-            inputPdf.delete();
-            outputPdf.delete();
+            assertTrue(inputPdf.delete());
+            assertTrue(outputPdf.delete());
         }
     }
 
@@ -102,11 +99,11 @@ public final class ZugferdPdfReaderTest {
         try {
             createEmptyFacturXAttachment(inputPdf, outputPdf);
 
-            SUT.extractXml(outputPdf);
+            SUT.read(outputPdf);
 
         } finally {
-            inputPdf.delete();
-            outputPdf.delete();
+            assertTrue(inputPdf.delete());
+            assertTrue(outputPdf.delete());
         }
     }
 
@@ -116,7 +113,7 @@ public final class ZugferdPdfReaderTest {
         try {
             Files.writeString(invalidPdf.toPath(), "This is not a PDF");
 
-            SUT.extractXml(invalidPdf);
+            SUT.read(invalidPdf);
 
         } finally {
             invalidPdf.delete();
@@ -162,12 +159,8 @@ public final class ZugferdPdfReaderTest {
 
     @Test
     public void shouldRoundTripInvoiceThroughPdf() throws Exception {
-        Invoice original = new InvoiceCalculator().calculate(TestInvoiceFactory.createCompleteInvoice());
-
-        String originalXml = ZugferdInvoiceWriter.builder()
-                .profile(ZugferdProfile.EXTENDED)
-                .build()
-                .writeToString(original);
+        Invoice original = new InvoiceCalculator()
+                .calculate(TestInvoiceFactory.createCompleteInvoice());
 
         File inputPdf = createInputPdf();
         File outputPdf = createOutputPdf();
@@ -179,27 +172,19 @@ public final class ZugferdPdfReaderTest {
                     .build()
                     .write(inputPdf, outputPdf);
 
-            String extractedXml = SUT.extractXml(outputPdf);
-
-            assertEquals(originalXml, extractedXml);
-
-            Invoice parsed = ZugferdInvoiceReader.builder()
-                    .build()
-                    .readFromString(extractedXml);
+            Invoice parsed = SUT.read(outputPdf);
 
             assertNotNull(parsed);
 
-            // Verify important invoice data survived the round trip
+            // Verify important invoice data survived the PDF round trip
             assertEquals(original.getInvoiceNumber(), parsed.getInvoiceNumber());
-
             assertEquals(original.getIssueDate(), parsed.getIssueDate());
             assertEquals(original.getCurrency().getCode(), parsed.getCurrency().getCode());
-
             assertEquals(original.getLines().size(), parsed.getLines().size());
 
         } finally {
-            inputPdf.delete();
-            outputPdf.delete();
+            assertTrue(inputPdf.delete());
+            assertTrue(outputPdf.delete());
         }
     }
 
