@@ -63,7 +63,8 @@ public final class CiiInvoiceReader {
      * @return the parsed invoice
      * @throws DeserializationException if the invoice cannot be read
      */
-    private Invoice read(InputStream inputStream) {
+    public Invoice read(InputStream inputStream) {
+        Objects.requireNonNull(inputStream, "inputStream must not be null");
         try {
             byte[] bytes = inputStream.readAllBytes();
 
