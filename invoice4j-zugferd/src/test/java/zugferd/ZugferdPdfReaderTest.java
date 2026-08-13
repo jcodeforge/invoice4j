@@ -31,13 +31,6 @@ public final class ZugferdPdfReaderTest {
         File inputPdf = createInputPdf();
         File outputPdf = createOutputPdf();
 
-        String xml = """
-            <?xml version="1.0" encoding="UTF-8"?>
-            <invoice>
-                <id>INV-001</id>
-            </invoice>
-            """;
-
         Invoice invoice = new InvoiceCalculator()
                 .calculate(TestInvoiceFactory.createCompleteInvoice());
 
@@ -45,14 +38,17 @@ public final class ZugferdPdfReaderTest {
                 .invoice(invoice)
                 .profile(ZugferdProfile.EXTENDED)
                 .build()
-                .write(inputPdf, xml, outputPdf);
+                .write(inputPdf, outputPdf);
 
         String extractedXml = SUT.extractXml(outputPdf);
 
-        assertEquals(xml, extractedXml);
+        assertNotNull(extractedXml);
+        assertFalse(extractedXml.isBlank());
+        assertTrue(extractedXml.contains("CrossIndustryInvoice"));
+        assertTrue(extractedXml.contains(invoice.getInvoiceNumber()));
 
-        inputPdf.delete();
-        outputPdf.delete();
+        assertTrue(inputPdf.delete());
+        assertTrue(outputPdf.delete());
     }
 
     private File createInputPdf() throws IOException {
@@ -181,7 +177,7 @@ public final class ZugferdPdfReaderTest {
                     .invoice(original)
                     .profile(ZugferdProfile.EXTENDED)
                     .build()
-                    .write(inputPdf, originalXml, outputPdf);
+                    .write(inputPdf, outputPdf);
 
             String extractedXml = SUT.extractXml(outputPdf);
 

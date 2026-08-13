@@ -26,15 +26,23 @@ public final class ZugferdPdfWriter {
 
     private final ZugferdProfile profile;
 
-    private ZugferdPdfWriter(Invoice invoice, ZugferdProfile profile) {
-        this.invoice = invoice;
-        this.profile = profile;
+    private final ZugferdInvoiceWriter xmlWriter;
+
+    private ZugferdPdfWriter(Builder builder) {
+        this.invoice = builder.invoice;
+        this.profile = builder.profile;
+
+        this.xmlWriter = ZugferdInvoiceWriter.builder()
+                .profile(profile)
+                .prettyPrint(builder.prettyPrintXml)
+                .build();
     }
 
-    public void write(File inputPdf, String xml, File outputPdf) {
+    public void write(File inputPdf, File outputPdf) {
         Objects.requireNonNull(inputPdf, "Input Pdf must not be null");
-        Objects.requireNonNull(xml, "Xml must not be null");
         Objects.requireNonNull(outputPdf, "Output Pdf must not be null");
+
+        String xml = xmlWriter.writeToString(invoice);
 
         try (PDDocument document = Loader.loadPDF(inputPdf)) {
 
@@ -102,7 +110,7 @@ public final class ZugferdPdfWriter {
             document.save(outputPdf);
 
         } catch (IOException e) {
-            throw new ZugferdPdfException("Unable to embed ZUGFeRD XML into PDF.", e);
+            throw new ZugferdPdfException("Unable to create ZUGFeRD PDF.", e);
         }
     }
 
@@ -113,8 +121,8 @@ public final class ZugferdPdfWriter {
     public static final class Builder {
 
         private Invoice invoice;
-
         private ZugferdProfile profile;
+        private boolean prettyPrintXml;
 
         public Builder invoice(Invoice invoice) {
             this.invoice = Objects.requireNonNull(invoice, "invoice must not be null");
@@ -123,6 +131,11 @@ public final class ZugferdPdfWriter {
 
         public Builder profile(ZugferdProfile profile) {
             this.profile = Objects.requireNonNull(profile, "profile must not be null");
+            return this;
+        }
+
+        public Builder prettyPrintXml(boolean prettyPrint) {
+            this.prettyPrintXml = prettyPrint;
             return this;
         }
 
@@ -135,7 +148,7 @@ public final class ZugferdPdfWriter {
                 throw new IllegalStateException("profile must be configured");
             }
 
-            return new ZugferdPdfWriter(invoice, profile);
+            return new ZugferdPdfWriter(this);
         }
     }
 }

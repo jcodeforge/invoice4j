@@ -39,22 +39,17 @@ public class ZugferdPdfWriterTest {
     }
 
     @Test
-    public void shouldEmbedXml() throws Exception {
+    public void shouldWriteZugferdPdf() throws Exception {
         File inputPdf = createInputPdf();
         File outputPdf = createOutputPdf();
 
-        String xml = """
-                <?xml version="1.0" encoding="UTF-8"?>
-                <test>Invoice XML</test>
-                """;
-
-        SUT.write(inputPdf, xml, outputPdf);
+        SUT.write(inputPdf, outputPdf);
 
         assertTrue(outputPdf.exists());
         assertTrue(outputPdf.length() > 0);
 
-        inputPdf.delete();
-        outputPdf.delete();
+        assertTrue(inputPdf.delete());
+        assertTrue(outputPdf.delete());
     }
 
     @Test
@@ -62,22 +57,15 @@ public class ZugferdPdfWriterTest {
         File inputPdf = createInputPdf();
         File outputPdf = createOutputPdf();
 
-        String xml = """
-            <?xml version="1.0" encoding="UTF-8"?>
-            <invoice>
-                <id>INV-001</id>
-            </invoice>
-            """;
-
-        SUT.write(inputPdf, xml, outputPdf);
+        SUT.write(inputPdf, outputPdf);
 
         try (PDDocument document = Loader.loadPDF(outputPdf)) {
-            PDDocumentNameDictionary names = document.getDocumentCatalog().getNames();
+            PDDocumentNameDictionary names =
+                    document.getDocumentCatalog().getNames();
 
             assertNotNull(names);
 
             PDEmbeddedFilesNameTreeNode embeddedFiles = names.getEmbeddedFiles();
-
             assertNotNull(embeddedFiles);
 
             Map<String, PDComplexFileSpecification> files = embeddedFiles.getNames();
@@ -93,11 +81,11 @@ public class ZugferdPdfWriterTest {
 
             assertNotNull(embeddedFile);
             assertEquals("application/xml", embeddedFile.getSubtype());
-            assertEquals(xml.getBytes(StandardCharsets.UTF_8).length, embeddedFile.getSize());
+            assertTrue(embeddedFile.getSize() > 0);
         }
 
-        inputPdf.delete();
-        outputPdf.delete();
+        assertTrue(inputPdf.delete());
+        assertTrue(outputPdf.delete());
     }
 
     @Test
@@ -105,9 +93,7 @@ public class ZugferdPdfWriterTest {
         File inputPdf = createInputPdf();
         File outputPdf = createOutputPdf();
 
-        String xml = "<invoice><id>INV-001</id></invoice>";
-
-        SUT.write(inputPdf, xml, outputPdf);
+        SUT.write(inputPdf, outputPdf);
 
         try (PDDocument document = Loader.loadPDF(outputPdf)) {
             COSArray af = (COSArray) document.getDocumentCatalog()
@@ -122,8 +108,8 @@ public class ZugferdPdfWriterTest {
             assertEquals("Alternative", fileSpecification.getNameAsString(COSName.AF_RELATIONSHIP));
         }
 
-        inputPdf.delete();
-        outputPdf.delete();
+        assertTrue(inputPdf.delete());
+        assertTrue(outputPdf.delete());
     }
 
     private File createInputPdf() throws IOException {
