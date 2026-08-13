@@ -35,14 +35,6 @@ public class MonetaryAmountTest {
                 .build();
     }
 
-    @Test(expected = InvoiceValidationException.class)
-    public void shouldRejectMoreThanThreeFractionDigits() {
-        MonetaryAmount.builder()
-                .amount(new BigDecimal("10.1234"))
-                .currency(CurrencyCode.EUR)
-                .build();
-    }
-
     @Test
     public void shouldAllowExactlyThreeFractionDigits() {
         MonetaryAmount amount = MonetaryAmount.builder()

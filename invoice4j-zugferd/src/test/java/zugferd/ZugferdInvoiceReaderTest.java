@@ -9,6 +9,8 @@ import io.github.jcodeforge.invoice4jzugferd.zugferd.ZugferdInvoiceWriter;
 import io.github.jcodeforge.invoice4jzugferd.zugferd.ZugferdProfile;
 import org.junit.Test;
 
+import java.io.InputStream;
+
 import static org.junit.Assert.*;
 
 public class ZugferdInvoiceReaderTest {
@@ -624,5 +626,85 @@ public class ZugferdInvoiceReaderTest {
 
         assertEquals(original.getProjectReference(), parsed.getProjectReference());
         assertEquals(original.getProjectName(), parsed.getProjectName());
+    }
+
+    @Test
+    public void shouldReadBasicwlSample() throws Exception {
+        try (InputStream input = getClass().getResourceAsStream(
+                "/zugferd/basicwl/BASIC-WL_Einfach.xml")) {
+
+            assertNotNull(input);
+
+            Invoice invoice = ZugferdInvoiceReader.builder()
+                    .build()
+                    .read(input);
+
+            assertNotNull(invoice);
+            assertNotNull(invoice.getInvoiceNumber());
+        }
+    }
+
+    @Test
+    public void shouldReadBasicSample() throws Exception {
+        try (InputStream input = getClass().getResourceAsStream(
+                "/zugferd/basic/B01_01_Einfach.xml")) {
+
+            assertNotNull(input);
+
+            Invoice invoice = ZugferdInvoiceReader.builder()
+                    .build()
+                    .read(input);
+
+            assertNotNull(invoice);
+            assertNotNull(invoice.getInvoiceNumber());
+        }
+    }
+
+    @Test
+    public void shouldReadEn16931Sample() throws Exception {
+        try (InputStream input = getClass().getResourceAsStream(
+                "/zugferd/En16931/E05_01_Einfach.xml")) {
+
+            assertNotNull(input);
+
+            Invoice invoice = ZugferdInvoiceReader.builder()
+                    .build()
+                    .read(input);
+
+            assertNotNull(invoice);
+            assertNotNull(invoice.getInvoiceNumber());
+        }
+    }
+
+    @Test
+    public void shouldReadExtendedSample() throws Exception {
+        try (InputStream input = getClass().getResourceAsStream(
+                "/zugferd/extended/X11_01_Kostenrechnung.xml")) {
+
+            assertNotNull(input);
+
+            Invoice invoice = ZugferdInvoiceReader.builder()
+                    .build()
+                    .read(input);
+
+            assertNotNull(invoice);
+            assertNotNull(invoice.getInvoiceNumber());
+        }
+    }
+
+    @Test
+    public void shouldReadMinimumSample() throws Exception {
+        try (InputStream input = getClass().getResourceAsStream(
+                "/zugferd/minimum/MINIMUM_Rechnung.xml")) {
+
+            assertNotNull(input);
+
+            Invoice invoice = ZugferdInvoiceReader.builder()
+                    .build()
+                    .read(input);
+
+            assertNotNull(invoice);
+            assertNotNull(invoice.getInvoiceNumber());
+        }
     }
 }

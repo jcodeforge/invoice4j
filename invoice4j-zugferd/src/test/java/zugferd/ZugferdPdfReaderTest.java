@@ -214,4 +214,84 @@ public final class ZugferdPdfReaderTest {
             document.save(outputPdf);
         }
     }
+
+    @Test
+    public void shouldReadExtendedSamplePdf() throws Exception {
+        File pdf = new File(
+                getClass()
+                        .getResource("/zugferd/Extended/X11_01_Kostenrechnung_fx.pdf")
+                        .toURI()
+        );
+
+        Invoice invoice = SUT.read(pdf);
+
+        assertNotNull(invoice);
+        assertNotNull(invoice.getInvoiceNumber());
+        assertNotNull(invoice.getIssueDate());
+        assertNotNull(invoice.getCurrency());
+    }
+
+    @Test
+    public void shouldReadBasicSamplePdf() throws Exception {
+        File pdf = new File(
+                getClass()
+                        .getResource("/zugferd/basic/B01_01_Einfach_fx.pdf")
+                        .toURI()
+        );
+
+        Invoice invoice = SUT.read(pdf);
+
+        assertNotNull(invoice);
+        assertNotNull(invoice.getInvoiceNumber());
+        assertNotNull(invoice.getIssueDate());
+        assertNotNull(invoice.getCurrency());
+    }
+
+    @Test
+    public void shouldReadBasicwlSamplePdf() throws Exception {
+        File pdf = new File(
+                getClass()
+                        .getResource("/zugferd/basicwl/BASIC-WL_Einfach_fx.pdf")
+                        .toURI()
+        );
+
+        Invoice invoice = SUT.read(pdf);
+
+        assertNotNull(invoice);
+        assertNotNull(invoice.getInvoiceNumber());
+        assertNotNull(invoice.getIssueDate());
+        assertNotNull(invoice.getCurrency());
+    }
+
+    @Test
+    public void shouldReadEn16931SamplePdf() throws Exception {
+        File pdf = new File(
+                getClass()
+                        .getResource("/zugferd/en16931/E05_01_Einfach_fx.pdf")
+                        .toURI()
+        );
+
+        Invoice invoice = SUT.read(pdf);
+
+        assertNotNull(invoice);
+        assertNotNull(invoice.getInvoiceNumber());
+        assertNotNull(invoice.getIssueDate());
+        assertNotNull(invoice.getCurrency());
+    }
+
+    @Test
+    public void shouldReadMinimumSamplePdf() throws Exception {
+        File pdf = new File(
+                getClass()
+                        .getResource("/zugferd/minimum/MINIMUM_Rechnung_fx.pdf")
+                        .toURI()
+        );
+
+        Invoice invoice = SUT.read(pdf);
+
+        assertNotNull(invoice);
+        assertNotNull(invoice.getInvoiceNumber());
+        assertNotNull(invoice.getIssueDate());
+        assertNotNull(invoice.getCurrency());
+    }
 }
