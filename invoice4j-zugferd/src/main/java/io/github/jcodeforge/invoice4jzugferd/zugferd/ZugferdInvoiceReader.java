@@ -37,10 +37,7 @@ public class ZugferdInvoiceReader {
      */
     public Invoice read(InputStream inputStream) {
         Objects.requireNonNull(inputStream, "inputStream must not be null");
-
-        // CiiInvoiceReader currently exposes string/file methods,
-        // so stream handling can be added there if desired.
-        throw new UnsupportedOperationException("InputStream reading should be delegated to CiiInvoiceReader.");
+        return ciiReader.read(inputStream);
     }
 
     /**
