@@ -2,9 +2,9 @@ package io.github.jcodeforge.invoice4jzugferd.examples;
 
 import io.github.jcodeforge.invoice4jbase.calculation.InvoiceCalculator;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
-import io.github.jcodeforge.invoice4jzugferd.cii.CiiInvoiceReader;
-import io.github.jcodeforge.invoice4jzugferd.cii.CiiInvoiceWriter;
-import io.github.jcodeforge.invoice4jzugferd.cii.CiiProfile;
+import io.github.jcodeforge.invoice4jzugferd.zugferd.ZugferdPdfReader;
+import io.github.jcodeforge.invoice4jzugferd.zugferd.ZugferdPdfWriter;
+import io.github.jcodeforge.invoice4jzugferd.zugferd.ZugferdProfile;
 import java.io.File;
 
 /**
@@ -12,49 +12,54 @@ import java.io.File;
  *
  * <p>This example shows how to:
  * <ol>
- *     <li>Create a minimal invoice.</li>
+ *     <li>Create an invoice.</li>
  *     <li>Calculate invoice totals and taxes.</li>
- *     <li>Write the invoice as an EN 16931 Cross Industry Invoice (CII) XML document.</li>
- *     <li>Read the generated XML back into an {@link Invoice}.</li>
+ *     <li>Create a ZUGFeRD PDF containing the invoice XML.</li>
+ *     <li>Read the ZUGFeRD PDF back into an {@link Invoice}.</li>
  * </ol>
  */
 public final class QuickStart {
 
     public static void main(String[] args) {
+
         // Create an invoice
         Invoice invoice = MinimalInvoiceFactory.createMinimalInvoice();
 
         // Calculate totals and taxes
         Invoice calculatedInvoice = new InvoiceCalculator().calculate(invoice);
 
-        // Create a writer
-        CiiInvoiceWriter writer = CiiInvoiceWriter.builder()
-                .profile(CiiProfile.EN16931)
-                .prettyPrint(true)
-                .build();
+        // Input PDF containing the visual invoice
+        File inputPdf = new File("examples/invoice.pdf");
 
-        // Write the invoice
-        File file = new File("minimal-invoice.xml");
-        writer.writeToFile(calculatedInvoice, file);
+        // Output ZUGFeRD PDF
+        File outputPdf = new File("zugferd-invoice.pdf");
 
-        System.out.println("Invoice written to minimal-invoice.xml");
+        // Create the ZUGFeRD PDF
+        ZugferdPdfWriter.builder()
+                .invoice(calculatedInvoice)
+                .profile(ZugferdProfile.EN16931)
+                .prettyPrintXml(true)
+                .build()
+                .write(inputPdf, outputPdf);
 
-        // Create a CII reader
-        CiiInvoiceReader reader = CiiInvoiceReader.builder()
-                .build();
+        System.out.println("ZUGFeRD invoice written to " + outputPdf.getAbsolutePath());
 
-        // Read the invoice back
-        Invoice parsedInvoice = reader.readFromFile(file);
+        // Read the ZUGFeRD PDF back
+        Invoice parsedInvoice = ZugferdPdfReader.builder()
+                .build()
+                .read(outputPdf);
 
         System.out.println("Invoice successfully read.");
         System.out.println("Invoice number: " + parsedInvoice.getInvoiceNumber());
         System.out.println("Seller: " + parsedInvoice.getSeller().getName());
         System.out.println("Buyer: " + parsedInvoice.getBuyer().getName());
-        System.out.println("Payable amount: "
-                + parsedInvoice.getMonetarySummation()
-                .getPayableAmount()
-                .getAmount()
-                + " "
-                + parsedInvoice.getCurrency());
+        System.out.println(
+                "Payable amount: "
+                        + parsedInvoice.getMonetarySummation()
+                        .getPayableAmount()
+                        .getAmount()
+                        + " "
+                        + parsedInvoice.getCurrency()
+        );
     }
 }
