@@ -57,13 +57,13 @@ The project provides support for multiple e-invoicing standards, including **ZUG
 <dependency>
     <groupId>io.github.jcodeforge</groupId>
     <artifactId>invoice4j-zugferd</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
 </dependency>
 
 <dependency>
     <groupId>io.github.jcodeforge</groupId>
     <artifactId>invoice4j-xr</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
 </dependency>
 ```
 
@@ -72,15 +72,15 @@ Only add the module(s) you need. Both modules automatically include the shared i
 ### Gradle (Kotlin DSL)
 
 ```kotlin
-implementation("io.github.jcodeforge:invoice4j-zugferd:0.2.0")
-implementation("io.github.jcodeforge:invoice4j-xr:0.2.0")
+implementation("io.github.jcodeforge:invoice4j-zugferd:0.3.0")
+implementation("io.github.jcodeforge:invoice4j-xr:0.3.0")
 ```
 
 ### Gradle (Groovy)
 
 ```groovy
-implementation 'io.github.jcodeforge:invoice4j-zugferd:0.2.0'
-implementation 'io.github.jcodeforge:invoice4j-xr:0.2.0'
+implementation 'io.github.jcodeforge:invoice4j-zugferd:0.3.0'
+implementation 'io.github.jcodeforge:invoice4j-xr:0.3.0'
 ```
 
 invoice4j-zugferd supports ZUGFeRD and Factur-X documents. invoice4j-xr supports XRechnung. Both modules automatically
@@ -100,42 +100,43 @@ invoice4j-zugferd/src/main/java/io/github/jcodeforge/invoice4jzugferd/examples/Q
 Run the example to see how to create an invoice and calculate its totals using the `InvoiceCalculator`.
 
 ---
-
 ## Examples
 
-```
+```java
 // Create and calculate an invoice
-Invoice invoice = InvoiceCalculator.calculate(
-        TestInvoiceFactory.createMinimalInvoice());
+Invoice invoice = new InvoiceCalculator().calculate(TestInvoiceFactory.createMinimalInvoice());
 
-// Create a CII writer
-CiiInvoiceWriter writer = CiiInvoiceWriter.builder()
-        .profile(CiiProfile.EN16931)
+// Create a ZUGFeRD PDF
+File inputPdf = new File("invoice.pdf");
+File outputPdf = new File("zugferd-invoice.pdf");
+
+ZugferdPdfWriter.builder()
+        .invoice(invoice)
+        .profile(ZugferdProfile.EN16931)
         .prettyPrint(true)
-        .validateAgainstXsd(true)
-        .build();
+        .build()
+        .write(inputPdf, outputPdf);
 
-// Write the invoice to XML
-File file = new File("invoice.xml");
-writer.writeToFile(invoice, file);
+System.out.println("ZUGFeRD invoice written to: " + outputPdf);
 
-// Create a CII reader
-CiiInvoiceReader reader = CiiInvoiceReader.builder()
-        .build();
-
-// Read the invoice back
-Invoice parsedInvoice = reader.readFromFile(file);
+// Read the ZUGFeRD PDF back
+Invoice parsedInvoice = ZugferdPdfReader.builder()
+        .build()
+        .read(outputPdf);
 
 System.out.println("Invoice number: " + parsedInvoice.getInvoiceNumber());
-System.out.println("Seller: " + parsedInvoice.getSeller().getName());
-System.out.println("Buyer: " + parsedInvoice.getBuyer().getName());
+        System.out.println("Seller: " + parsedInvoice.getSeller().getName());
+        System.out.println("Buyer: " + parsedInvoice.getBuyer().getName());
+        System.out.println(
+        "Payable amount: "
+                + parsedInvoice.getMonetarySummation()
+                        .getPayableAmount()
+                        .getAmount()
+                + " "
+                        + parsedInvoice.getCurrency()
+);
         
 ```
-
-### Generated XML examples
-
-- minimal-invoice.xml
-- complete-invoice.xml
 
 ---
 
@@ -153,14 +154,6 @@ To run the complete verification including integration tests:
 mvn verify
 ```
 
-The test suite covers:
-
-- Domain model validation
-- Invoice line calculations
-- VAT breakdown calculations
-- Monetary summation calculations
-- Complete invoice calculations
-
 ---
 
 ## Roadmap
@@ -169,8 +162,8 @@ The test suite covers:
 |-----------|-----------------------------------------|-------------|
 | v0.1.0    | Core Model - Invoice calculation engine | Finished    |
 | v0.2.0    | CII XML                                 | Finished    |
-| v0.3.0    | ZUGFeRD                                 | In Progress |
-| v0.4.0    | XRechnung                               | Planned     |
+| v0.3.0    | ZUGFeRD                                 | Finished    |
+| v0.4.0    | XRechnung                               | In Progress |
 | v1.0.0    | Public Release                          | Planned     |
 | v1.1.0    | PEPPOL Support                          | Planned     |
 | v1.2.0    | Additional European e-Invoice Formats   | Planned     |
