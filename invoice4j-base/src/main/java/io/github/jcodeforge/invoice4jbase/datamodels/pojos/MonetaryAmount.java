@@ -51,11 +51,6 @@ public class MonetaryAmount {
             if (monetaryAmount.currency == null) {
                 throw new InvoiceValidationException("Currency is required.");
             }
-            if (monetaryAmount.amount.scale() > 3) {
-                throw new InvoiceValidationException(
-                        "Amount must not contain more than 3 fractional digits."
-                );
-            }
 
             return monetaryAmount;
         }
