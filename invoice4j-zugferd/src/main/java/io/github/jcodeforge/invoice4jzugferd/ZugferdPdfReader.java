@@ -30,8 +30,13 @@ public final class ZugferdPdfReader {
 
     private final ZugferdInvoiceReader xmlReader;
 
-    private ZugferdPdfReader() {
-        this.xmlReader = ZugferdInvoiceReader.builder().build();
+    private final boolean validate;
+
+    private ZugferdPdfReader(Builder builder) {
+        this.validate = builder.validate;
+        this.xmlReader = ZugferdInvoiceReader.builder()
+                .validate(validate)
+                .build();
     }
 
     public static Builder builder() {
@@ -45,6 +50,7 @@ public final class ZugferdPdfReader {
 
         // todo validate metadata ??
 
+        // The embedded XML is validated by ZugferdInvoiceReader.
         return xmlReader.readFromString(xml);
     }
 
@@ -59,7 +65,6 @@ public final class ZugferdPdfReader {
         Objects.requireNonNull(pdfFile, "Pdf file must not be null");
 
         try (PDDocument document = Loader.loadPDF(pdfFile)) {
-
             PDEmbeddedFile embeddedFile = getEmbeddedFile(document);
 
             if (embeddedFile == null) {
@@ -74,7 +79,6 @@ public final class ZugferdPdfReader {
             throw new ZugferdPdfException("Unable to extract ZUGFeRD XML from PDF.", e);
         }
     }
-
 
     /**
      * Reads a value from the Factur-X XMP metadata.
@@ -166,8 +170,15 @@ public final class ZugferdPdfReader {
 
     public static final class Builder {
 
+        private boolean validate = true;
+
+        public Builder validate(boolean validate) {
+            this.validate = validate;
+            return this;
+        }
+
         public ZugferdPdfReader build() {
-            return new ZugferdPdfReader();
+            return new ZugferdPdfReader(this);
         }
     }
 }

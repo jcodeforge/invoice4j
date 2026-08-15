@@ -3,6 +3,7 @@ package io.github.jcodeforge.invoice4jzugferd;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jbase.cii.CiiInvoiceWriter;
 import io.github.jcodeforge.invoice4jbase.cii.CiiProfile;
+import io.github.jcodeforge.invoice4jzugferd.validation.*;
 import java.io.File;
 import java.util.Objects;
 
@@ -12,8 +13,11 @@ public final class ZugferdInvoiceWriter {
 
     private final CiiInvoiceWriter ciiWriter;
 
+    private final boolean validate;
+
     private ZugferdInvoiceWriter(Builder builder) {
         this.profile = builder.profile;
+        this.validate = builder.validate;
 
         this.ciiWriter = CiiInvoiceWriter.builder()
                 .profile(toCiiProfile(profile))
@@ -40,7 +44,17 @@ public final class ZugferdInvoiceWriter {
         Objects.requireNonNull(invoice, "invoice must not be null");
         Objects.requireNonNull(file, "file must not be null");
 
-        ciiWriter.writeToFile(invoice, file);
+        if (validate) {
+            validateInvoice(invoice);
+        }
+
+        String xml = ciiWriter.writeToString(invoice);
+
+        if (validate) {
+            validateXml(xml);
+        }
+
+        ciiWriter.writeToFile(xml, file);
     }
 
     /**
@@ -52,7 +66,34 @@ public final class ZugferdInvoiceWriter {
     public String writeToString(Invoice invoice) {
         Objects.requireNonNull(invoice, "invoice must not be null");
 
-        return ciiWriter.writeToString(invoice);
+        if (validate) {
+            validateInvoice(invoice);
+        }
+
+        String xml = ciiWriter.writeToString(invoice);
+
+        if (validate) {
+            validateXml(xml);
+        }
+
+        return xml;
+    }
+
+    private void validateInvoice(Invoice invoice) {
+        switch (profile) {
+            case BASIC -> new ZugferdBasicValidator().validate(invoice);
+            // todo add more business profile validation here
+        }
+    }
+
+    private void validateXml(String xml) {
+        switch (profile) {
+            case BASIC -> new ZugferdBasicXsdValidator().validate(xml);
+            case BASIC_WL -> new ZugferdBasicwlXsdValidator().validate(xml);
+            case MINIMUM -> new ZugferdMinimumXsdValidator().validate(xml);
+            case EN16931 -> new ZugferdEn16931XsdValidator().validate(xml);
+            case EXTENDED -> new ZugferdExtendedXsdValidator().validate(xml);
+        }
     }
 
     /**
@@ -83,6 +124,7 @@ public final class ZugferdInvoiceWriter {
 
         private ZugferdProfile profile = ZugferdProfile.EN16931;
         private boolean prettyPrint;
+        private boolean validate = true;
 
         /**
          * Sets the ZUGFeRD profile.
@@ -103,6 +145,11 @@ public final class ZugferdInvoiceWriter {
          */
         public Builder prettyPrint(boolean prettyPrint) {
             this.prettyPrint = prettyPrint;
+            return this;
+        }
+
+        public Builder validate(boolean validate) {
+            this.validate = validate;
             return this;
         }
 

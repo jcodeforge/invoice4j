@@ -130,6 +130,35 @@ public final class CiiInvoiceWriter {
     }
 
     /**
+     * Writes an XML document to the specified file.
+     *
+     * @param xml the XML document
+     * @param file the destination file
+     *
+     * @throws NullPointerException if {@code xml} or {@code file} is {@code null}
+     * @throws SerializationException if the XML cannot be written
+     */
+    public void writeToFile(String xml, File file) {
+        Objects.requireNonNull(xml, "xml must not be null");
+        Objects.requireNonNull(file, "file must not be null");
+
+        try {
+            if (!options.isPrettyPrint()) {
+                try (Writer writer = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8)) {
+                    writer.write(xml);
+                }
+
+                return;
+            }
+
+            prettyPrint(xml, file);
+
+        } catch (Exception e) {
+            throw new SerializationException("Unable to write XML to file.", e);
+        }
+    }
+
+    /**
      * Serializes an invoice to a UTF-8 encoded XML string.
      *
      * @param invoice the invoice to serialize

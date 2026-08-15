@@ -392,12 +392,6 @@ public class CiiInvoiceWriterTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void shouldRejectNullInvoiceForWriteToFile() {
-        File file = new File("dummy.xml");
-        SUT.writeToFile(null, file);
-    }
-
-    @Test(expected = NullPointerException.class)
     public void shouldRejectNullFile() {
         SUT.writeToFile(TestInvoiceFactory.createMinimalInvoice(), null);
     }

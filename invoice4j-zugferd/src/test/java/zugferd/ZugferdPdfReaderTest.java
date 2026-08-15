@@ -27,7 +27,8 @@ import static org.junit.Assert.*;
 
 public final class ZugferdPdfReaderTest {
 
-    private final ZugferdPdfReader SUT = ZugferdPdfReader.builder().build();
+    private final ZugferdPdfReader SUT = ZugferdPdfReader.builder()
+                    .validate(false).build();
 
     @Test
     public void shouldReadInvoiceFromZugferdPdf() throws Exception {

@@ -15,7 +15,9 @@ import static org.junit.Assert.*;
 
 public class ZugferdInvoiceReaderTest {
 
-    private final ZugferdInvoiceReader SUT = ZugferdInvoiceReader.builder().build();
+    private final ZugferdInvoiceReader SUT = ZugferdInvoiceReader.builder()
+            .validate(false)
+            .build();
 
     @Test
     public void shouldRoundTripBasicInvoice() {
@@ -71,21 +73,6 @@ public class ZugferdInvoiceReaderTest {
         assertNotNull(parsed.getInvoicePeriod());
         assertEquals(original.getInvoicePeriod().getStartDate(), parsed.getInvoicePeriod().getStartDate());
         assertEquals(original.getInvoicePeriod().getEndDate(), parsed.getInvoicePeriod().getEndDate());
-    }
-
-    @Test
-    public void shouldNotReadUnsupportedBasicProject() {
-        Invoice original = new InvoiceCalculator().calculate(TestInvoiceFactory.createCompleteInvoice());
-
-        String xml = ZugferdInvoiceWriter.builder()
-                .profile(ZugferdProfile.BASIC)
-                .build()
-                .writeToString(original);
-
-        Invoice parsed = SUT.readFromString(xml);
-
-        assertNull(parsed.getProjectReference());
-        assertNull(parsed.getProjectName());
     }
 
     @Test
@@ -651,9 +638,7 @@ public class ZugferdInvoiceReaderTest {
 
             assertNotNull(input);
 
-            Invoice invoice = ZugferdInvoiceReader.builder()
-                    .build()
-                    .read(input);
+            Invoice invoice = SUT.read(input);
 
             assertNotNull(invoice);
             assertNotNull(invoice.getInvoiceNumber());

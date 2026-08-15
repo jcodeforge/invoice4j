@@ -35,6 +35,7 @@ public final class ZugferdPdfWriter {
         this.xmlWriter = ZugferdInvoiceWriter.builder()
                 .profile(profile)
                 .prettyPrint(builder.prettyPrintXml)
+                .validate(builder.validate)
                 .build();
     }
 
@@ -123,6 +124,7 @@ public final class ZugferdPdfWriter {
         private Invoice invoice;
         private ZugferdProfile profile;
         private boolean prettyPrintXml;
+        private boolean validate = true;
 
         public Builder invoice(Invoice invoice) {
             this.invoice = Objects.requireNonNull(invoice, "invoice must not be null");
@@ -136,6 +138,11 @@ public final class ZugferdPdfWriter {
 
         public Builder prettyPrintXml(boolean prettyPrint) {
             this.prettyPrintXml = prettyPrint;
+            return this;
+        }
+
+        public Builder validate(boolean validate) {
+            this.validate = validate;
             return this;
         }
 
