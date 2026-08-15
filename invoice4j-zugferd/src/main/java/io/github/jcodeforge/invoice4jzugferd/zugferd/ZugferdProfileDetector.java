@@ -1,8 +1,8 @@
 package io.github.jcodeforge.invoice4jzugferd.zugferd;
 
 import io.github.jcodeforge.invoice4jbase.exceptions.DeserializationException;
-import io.github.jcodeforge.invoice4jzugferd.xml.XmlReader;
-import io.github.jcodeforge.invoice4jzugferd.xml.XmlReaderFactory;
+import io.github.jcodeforge.invoice4jbase.xml.XmlReader;
+import io.github.jcodeforge.invoice4jbase.xml.XmlReaderFactory;
 import java.util.Objects;
 
 public class ZugferdProfileDetector {

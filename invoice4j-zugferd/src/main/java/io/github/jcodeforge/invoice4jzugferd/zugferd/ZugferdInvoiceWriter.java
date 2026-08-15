@@ -1,8 +1,8 @@
 package io.github.jcodeforge.invoice4jzugferd.zugferd;
 
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
-import io.github.jcodeforge.invoice4jzugferd.cii.CiiInvoiceWriter;
-import io.github.jcodeforge.invoice4jzugferd.cii.CiiProfile;
+import io.github.jcodeforge.invoice4jbase.cii.CiiInvoiceWriter;
+import io.github.jcodeforge.invoice4jbase.cii.CiiProfile;
 import java.io.File;
 import java.util.Objects;
 

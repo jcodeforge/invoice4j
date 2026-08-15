@@ -1,6 +1,6 @@
 package factory;
 
-import io.github.jcodeforge.invoice4jzugferd.xml.XmlNamespaceContext;
+import io.github.jcodeforge.invoice4jbase.xml.XmlNamespaceContext;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
 

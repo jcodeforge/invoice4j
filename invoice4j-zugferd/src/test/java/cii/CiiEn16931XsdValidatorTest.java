@@ -4,8 +4,8 @@ import factory.TestInvoiceFactory;
 import io.github.jcodeforge.invoice4jbase.calculation.InvoiceCalculator;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jbase.exceptions.XsdValidationException;
-import io.github.jcodeforge.invoice4jzugferd.cii.CiiEn16931XsdValidator;
-import io.github.jcodeforge.invoice4jzugferd.cii.CiiInvoiceWriter;
+import io.github.jcodeforge.invoice4jbase.cii.CiiEn16931XsdValidator;
+import io.github.jcodeforge.invoice4jbase.cii.CiiInvoiceWriter;
 import org.junit.Test;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -14,8 +14,6 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
-import static org.junit.Assert.*;
 
 public class CiiEn16931XsdValidatorTest {
 

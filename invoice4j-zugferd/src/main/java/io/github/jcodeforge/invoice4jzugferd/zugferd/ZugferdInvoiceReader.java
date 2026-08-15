@@ -1,7 +1,7 @@
 package io.github.jcodeforge.invoice4jzugferd.zugferd;
 
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
-import io.github.jcodeforge.invoice4jzugferd.cii.CiiInvoiceReader;
+import io.github.jcodeforge.invoice4jbase.cii.CiiInvoiceReader;
 import io.github.jcodeforge.invoice4jbase.exceptions.DeserializationException;
 import java.io.File;
 import java.io.InputStream;
