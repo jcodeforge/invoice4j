@@ -209,7 +209,8 @@ public final class InvoiceSerializer implements XmlSerializer<Invoice> {
                 && options.getProfile() != CiiProfile.ZUGFERD_BASIC
                 && options.getProfile() != CiiProfile.ZUGFERD_BASIC_WL
                 && options.getProfile() != CiiProfile.ZUGFERD_MINIMUM
-                && options.getProfile() != CiiProfile.ZUGFERD_EXTENDED) {
+                && options.getProfile() != CiiProfile.ZUGFERD_EXTENDED
+                && options.getProfile() != CiiProfile.XRECHNUNG) {
 
             payeeSerializer.serialize(
                     writer,
@@ -377,6 +378,17 @@ public final class InvoiceSerializer implements XmlSerializer<Invoice> {
                 "InvoiceCurrencyCode",
                 invoice.getCurrency().getCode()
         );
+
+        /*
+         * XRechnung / CII 16B
+         *
+         * PayeeTradeParty belongs to HeaderTradeSettlement and must
+         * appear before SpecifiedTradeSettlementPaymentMeans.
+         */
+        if (options.getProfile() == CiiProfile.XRECHNUNG) {
+            // BT-59 / BG-10
+            payeeSerializer.serialize(writer, invoice.getPayee());
+        }
 
         if (options.getProfile() == CiiProfile.ZUGFERD_MINIMUM) {
 
