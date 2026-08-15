@@ -8,7 +8,7 @@ import io.github.jcodeforge.invoice4jbase.exceptions.DeserializationException;
 import io.github.jcodeforge.invoice4jbase.cii.CiiInvoiceReader;
 import io.github.jcodeforge.invoice4jbase.cii.CiiInvoiceWriter;
 import io.github.jcodeforge.invoice4jbase.cii.CiiProfile;
-import io.github.jcodeforge.invoice4jbase.cii.CiiEn16931XsdValidator;
+import io.github.jcodeforge.invoice4jbase.validation.CiiEn16931XsdValidator;
 import org.junit.Before;
 import org.junit.Test;
 import java.io.ByteArrayInputStream;

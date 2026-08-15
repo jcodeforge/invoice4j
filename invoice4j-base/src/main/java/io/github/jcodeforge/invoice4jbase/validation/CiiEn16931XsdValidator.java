@@ -1,4 +1,4 @@
-package io.github.jcodeforge.invoice4jbase.cii;
+package io.github.jcodeforge.invoice4jbase.validation;
 
 import io.github.jcodeforge.invoice4jbase.exceptions.XsdValidationException;
 import java.io.ByteArrayInputStream;
@@ -12,12 +12,12 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
-import io.github.jcodeforge.invoice4jbase.validation.XsdValidator;
+
 import org.xml.sax.SAXException;
 
 public final class CiiEn16931XsdValidator implements XsdValidator {
 
-    private static final String SCHEMA_LOCATION = "/xsd/en16931/Factur-X_1.09_EN16931.xsd";
+    private static final String SCHEMA_LOCATION = "/xsd/cii/en16931/Factur-X_1.09_EN16931.xsd";
 
     private final Schema schema;
 

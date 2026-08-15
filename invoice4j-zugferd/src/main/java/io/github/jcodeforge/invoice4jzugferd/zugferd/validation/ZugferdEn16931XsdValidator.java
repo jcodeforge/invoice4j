@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.Objects;
 import io.github.jcodeforge.invoice4jbase.validation.XsdValidator;
-import io.github.jcodeforge.invoice4jbase.cii.CiiEn16931XsdValidator;
+import io.github.jcodeforge.invoice4jbase.validation.CiiEn16931XsdValidator;
 
 /**
  * Validates ZUGFeRD / Factur-X EN 16931 CII XML documents
