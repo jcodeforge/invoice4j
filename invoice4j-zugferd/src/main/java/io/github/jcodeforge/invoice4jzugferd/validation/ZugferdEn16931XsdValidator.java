@@ -1,4 +1,4 @@
-package io.github.jcodeforge.invoice4jzugferd.zugferd.validation;
+package io.github.jcodeforge.invoice4jzugferd.validation;
 
 import java.io.File;
 import java.io.InputStream;

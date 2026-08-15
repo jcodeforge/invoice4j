@@ -2,9 +2,9 @@ package io.github.jcodeforge.invoice4jzugferd.examples;
 
 import io.github.jcodeforge.invoice4jbase.calculation.InvoiceCalculator;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
-import io.github.jcodeforge.invoice4jzugferd.zugferd.ZugferdPdfReader;
-import io.github.jcodeforge.invoice4jzugferd.zugferd.ZugferdPdfWriter;
-import io.github.jcodeforge.invoice4jzugferd.zugferd.ZugferdProfile;
+import io.github.jcodeforge.invoice4jzugferd.ZugferdPdfReader;
+import io.github.jcodeforge.invoice4jzugferd.ZugferdPdfWriter;
+import io.github.jcodeforge.invoice4jzugferd.ZugferdProfile;
 import java.io.File;
 
 /**

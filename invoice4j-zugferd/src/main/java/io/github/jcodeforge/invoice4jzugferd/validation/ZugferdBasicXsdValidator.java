@@ -1,4 +1,4 @@
-package io.github.jcodeforge.invoice4jzugferd.zugferd.validation;
+package io.github.jcodeforge.invoice4jzugferd.validation;
 
 import io.github.jcodeforge.invoice4jbase.exceptions.XsdValidationException;
 import java.io.File;
@@ -14,13 +14,13 @@ import javax.xml.validation.Validator;
 import io.github.jcodeforge.invoice4jbase.validation.XsdValidator;
 import org.xml.sax.SAXException;
 
-public final class ZugferdExtendedXsdValidator implements XsdValidator {
+public final class ZugferdBasicXsdValidator implements XsdValidator {
 
-    private static final String SCHEMA_LOCATION = "/xsd/extended/Factur-X_1.09_EXTENDED.xsd";
+    private static final String SCHEMA_LOCATION = "/xsd/basic/Factur-X_1.09_BASIC.xsd";
 
     private final Schema schema;
 
-    public ZugferdExtendedXsdValidator() {
+    public ZugferdBasicXsdValidator() {
         try {
             SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
@@ -35,7 +35,7 @@ public final class ZugferdExtendedXsdValidator implements XsdValidator {
             this.schema = factory.newSchema(schemaUrl);
 
         } catch (Exception e) {
-            throw new IllegalStateException("Unable to load ZUGFeRD EXTENDED XML schema.", e);
+            throw new IllegalStateException("Unable to load ZUGFeRD BASIC XML schema.", e);
         }
     }
 
@@ -48,7 +48,7 @@ public final class ZugferdExtendedXsdValidator implements XsdValidator {
             validator.validate(new StreamSource(file));
 
         } catch (SAXException e) {
-            throw new XsdValidationException("XML document is not valid according to the ZUGFeRD EXTENDED schema.", e);
+            throw new XsdValidationException("XML document is not valid according to the ZUGFeRD BASIC schema.", e);
 
         } catch (Exception e) {
             throw new XsdValidationException("Unable to validate XML document.", e);
@@ -64,7 +64,7 @@ public final class ZugferdExtendedXsdValidator implements XsdValidator {
             validator.validate(new StreamSource(inputStream));
 
         } catch (SAXException e) {
-            throw new XsdValidationException("XML document is not valid according to the ZUGFeRD EXTENDED schema.", e);
+            throw new XsdValidationException("XML document is not valid according to the ZUGFeRD BASIC schema.", e);
 
         } catch (Exception e) {
             throw new XsdValidationException("Unable to validate XML document.", e);
@@ -80,7 +80,7 @@ public final class ZugferdExtendedXsdValidator implements XsdValidator {
             validator.validate(new StreamSource(new StringReader(xml)));
 
         } catch (SAXException e) {
-            throw new XsdValidationException("XML document is not valid according to the ZUGFeRD EXTENDED schema.", e);
+            throw new XsdValidationException("XML document is not valid according to the ZUGFeRD BASIC schema.", e);
 
         } catch (Exception e) {
             throw new XsdValidationException("Unable to validate XML document.", e);

@@ -4,9 +4,9 @@ import io.github.jcodeforge.invoice4jbase.testfactory.TestInvoiceFactory;
 import io.github.jcodeforge.invoice4jbase.calculation.InvoiceCalculator;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jbase.exceptions.XsdValidationException;
-import io.github.jcodeforge.invoice4jzugferd.zugferd.ZugferdInvoiceWriter;
-import io.github.jcodeforge.invoice4jzugferd.zugferd.ZugferdProfile;
-import io.github.jcodeforge.invoice4jzugferd.zugferd.validation.ZugferdExtendedXsdValidator;
+import io.github.jcodeforge.invoice4jzugferd.ZugferdInvoiceWriter;
+import io.github.jcodeforge.invoice4jzugferd.ZugferdProfile;
+import io.github.jcodeforge.invoice4jzugferd.validation.ZugferdExtendedXsdValidator;
 import org.junit.Test;
 
 public class ZugferdExtendedXsdValidatorTest {

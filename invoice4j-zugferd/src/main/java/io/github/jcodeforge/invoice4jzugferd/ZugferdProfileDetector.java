@@ -1,4 +1,4 @@
-package io.github.jcodeforge.invoice4jzugferd.zugferd;
+package io.github.jcodeforge.invoice4jzugferd;
 
 import io.github.jcodeforge.invoice4jbase.exceptions.DeserializationException;
 import io.github.jcodeforge.invoice4jbase.xml.XmlReader;

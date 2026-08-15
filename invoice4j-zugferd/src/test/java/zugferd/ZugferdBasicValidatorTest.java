@@ -7,8 +7,8 @@ import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.MonetaryAmount;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.MonetarySummation;
 import io.github.jcodeforge.invoice4jbase.exceptions.InvoiceValidationException;
-import io.github.jcodeforge.invoice4jzugferd.zugferd.validation.BrCo15Validator;
-import io.github.jcodeforge.invoice4jzugferd.zugferd.validation.ZugferdBasicValidator;
+import io.github.jcodeforge.invoice4jzugferd.validation.BrCo15Validator;
+import io.github.jcodeforge.invoice4jzugferd.validation.ZugferdBasicValidator;
 import org.junit.Test;
 
 import java.math.BigDecimal;

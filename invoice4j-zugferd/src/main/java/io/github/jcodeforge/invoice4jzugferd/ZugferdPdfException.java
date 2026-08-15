@@ -1,4 +1,4 @@
-package io.github.jcodeforge.invoice4jzugferd.zugferd;
+package io.github.jcodeforge.invoice4jzugferd;
 
 public class ZugferdPdfException extends RuntimeException {
 

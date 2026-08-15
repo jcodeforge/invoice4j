@@ -1,8 +1,8 @@
 package zugferd;
 
 import io.github.jcodeforge.invoice4jbase.exceptions.DeserializationException;
-import io.github.jcodeforge.invoice4jzugferd.zugferd.ZugferdProfile;
-import io.github.jcodeforge.invoice4jzugferd.zugferd.ZugferdProfileDetector;
+import io.github.jcodeforge.invoice4jzugferd.ZugferdProfile;
+import io.github.jcodeforge.invoice4jzugferd.ZugferdProfileDetector;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
