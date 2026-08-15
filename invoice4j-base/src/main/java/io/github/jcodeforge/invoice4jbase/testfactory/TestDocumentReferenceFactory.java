@@ -1,4 +1,4 @@
-package factory;
+package io.github.jcodeforge.invoice4jbase.testfactory;
 
 import io.github.jcodeforge.invoice4jbase.datamodels.enums.DocumentTypeCode;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.DocumentReference;

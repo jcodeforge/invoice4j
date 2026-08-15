@@ -1,6 +1,6 @@
 package cii;
 
-import factory.TestInvoiceFactory;
+import io.github.jcodeforge.invoice4jbase.testfactory.TestInvoiceFactory;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.InvoiceLine;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Tax;

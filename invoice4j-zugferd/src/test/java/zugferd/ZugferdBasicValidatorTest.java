@@ -1,6 +1,6 @@
 package zugferd;
 
-import factory.TestInvoiceFactory;
+import io.github.jcodeforge.invoice4jbase.testfactory.TestInvoiceFactory;
 import io.github.jcodeforge.invoice4jbase.calculation.InvoiceCalculator;
 import io.github.jcodeforge.invoice4jbase.datamodels.enums.CurrencyCode;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;

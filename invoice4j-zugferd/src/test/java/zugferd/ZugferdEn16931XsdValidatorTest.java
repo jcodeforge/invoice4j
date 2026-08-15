@@ -1,13 +1,12 @@
 package zugferd;
 
-import factory.TestInvoiceFactory;
+import io.github.jcodeforge.invoice4jbase.testfactory.TestInvoiceFactory;
 import io.github.jcodeforge.invoice4jbase.calculation.InvoiceCalculator;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jbase.exceptions.XsdValidationException;
 import io.github.jcodeforge.invoice4jzugferd.zugferd.ZugferdInvoiceWriter;
 import io.github.jcodeforge.invoice4jzugferd.zugferd.ZugferdProfile;
 import io.github.jcodeforge.invoice4jzugferd.zugferd.validation.ZugferdEn16931XsdValidator;
-import org.junit.Assert;
 import org.junit.Test;
 import java.io.File;
 import java.io.InputStream;

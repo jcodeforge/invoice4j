@@ -1,12 +1,12 @@
 package cii;
 
-import factory.*;
 import io.github.jcodeforge.invoice4jbase.datamodels.enums.CurrencyCode;
 import io.github.jcodeforge.invoice4jbase.datamodels.enums.DocumentTypeCode;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jbase.exceptions.InvoiceValidationException;
 import io.github.jcodeforge.invoice4jbase.cii.CiiInvoiceWriter;
 import io.github.jcodeforge.invoice4jbase.cii.CiiProfile;
+import io.github.jcodeforge.invoice4jbase.testfactory.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;

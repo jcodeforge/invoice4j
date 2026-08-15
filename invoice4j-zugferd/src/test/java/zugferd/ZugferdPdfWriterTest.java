@@ -1,6 +1,6 @@
 package zugferd;
 
-import factory.TestInvoiceFactory;
+import io.github.jcodeforge.invoice4jbase.testfactory.TestInvoiceFactory;
 import io.github.jcodeforge.invoice4jbase.calculation.InvoiceCalculator;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jzugferd.zugferd.ZugferdPdfWriter;
@@ -19,7 +19,6 @@ import org.junit.Before;
 import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import static org.junit.Assert.*;
