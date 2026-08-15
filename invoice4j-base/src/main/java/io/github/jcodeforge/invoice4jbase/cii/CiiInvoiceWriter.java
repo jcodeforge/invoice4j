@@ -1,7 +1,7 @@
 package io.github.jcodeforge.invoice4jbase.cii;
 
+import io.github.jcodeforge.invoice4jbase.cii.serializer.InvoiceSerializer;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
-import io.github.jcodeforge.invoice4jzugferd.cii.serializer.InvoiceSerializer;
 import io.github.jcodeforge.invoice4jbase.exceptions.SerializationException;
 import io.github.jcodeforge.invoice4jbase.xml.XmlWriter;
 import io.github.jcodeforge.invoice4jbase.xml.XmlWriterFactory;
