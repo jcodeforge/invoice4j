@@ -1,15 +1,17 @@
 import io.github.jcodeforge.invoice4jbase.calculation.InvoiceCalculator;
-import io.github.jcodeforge.invoice4jbase.cii.CiiInvoiceReader;
-import io.github.jcodeforge.invoice4jbase.cii.CiiInvoiceWriter;
-import io.github.jcodeforge.invoice4jbase.cii.CiiProfile;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jbase.testfactory.TestInvoiceFactory;
+import io.github.jcodeforge.invoice4jxr.XrCiiInvoiceReader;
+import io.github.jcodeforge.invoice4jxr.XrCiiInvoiceWriter;
+import io.github.jcodeforge.invoice4jxr.XrProfile;
 import org.junit.Test;
 import java.io.InputStream;
 
 import static org.junit.Assert.*;
 
 public class XrCiiReaderTest {
+
+    private final XrCiiInvoiceReader SUT = XrCiiInvoiceReader.builder().build();
 
     @Test
     public void shouldReadXRechnungCiiSample() throws Exception {
@@ -18,9 +20,7 @@ public class XrCiiReaderTest {
 
             assertNotNull(input);
 
-            Invoice invoice = CiiInvoiceReader.builder()
-                    .build()
-                    .read(input);
+            Invoice invoice = SUT.read(input);
 
             assertNotNull(invoice);
 
@@ -42,14 +42,12 @@ public class XrCiiReaderTest {
         Invoice original = new InvoiceCalculator()
                 .calculate(TestInvoiceFactory.createCompleteInvoice());
 
-        String xml = CiiInvoiceWriter.builder()
-                .profile(CiiProfile.XRECHNUNG)
+        String xml = XrCiiInvoiceWriter.builder()
+                .profile(XrProfile.XRECHNUNG)
                 .build()
                 .writeToString(original);
 
-        Invoice parsed = CiiInvoiceReader.builder()
-                .build()
-                .readFromString(xml);
+        Invoice parsed = SUT.readFromString(xml);
 
         assertEquals(original.getInvoiceNumber(), parsed.getInvoiceNumber());
         assertEquals(original.getIssueDate(), parsed.getIssueDate());

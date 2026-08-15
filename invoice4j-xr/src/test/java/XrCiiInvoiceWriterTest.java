@@ -1,24 +1,25 @@
 import io.github.jcodeforge.invoice4jbase.calculation.InvoiceCalculator;
-import io.github.jcodeforge.invoice4jbase.cii.CiiInvoiceWriter;
-import io.github.jcodeforge.invoice4jbase.cii.CiiProfile;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jbase.testfactory.TestInvoiceFactory;
+import io.github.jcodeforge.invoice4jxr.XrCiiInvoiceWriter;
+import io.github.jcodeforge.invoice4jxr.XrProfile;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class XrCiiWriterTest {
+public class XrCiiInvoiceWriterTest {
+
+    private final XrCiiInvoiceWriter SUT = XrCiiInvoiceWriter.builder()
+            .profile(XrProfile.XRECHNUNG)
+            .prettyPrint(true)
+            .build();
 
     @Test
     public void shouldWriteXRechnungCii() {
         Invoice invoice = new InvoiceCalculator()
                 .calculate(TestInvoiceFactory.createCompleteInvoice());
 
-        String xml = CiiInvoiceWriter.builder()
-                .profile(CiiProfile.XRECHNUNG)
-                .prettyPrint(true)
-                .build()
-                .writeToString(invoice);
+        String xml = SUT.writeToString(invoice);
 
         assertNotNull(xml);
         assertTrue(xml.contains("<rsm:CrossIndustryInvoice"));
@@ -35,10 +36,7 @@ public class XrCiiWriterTest {
         Invoice invoice = new InvoiceCalculator()
                 .calculate(TestInvoiceFactory.createCompleteInvoice());
 
-        String xml = CiiInvoiceWriter.builder()
-                .profile(CiiProfile.XRECHNUNG)
-                .build()
-                .writeToString(invoice);
+        String xml = SUT.writeToString(invoice);
 
         assertTrue(xml.contains("<ram:BusinessProcessSpecifiedDocumentContextParameter>"));
         assertTrue(xml.contains("<ram:GuidelineSpecifiedDocumentContextParameter>"));
