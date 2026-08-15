@@ -88,6 +88,11 @@ public enum UnitCode {
     KILOMETER("KMT"),
 
     /**
+     * XPP - Percentage point
+     */
+    XPP("XPP"),
+
+    /**
      * LTR - Litre
      */
     LITER("LTR"),
