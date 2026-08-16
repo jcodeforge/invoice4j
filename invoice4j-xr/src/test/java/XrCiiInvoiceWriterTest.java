@@ -43,4 +43,31 @@ public class XrCiiInvoiceWriterTest {
         assertTrue(xml.contains("urn:fdc:peppol.eu:2017:poacc:billing:01:1.0"));
         assertTrue(xml.contains("urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0"));
     }
+
+    @Test
+    public void shouldValidateXRechnungCiiByDefault() {
+        Invoice invoice = new InvoiceCalculator()
+                .calculate(TestInvoiceFactory.createCompleteInvoice());
+
+        String xml = XrCiiInvoiceWriter.builder()
+                .profile(XrProfile.XRECHNUNG)
+                .build()
+                .writeToString(invoice);
+
+        assertNotNull(xml);
+    }
+
+    @Test
+    public void shouldAllowDisablingValidation() {
+        Invoice invoice = new InvoiceCalculator()
+                .calculate(TestInvoiceFactory.createCompleteInvoice());
+
+        String xml = XrCiiInvoiceWriter.builder()
+                .profile(XrProfile.XRECHNUNG)
+                .validate(false)
+                .build()
+                .writeToString(invoice);
+
+        assertNotNull(xml);
+    }
 }

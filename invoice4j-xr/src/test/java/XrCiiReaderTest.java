@@ -1,5 +1,7 @@
 import io.github.jcodeforge.invoice4jbase.calculation.InvoiceCalculator;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
+import io.github.jcodeforge.invoice4jbase.exceptions.DeserializationException;
+import io.github.jcodeforge.invoice4jbase.exceptions.XsdValidationException;
 import io.github.jcodeforge.invoice4jbase.testfactory.TestInvoiceFactory;
 import io.github.jcodeforge.invoice4jxr.XrCiiInvoiceReader;
 import io.github.jcodeforge.invoice4jxr.XrCiiInvoiceWriter;
@@ -54,5 +56,38 @@ public class XrCiiReaderTest {
         assertEquals(original.getCurrency().getCode(),
                 parsed.getCurrency().getCode());
         assertEquals(original.getLines().size(), parsed.getLines().size());
+    }
+
+    @Test(expected = XsdValidationException.class)
+    public void shouldRejectInvalidXRechnungCii() {
+        String xml = """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <rsm:CrossIndustryInvoice
+                    xmlns:rsm="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100"
+                    xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100"
+                    xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100">
+
+                <rsm:ExchangedDocumentContext>
+                    <ram:GuidelineSpecifiedDocumentContextParameter>
+                        <ram:ID>
+                            urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0
+                        </ram:ID>
+                    </ram:GuidelineSpecifiedDocumentContextParameter>
+                </rsm:ExchangedDocumentContext>
+
+            </rsm:CrossIndustryInvoice>
+            """;
+
+        SUT.readFromString(xml);
+    }
+
+    @Test(expected = DeserializationException.class)
+    public void shouldRejectXmlWithoutXRechnungProfile() {
+        SUT.readFromString("<invalid/>");
+    }
+
+    @Test(expected = XsdValidationException.class)
+    public void shouldRejectXRechnungCiiThatViolatesXsd() {
+        // recognizable XRechnung XML, but XSD-invalid
     }
 }

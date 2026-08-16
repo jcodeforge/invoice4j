@@ -3,8 +3,12 @@ package io.github.jcodeforge.invoice4jxr;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jbase.cii.CiiInvoiceReader;
 import io.github.jcodeforge.invoice4jbase.exceptions.DeserializationException;
+import io.github.jcodeforge.invoice4jbase.validation.Cii16BXsdValidator;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Objects;
 
 public class XrCiiInvoiceReader {
@@ -13,7 +17,10 @@ public class XrCiiInvoiceReader {
 
     private final XrProfileDetector profileDetector = new XrProfileDetector();
 
-    private XrCiiInvoiceReader() {
+    private final boolean validate;
+
+    private XrCiiInvoiceReader(Builder builder) {
+        this.validate = builder.validate;
         this.ciiReader = CiiInvoiceReader.builder().build();
     }
 
@@ -23,8 +30,22 @@ public class XrCiiInvoiceReader {
 
     public static final class Builder {
 
+        private boolean validate = true;
+
+        /**
+         * Enables or disables XRechnung XML validation.
+         *
+         * @param validate whether the XML should be validated against the
+         *                 XRechnung CII schema
+         * @return this builder
+         */
+        public Builder validate(boolean validate) {
+            this.validate = validate;
+            return this;
+        }
+
         public XrCiiInvoiceReader build() {
-            return new XrCiiInvoiceReader();
+            return new XrCiiInvoiceReader(this);
         }
     }
 
@@ -37,7 +58,18 @@ public class XrCiiInvoiceReader {
      */
     public Invoice read(InputStream inputStream) {
         Objects.requireNonNull(inputStream, "inputStream must not be null");
-        return ciiReader.read(inputStream);
+        try {
+            String xml = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+
+            return readFromString(xml);
+
+        } catch (Exception e) {
+            if (e instanceof DeserializationException) {
+                throw (DeserializationException) e;
+            }
+
+            throw new DeserializationException("Unable to read Xrechnung invoice from input stream.", e);
+        }
     }
 
     /**
@@ -49,7 +81,14 @@ public class XrCiiInvoiceReader {
     public Invoice readFromFile(File file) {
         Objects.requireNonNull(file, "file must not be null");
 
-        return ciiReader.readFromFile(file);
+        try {
+            String xml = Files.readString(file.toPath(), StandardCharsets.UTF_8);
+
+            return readFromString(xml);
+
+        } catch (IOException e) {
+            throw new DeserializationException("Unable to read Xrechnung invoice from file.", e);
+        }
     }
 
     /**
@@ -61,6 +100,16 @@ public class XrCiiInvoiceReader {
     public Invoice readFromString(String xml) {
         Objects.requireNonNull(xml, "xml must not be null");
 
+        if (xml.isBlank()) {
+            throw new DeserializationException("XML document must not be empty.");
+        }
+
+        XrProfile profile = detectProfile(xml);
+
+        if (validate) {
+            validateXml(profile, xml);
+        }
+
         return ciiReader.readFromString(xml);
     }
 
@@ -68,6 +117,12 @@ public class XrCiiInvoiceReader {
         Objects.requireNonNull(xml, "xml must not be null");
 
         return profileDetector.detect(xml);
+    }
+
+    private void validateXml(XrProfile profile, String xml) {
+        switch (profile) {
+            case XRECHNUNG -> new Cii16BXsdValidator().validate(xml);
+        }
     }
 }
 
