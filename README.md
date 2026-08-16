@@ -158,17 +158,18 @@ mvn verify
 
 ## Roadmap
 
-| Version   | Milestone                               | Status      |
-|-----------|-----------------------------------------|-------------|
-| v0.1.0    | Core Model - Invoice calculation engine | Finished    |
-| v0.2.0    | CII XML                                 | Finished    |
-| v0.3.0    | ZUGFeRD                                 | Finished    |
-| v0.4.0    | XRechnung                               | In Progress |
-| v1.0.0    | Public Release                          | Planned     |
-| v1.1.0    | PEPPOL Support                          | Planned     |
-| v1.2.0    | Additional European e-Invoice Formats   | Planned     |
-| v1.3.0    | Streaming APIs                          | Planned     |
-| v1.4.0    | Digital Signatures (XAdES/PAdES)        | Planned     |
+| Version | Milestone                               | Status      |
+|---------|-----------------------------------------|-------------|
+| v0.1.0  | Core Model - Invoice calculation engine | Finished    |
+| v0.2.0  | CII XML                                 | Finished    |
+| v0.3.0  | ZUGFeRD                                 | Finished    |
+| v0.4.0  | XRechnung CII                           | Finished    |
+| v0.5.0  | XRechnung UBL                           | In Progress |
+| v1.0.0  | Public Release                          | Planned     |
+| v1.1.0  | PEPPOL Support                          | Planned     |
+| v1.2.0  | Additional European e-Invoice Formats   | Planned     |
+| v1.3.0  | Streaming APIs                          | Planned     |
+| v1.4.0  | Digital Signatures (XAdES/PAdES)        | Planned     |
 
 See the **GitHub Milestones** for the detailed implementation plan and progress.
 
