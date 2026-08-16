@@ -54,8 +54,8 @@ public final class PayeeSerializer implements XmlSerializer<Payee> {
         /*
          * Trading name is not supported by ZUGFeRD BASIC.
          */
-        if (options.getProfile() != CiiProfile.ZUGFERD_BASIC) {
-
+        if (options.getProfile() != CiiProfile.ZUGFERD_BASIC
+                && options.getProfile() != CiiProfile.XRECHNUNG) {
             writer.writeOptionalElement(
                     XmlNamespaces.RAM,
                     "Description",
@@ -66,18 +66,22 @@ public final class PayeeSerializer implements XmlSerializer<Payee> {
         /*
          * Address
          */
-        addressSerializer.serialize(
-                writer,
-                payee.getAddress()
-        );
+        if (options.getProfile() != CiiProfile.XRECHNUNG) {
+            addressSerializer.serialize(
+                    writer,
+                    payee.getAddress()
+            );
+        }
 
         /*
          * Electronic address
          */
-        electronicAddressSerializer.serialize(
-                writer,
-                payee.getElectronicAddress()
-        );
+        if (options.getProfile() != CiiProfile.XRECHNUNG) {
+            electronicAddressSerializer.serialize(
+                    writer,
+                    payee.getElectronicAddress()
+            );
+        }
 
         writer.endElement();
     }

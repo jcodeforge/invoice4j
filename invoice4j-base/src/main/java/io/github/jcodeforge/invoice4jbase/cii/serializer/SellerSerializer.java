@@ -74,6 +74,13 @@ public final class SellerSerializer implements XmlSerializer<Seller> {
             writer.endElement();
         }
 
+        // Contact
+        if (options.getProfile() == CiiProfile.XRECHNUNG) {
+            contactSerializer.serialize(
+                    writer,
+                    seller.getContact()
+            );
+        }
 
         // Address
         addressSerializer.serialize(
@@ -110,17 +117,6 @@ public final class SellerSerializer implements XmlSerializer<Seller> {
 
             writer.endElement();
         }
-
-        // Contact
-        /*
-        if (options.getProfile() != CiiProfile.ZUGFERD_BASIC) {
-            contactSerializer.serialize(
-                    writer,
-                    seller.getContact()
-            );
-        }
-
-         */
 
         writer.endElement();
     }
