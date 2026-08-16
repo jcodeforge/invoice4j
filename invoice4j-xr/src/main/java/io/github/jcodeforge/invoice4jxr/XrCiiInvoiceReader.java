@@ -4,6 +4,9 @@ import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jbase.cii.CiiInvoiceReader;
 import io.github.jcodeforge.invoice4jbase.exceptions.DeserializationException;
 import io.github.jcodeforge.invoice4jbase.validation.Cii16BXsdValidator;
+import io.github.jcodeforge.invoice4jxr.exceptions.KositValidationException;
+import io.github.jcodeforge.invoice4jxr.validation.KositValidator;
+import io.github.jcodeforge.invoice4jxr.validation.ValidationResult;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,6 +19,8 @@ public class XrCiiInvoiceReader {
     private final CiiInvoiceReader ciiReader;
 
     private final XrProfileDetector profileDetector = new XrProfileDetector();
+
+    private final KositValidator kositValidator = new KositValidator();
 
     private final boolean validate;
 
@@ -108,6 +113,7 @@ public class XrCiiInvoiceReader {
 
         if (validate) {
             validateXml(profile, xml);
+            validateInvoice(xml);
         }
 
         return ciiReader.readFromString(xml);
@@ -122,6 +128,14 @@ public class XrCiiInvoiceReader {
     private void validateXml(XrProfile profile, String xml) {
         switch (profile) {
             case XRECHNUNG -> new Cii16BXsdValidator().validate(xml);
+        }
+    }
+
+    private void validateInvoice(String xml) {
+        ValidationResult result = kositValidator.validate(xml);
+
+        if (!result.isValid()) {
+            throw new KositValidationException(result);
         }
     }
 }

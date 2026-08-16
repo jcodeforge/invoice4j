@@ -6,8 +6,12 @@ import io.github.jcodeforge.invoice4jbase.testfactory.TestInvoiceFactory;
 import io.github.jcodeforge.invoice4jxr.XrCiiInvoiceReader;
 import io.github.jcodeforge.invoice4jxr.XrCiiInvoiceWriter;
 import io.github.jcodeforge.invoice4jxr.XrProfile;
+import io.github.jcodeforge.invoice4jxr.exceptions.KositValidationException;
 import org.junit.Test;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.junit.Assert.*;
 
@@ -58,36 +62,37 @@ public class XrCiiReaderTest {
         assertEquals(original.getLines().size(), parsed.getLines().size());
     }
 
-    @Test(expected = XsdValidationException.class)
-    public void shouldRejectInvalidXRechnungCii() {
-        String xml = """
-            <?xml version="1.0" encoding="UTF-8"?>
-            <rsm:CrossIndustryInvoice
-                    xmlns:rsm="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100"
-                    xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100"
-                    xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100">
-
-                <rsm:ExchangedDocumentContext>
-                    <ram:GuidelineSpecifiedDocumentContextParameter>
-                        <ram:ID>
-                            urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0
-                        </ram:ID>
-                    </ram:GuidelineSpecifiedDocumentContextParameter>
-                </rsm:ExchangedDocumentContext>
-
-            </rsm:CrossIndustryInvoice>
-            """;
-
-        SUT.readFromString(xml);
-    }
-
     @Test(expected = DeserializationException.class)
     public void shouldRejectXmlWithoutXRechnungProfile() {
         SUT.readFromString("<invalid/>");
     }
 
-    @Test(expected = XsdValidationException.class)
-    public void shouldRejectXRechnungCiiThatViolatesXsd() {
-        // recognizable XRechnung XML, but XSD-invalid
+    @Test
+    public void shouldRejectInvalidXRechnungCii() throws Exception {
+        String xml = Files.readString(Path.of(getClass()
+                        .getResource("/xrechnung/invalid/cii-br-de-25-test-bg-19-remove-bt-90-1031-remove.xml")
+                        .toURI()), StandardCharsets.UTF_8);
+
+        try {
+            SUT.readFromString(xml);
+            fail("Expected KositValidationException");
+
+        } catch (KositValidationException exception) {
+            assertFalse(exception.getValidationResult().isValid());
+            assertFalse(exception.getValidationResult().getMessages().isEmpty());
+        }
+    }
+
+    @Test
+    public void shouldReadValidXRechnungCii() {
+        Invoice original = new InvoiceCalculator().calculate(TestInvoiceFactory.createCompleteInvoice());
+
+        String xml = XrCiiInvoiceWriter.builder()
+                .build()
+                .writeToString(original);
+
+        Invoice parsed = SUT.readFromString(xml);
+
+        assertNotNull(parsed);
     }
 }

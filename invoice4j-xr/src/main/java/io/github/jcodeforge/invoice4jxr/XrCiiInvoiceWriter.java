@@ -4,6 +4,9 @@ import io.github.jcodeforge.invoice4jbase.cii.CiiInvoiceWriter;
 import io.github.jcodeforge.invoice4jbase.cii.CiiProfile;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jbase.validation.Cii16BXsdValidator;
+import io.github.jcodeforge.invoice4jxr.exceptions.KositValidationException;
+import io.github.jcodeforge.invoice4jxr.validation.KositValidator;
+import io.github.jcodeforge.invoice4jxr.validation.ValidationResult;
 import java.io.File;
 import java.util.Objects;
 
@@ -12,6 +15,8 @@ public final class XrCiiInvoiceWriter {
     private final XrProfile profile;
 
     private final CiiInvoiceWriter ciiWriter;
+
+    private final KositValidator kositValidator = new KositValidator();
 
     private final boolean validate;
 
@@ -44,14 +49,11 @@ public final class XrCiiInvoiceWriter {
         Objects.requireNonNull(invoice, "invoice must not be null");
         Objects.requireNonNull(file, "file must not be null");
 
-        if (validate) {
-            validateInvoice(invoice);
-        }
-
         String xml = ciiWriter.writeToString(invoice);
 
         if (validate) {
             validateXml(xml);
+            validateInvoice(xml);
         }
 
         ciiWriter.writeToFile(xml, file);
@@ -66,14 +68,11 @@ public final class XrCiiInvoiceWriter {
     public String writeToString(Invoice invoice) {
         Objects.requireNonNull(invoice, "invoice must not be null");
 
-        if (validate) {
-            validateInvoice(invoice);
-        }
-
         String xml = ciiWriter.writeToString(invoice);
 
         if (validate) {
             validateXml(xml);
+            validateInvoice(xml);
         }
 
         return xml;
@@ -96,8 +95,12 @@ public final class XrCiiInvoiceWriter {
         };
     }
 
-    // Todo add business logic validation here
-    private void validateInvoice(Invoice invoice) {
+    private void validateInvoice(String xml) {
+        ValidationResult result = kositValidator.validate(xml);
+
+        if (!result.isValid()) {
+            throw new KositValidationException(result);
+        }
     }
 
     private void validateXml(String xml) {
