@@ -15,9 +15,7 @@ import static org.junit.Assert.*;
 
 public class ZugferdInvoiceReaderTest {
 
-    private final ZugferdInvoiceReader SUT = ZugferdInvoiceReader.builder()
-            .validate(false)
-            .build();
+    private final ZugferdInvoiceReader SUT = ZugferdInvoiceReader.builder().build();
 
     @Test
     public void shouldRoundTripBasicInvoice() {

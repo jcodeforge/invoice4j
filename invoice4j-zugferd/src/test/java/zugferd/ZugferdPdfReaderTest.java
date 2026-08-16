@@ -27,8 +27,7 @@ import static org.junit.Assert.*;
 
 public final class ZugferdPdfReaderTest {
 
-    private final ZugferdPdfReader SUT = ZugferdPdfReader.builder()
-                    .validate(false).build();
+    private final ZugferdPdfReader SUT = ZugferdPdfReader.builder().build();
 
     @Test
     public void shouldReadInvoiceFromZugferdPdf() throws Exception {
@@ -40,7 +39,7 @@ public final class ZugferdPdfReaderTest {
 
         ZugferdPdfWriter.builder()
                 .invoice(invoice)
-                .profile(ZugferdProfile.EXTENDED)
+                .profile(ZugferdProfile.EN16931)
                 .build()
                 .write(inputPdf, outputPdf);
 

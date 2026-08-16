@@ -109,13 +109,7 @@ public class ZugferdInvoiceReader {
             validateXml(profile, xml);
         }
 
-        Invoice invoice = ciiReader.readFromString(xml);
-
-        if (validate) {
-            validateInvoice(profile, invoice);
-        }
-
-        return invoice;
+        return ciiReader.readFromString(xml);
     }
 
     public ZugferdProfile detectProfile(String xml) {
@@ -131,13 +125,6 @@ public class ZugferdInvoiceReader {
             case MINIMUM -> new ZugferdMinimumXsdValidator().validate(xml);
             case EN16931 -> new ZugferdEn16931XsdValidator().validate(xml);
             case EXTENDED -> new ZugferdExtendedXsdValidator().validate(xml);
-        }
-    }
-
-    private void validateInvoice(ZugferdProfile profile, Invoice invoice) {
-        switch (profile) {
-            case BASIC -> new ZugferdBasicValidator().validate(invoice);
-            // todo add more business profile validation here
         }
     }
 }

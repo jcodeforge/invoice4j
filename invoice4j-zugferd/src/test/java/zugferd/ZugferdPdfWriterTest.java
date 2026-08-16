@@ -33,7 +33,7 @@ public class ZugferdPdfWriterTest {
 
         SUT = ZugferdPdfWriter.builder()
                 .invoice(invoice)
-                .profile(ZugferdProfile.EXTENDED)
+                .profile(ZugferdProfile.EN16931)
                 .build();
     }
 
