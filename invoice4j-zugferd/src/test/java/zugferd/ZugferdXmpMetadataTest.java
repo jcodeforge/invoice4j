@@ -4,7 +4,7 @@ import io.github.jcodeforge.invoice4jbase.testfactory.TestInvoiceFactory;
 import io.github.jcodeforge.invoice4jbase.calculation.InvoiceCalculator;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jzugferd.ZugferdProfile;
-import io.github.jcodeforge.invoice4jzugferd.ZugferdXmpMetadata;
+import io.github.jcodeforge.invoice4jzugferd.pdf.ZugferdXmpMetadata;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import javax.xml.parsers.DocumentBuilderFactory;

@@ -79,7 +79,7 @@ public class ZugferdPdfWriterTest {
             PDEmbeddedFile embeddedFile = fileSpec.getEmbeddedFile();
 
             assertNotNull(embeddedFile);
-            assertEquals("application/xml", embeddedFile.getSubtype());
+            assertEquals("text/xml", embeddedFile.getSubtype());
             assertTrue(embeddedFile.getSize() > 0);
         }
 
