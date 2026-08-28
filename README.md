@@ -226,3 +226,7 @@ Feedback is highly appreciated:
 If you work with electronic invoices and have requirements or suggestions, please open an issue or start a discussion.
 
 Thank you for helping shape **invoice4j**.
+
+## Articles
+
+- [Invoice4j: Building ZUGFeRD and XRechnung Invoices in Java](https://medium.com/@scholzalex90/invoice4j-building-zugferd-and-xrechnung-invoices-in-java-7690643cb5d4)
