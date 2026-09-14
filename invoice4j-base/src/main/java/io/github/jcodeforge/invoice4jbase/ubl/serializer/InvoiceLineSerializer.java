@@ -26,6 +26,7 @@ public final class InvoiceLineSerializer implements XmlSerializer<InvoiceLine> {
         );
 
         writeId(writer, line);
+        writeNote(writer, line);
         writeAccountingCost(writer, line);
         writeQuantity(writer, line);
         writeLineExtensionAmount(writer, line);
@@ -42,6 +43,15 @@ public final class InvoiceLineSerializer implements XmlSerializer<InvoiceLine> {
                 XmlNamespaces.UBL_CBC,
                 "ID",
                 line.getId()
+        );
+    }
+
+    private void writeNote(XmlWriter writer, InvoiceLine line) {
+        writer.writeOptionalElement(
+                "cbc",
+                XmlNamespaces.UBL_CBC,
+                "Note",
+                line.getNote()
         );
     }
 
@@ -251,7 +261,9 @@ public final class InvoiceLineSerializer implements XmlSerializer<InvoiceLine> {
         }
 
         for (ItemProperty property : line.getProperties()) {
-            itemPropertySerializer.serialize(writer, property);
+            if (property != null) {
+                itemPropertySerializer.serialize(writer, property);
+            }
         }
     }
 
@@ -262,6 +274,14 @@ public final class InvoiceLineSerializer implements XmlSerializer<InvoiceLine> {
                 "Price"
         );
 
+        writePriceAmount(writer, line);
+        writePriceDiscount(writer, line);
+        writeBaseQuantity(writer, line);
+
+        writer.endElement();
+    }
+
+    private void writePriceAmount(XmlWriter writer, InvoiceLine line) {
         writer.startElement(
                 "cbc",
                 XmlNamespaces.UBL_CBC,
@@ -284,26 +304,102 @@ public final class InvoiceLineSerializer implements XmlSerializer<InvoiceLine> {
         );
 
         writer.endElement();
+    }
 
-        if (line.getBaseQuantity() != null) {
+    /**
+     * Writes BT-147 (price discount) and BT-148 (gross price).
+     *
+     * <p>The price-level allowance is always an allowance,
+     * therefore ChargeIndicator is false.</p>
+     */
+    private void writePriceDiscount(XmlWriter writer, InvoiceLine line) {
+        if (line.getPriceDiscount() == null && line.getGrossPrice() == null) {
+            return;
+        }
 
+        writer.startElement(
+                "cac",
+                XmlNamespaces.UBL_CAC,
+                "AllowanceCharge"
+        );
+
+        writer.writeElement(
+                "cbc",
+                XmlNamespaces.UBL_CBC,
+                "ChargeIndicator",
+                "false"
+        );
+
+        if (line.getPriceDiscount() != null) {
             writer.startElement(
                     "cbc",
                     XmlNamespaces.UBL_CBC,
-                    "BaseQuantity"
+                    "Amount"
             );
 
-            writer.writeAttribute(
-                    "unitCode",
-                    line.getUnitCode().getCode()
-            );
+            if (line.getNetPrice().getCurrency() != null) {
+                writer.writeAttribute(
+                        "currencyID",
+                        line.getNetPrice()
+                                .getCurrency()
+                                .getCode()
+                );
+            }
 
             writer.writeCharacters(
-                    line.getBaseQuantity().toPlainString()
+                    line.getPriceDiscount().toPlainString()
             );
 
             writer.endElement();
         }
+
+        if (line.getGrossPrice() != null) {
+            writer.startElement(
+                    "cbc",
+                    XmlNamespaces.UBL_CBC,
+                    "BaseAmount"
+            );
+
+            if (line.getGrossPrice().getCurrency() != null) {
+                writer.writeAttribute(
+                        "currencyID",
+                        line.getGrossPrice()
+                                .getCurrency()
+                                .getCode()
+                );
+            }
+
+            writer.writeCharacters(
+                    line.getGrossPrice()
+                            .getAmount()
+                            .toPlainString()
+            );
+
+            writer.endElement();
+        }
+
+        writer.endElement();
+    }
+
+    private void writeBaseQuantity(XmlWriter writer, InvoiceLine line) {
+        if (line.getBaseQuantity() == null) {
+            return;
+        }
+
+        writer.startElement(
+                "cbc",
+                XmlNamespaces.UBL_CBC,
+                "BaseQuantity"
+        );
+
+        writer.writeAttribute(
+                "unitCode",
+                line.getUnitCode().getCode()
+        );
+
+        writer.writeCharacters(
+                line.getBaseQuantity().toPlainString()
+        );
 
         writer.endElement();
     }

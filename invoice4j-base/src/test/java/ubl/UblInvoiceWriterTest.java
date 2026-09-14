@@ -1,8 +1,12 @@
 package ubl;
 
+import calculation.CalculationUtils;
 import io.github.jcodeforge.invoice4jbase.datamodels.enums.CurrencyCode;
 import io.github.jcodeforge.invoice4jbase.datamodels.enums.DocumentTypeCode;
+import io.github.jcodeforge.invoice4jbase.datamodels.enums.TaxCategoryCode;
+import io.github.jcodeforge.invoice4jbase.datamodels.enums.UnitCode;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
+import io.github.jcodeforge.invoice4jbase.datamodels.pojos.InvoiceLine;
 import io.github.jcodeforge.invoice4jbase.testfactory.*;
 import io.github.jcodeforge.invoice4jbase.ubl.UblInvoiceWriter;
 import io.github.jcodeforge.invoice4jbase.ubl.UblProfile;
@@ -14,6 +18,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
 import java.io.File;
 import java.io.StringReader;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.List;
@@ -506,6 +511,75 @@ public class UblInvoiceWriterTest {
         );
 
         assertEquals("0", count);
+    }
+
+    @Test
+    public void shouldWriteInvoiceLinePriceDiscountAndGrossPrice() throws Exception {
+        InvoiceLine line = InvoiceLine.builder()
+                .id("1")
+                .itemName("Notebook")
+                .quantity(BigDecimal.ONE)
+                .unitCode(UnitCode.ONE)
+                .netPrice(CalculationUtils.createEUMoney("100.00"))
+                .priceDiscount(new BigDecimal("15.00"))
+                .grossPrice(CalculationUtils.createEUMoney("115.00"))
+                .taxCategory(TaxCategoryCode.STANDARD)
+                .taxRate(new BigDecimal("19"))
+                .build();
+
+        Invoice invoice = Invoice.builder()
+                .invoiceNumber("INV-2026-0001")
+                .documentTypeCode(DocumentTypeCode.COMMERCIAL_INVOICE)
+                .issueDate(LocalDate.of(2026, 1, 1))
+                .currency(CurrencyCode.EUR)
+                .seller(TestPartyFactory.createSeller())
+                .buyer(TestPartyFactory.createBuyer())
+                .delivery(TestDeliveryFactory.createDelivery())
+                .paymentMeans(TestPaymentFactory.createPaymentMeans())
+                .paymentTerms(TestPaymentFactory.createPaymentTerms())
+                .invoicePeriod(TestPartyFactory.createInvoicePeriod())
+                .allowanceCharges(List.of())
+                .lines(List.of(line))
+                .taxes(List.of(TestTaxFactory.createTax()))
+                .monetarySummation(
+                        TestMonetarySummationFactory.createMonetarySummation()
+                )
+                .build();
+
+        Document document = parse(SUT.writeToString(invoice));
+
+        XPath xpath = TestXPathFactory.createXPath();
+
+        String priceDiscount = xpath.evaluate(
+                "/ubl:Invoice"
+                        + "/cac:InvoiceLine"
+                        + "/cac:Price"
+                        + "/cac:AllowanceCharge"
+                        + "/cbc:Amount",
+                document
+        );
+
+        String grossPrice = xpath.evaluate(
+                "/ubl:Invoice"
+                        + "/cac:InvoiceLine"
+                        + "/cac:Price"
+                        + "/cac:AllowanceCharge"
+                        + "/cbc:BaseAmount",
+                document
+        );
+
+        String chargeIndicator = xpath.evaluate(
+                "/ubl:Invoice"
+                        + "/cac:InvoiceLine"
+                        + "/cac:Price"
+                        + "/cac:AllowanceCharge"
+                        + "/cbc:ChargeIndicator",
+                document
+        );
+
+        assertEquals("15.00", priceDiscount);
+        assertEquals("115.00", grossPrice);
+        assertEquals("false", chargeIndicator);
     }
 
     private Document parse(String xml) throws Exception {
