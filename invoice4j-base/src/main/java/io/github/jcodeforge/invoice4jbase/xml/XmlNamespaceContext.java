@@ -6,8 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * Namespace context used for XPath evaluation of Cross Industry Invoice (CII)
- * XML documents.
+ * Namespace context used for XPath evaluation of invoice XML documents.
  *
  * <p>Maps the namespace prefixes used throughout the library to their
  * corresponding namespace URIs.</p>
@@ -15,20 +14,18 @@ import java.util.Map;
 public class XmlNamespaceContext implements NamespaceContext {
 
     private static final Map<String, String> NAMESPACES = Map.of(
+            // CII
             "rsm", XmlNamespaces.RSM,
             "ram", XmlNamespaces.RAM,
             "udt", XmlNamespaces.UDT,
-            "qdt", XmlNamespaces.QDT
+            "qdt", XmlNamespaces.QDT,
+
+            // UBL
+            "ubl", XmlNamespaces.UBL_INVOICE,
+            "cac", XmlNamespaces.UBL_CAC,
+            "cbc", XmlNamespaces.UBL_CBC
     );
 
-    /**
-     * Returns the namespace URI associated with the given prefix.
-     *
-     * @param prefix the namespace prefix
-     * @return the namespace URI, or {@link XMLConstants#NULL_NS_URI} if the
-     *         prefix is not registered
-     * @throws IllegalArgumentException if {@code prefix} is {@code null}
-     */
     @Override
     public String getNamespaceURI(String prefix) {
         if (prefix == null) {
@@ -38,12 +35,6 @@ public class XmlNamespaceContext implements NamespaceContext {
         return NAMESPACES.getOrDefault(prefix, XMLConstants.NULL_NS_URI);
     }
 
-    /**
-     * Returns the preferred prefix for the given namespace URI.
-     *
-     * @param namespaceURI the namespace URI
-     * @return the corresponding prefix, or {@code null} if none exists
-     */
     @Override
     public String getPrefix(String namespaceURI) {
         return NAMESPACES.entrySet().stream()
@@ -53,14 +44,6 @@ public class XmlNamespaceContext implements NamespaceContext {
                 .orElse(null);
     }
 
-    /**
-     * Returns an iterator over the prefixes associated with the given
-     * namespace URI.
-     *
-     * @param namespaceURI the namespace URI
-     * @return an iterator containing the matching prefix, or an empty iterator
-     *         if none exists
-     */
     @Override
     public Iterator<String> getPrefixes(String namespaceURI) {
         String prefix = getPrefix(namespaceURI);
