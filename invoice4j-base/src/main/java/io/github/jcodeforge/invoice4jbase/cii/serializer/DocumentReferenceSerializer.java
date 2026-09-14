@@ -1,5 +1,6 @@
 package io.github.jcodeforge.invoice4jbase.cii.serializer;
 
+import io.github.jcodeforge.invoice4jbase.XmlSerializer;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.DocumentReference;
 import io.github.jcodeforge.invoice4jbase.xml.XmlNamespaces;
 import io.github.jcodeforge.invoice4jbase.xml.XmlWriter;

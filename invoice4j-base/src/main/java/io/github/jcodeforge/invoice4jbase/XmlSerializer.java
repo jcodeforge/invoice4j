@@ -1,4 +1,4 @@
-package io.github.jcodeforge.invoice4jbase.cii.serializer;
+package io.github.jcodeforge.invoice4jbase;
 
 import io.github.jcodeforge.invoice4jbase.xml.XmlWriter;
 
