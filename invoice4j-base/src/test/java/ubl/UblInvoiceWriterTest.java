@@ -582,6 +582,474 @@ public class UblInvoiceWriterTest {
         assertEquals("false", chargeIndicator);
     }
 
+    @Test
+    public void shouldWriteInvoiceLineBaseQuantity() throws Exception {
+        InvoiceLine line = InvoiceLine.builder()
+                .id("1")
+                .itemName("Notebook")
+                .quantity(BigDecimal.ONE)
+                .unitCode(UnitCode.ONE)
+                .netPrice(CalculationUtils.createEUMoney("100.00"))
+                .baseQuantity(new BigDecimal("10"))
+                .taxCategory(TaxCategoryCode.STANDARD)
+                .taxRate(new BigDecimal("19"))
+                .build();
+
+        Invoice invoice = Invoice.builder()
+                .invoiceNumber("INV-2026-0001")
+                .documentTypeCode(DocumentTypeCode.COMMERCIAL_INVOICE)
+                .issueDate(LocalDate.of(2026, 1, 1))
+                .currency(CurrencyCode.EUR)
+                .seller(TestPartyFactory.createSeller())
+                .buyer(TestPartyFactory.createBuyer())
+                .delivery(TestDeliveryFactory.createDelivery())
+                .paymentMeans(TestPaymentFactory.createPaymentMeans())
+                .paymentTerms(TestPaymentFactory.createPaymentTerms())
+                .invoicePeriod(TestPartyFactory.createInvoicePeriod())
+                .allowanceCharges(List.of())
+                .lines(List.of(line))
+                .taxes(List.of(TestTaxFactory.createTax()))
+                .monetarySummation(
+                        TestMonetarySummationFactory.createMonetarySummation()
+                )
+                .build();
+
+        Document document = parse(SUT.writeToString(invoice));
+
+        XPath xpath = TestXPathFactory.createXPath();
+
+        String value = xpath.evaluate(
+                "/ubl:Invoice"
+                        + "/cac:InvoiceLine"
+                        + "/cac:Price"
+                        + "/cbc:BaseQuantity",
+                document
+        );
+
+        String unitCode = xpath.evaluate(
+                "/ubl:Invoice"
+                        + "/cac:InvoiceLine"
+                        + "/cac:Price"
+                        + "/cbc:BaseQuantity/@unitCode",
+                document
+        );
+
+        assertEquals("10", value);
+        assertEquals(UnitCode.ONE.getCode(), unitCode);
+    }
+
+    @Test
+    public void shouldWriteInvoiceLineNote() throws Exception {
+        InvoiceLine line = InvoiceLine.builder()
+                .id("1")
+                .note("Special handling required")
+                .itemName("Notebook")
+                .quantity(BigDecimal.ONE)
+                .unitCode(UnitCode.ONE)
+                .netPrice(CalculationUtils.createEUMoney("100.00"))
+                .taxCategory(TaxCategoryCode.STANDARD)
+                .taxRate(new BigDecimal("19"))
+                .build();
+
+        Invoice invoice = Invoice.builder()
+                .invoiceNumber("INV-2026-0001")
+                .documentTypeCode(DocumentTypeCode.COMMERCIAL_INVOICE)
+                .issueDate(LocalDate.of(2026, 1, 1))
+                .currency(CurrencyCode.EUR)
+                .seller(TestPartyFactory.createSeller())
+                .buyer(TestPartyFactory.createBuyer())
+                .delivery(TestDeliveryFactory.createDelivery())
+                .paymentMeans(TestPaymentFactory.createPaymentMeans())
+                .paymentTerms(TestPaymentFactory.createPaymentTerms())
+                .invoicePeriod(TestPartyFactory.createInvoicePeriod())
+                .allowanceCharges(List.of())
+                .lines(List.of(line))
+                .taxes(List.of(TestTaxFactory.createTax()))
+                .monetarySummation(
+                        TestMonetarySummationFactory.createMonetarySummation()
+                )
+                .build();
+
+        Document document = parse(SUT.writeToString(invoice));
+
+        XPath xpath = TestXPathFactory.createXPath();
+
+        String value = xpath.evaluate(
+                "/ubl:Invoice"
+                        + "/cac:InvoiceLine"
+                        + "/cbc:Note",
+                document
+        );
+
+        assertEquals("Special handling required", value);
+    }
+
+    @Test
+    public void shouldWriteInvoiceLineAccountingCost() throws Exception {
+        InvoiceLine line = InvoiceLine.builder()
+                .id("1")
+                .itemName("Notebook")
+                .buyerAccountingReference("COST-CENTER-100")
+                .quantity(BigDecimal.ONE)
+                .unitCode(UnitCode.ONE)
+                .netPrice(CalculationUtils.createEUMoney("100.00"))
+                .taxCategory(TaxCategoryCode.STANDARD)
+                .taxRate(new BigDecimal("19"))
+                .build();
+
+        Invoice invoice = Invoice.builder()
+                .invoiceNumber("INV-2026-0001")
+                .documentTypeCode(DocumentTypeCode.COMMERCIAL_INVOICE)
+                .issueDate(LocalDate.of(2026, 1, 1))
+                .currency(CurrencyCode.EUR)
+                .seller(TestPartyFactory.createSeller())
+                .buyer(TestPartyFactory.createBuyer())
+                .delivery(TestDeliveryFactory.createDelivery())
+                .paymentMeans(TestPaymentFactory.createPaymentMeans())
+                .paymentTerms(TestPaymentFactory.createPaymentTerms())
+                .invoicePeriod(TestPartyFactory.createInvoicePeriod())
+                .allowanceCharges(List.of())
+                .lines(List.of(line))
+                .taxes(List.of(TestTaxFactory.createTax()))
+                .monetarySummation(
+                        TestMonetarySummationFactory.createMonetarySummation()
+                )
+                .build();
+
+        Document document = parse(SUT.writeToString(invoice));
+
+        XPath xpath = TestXPathFactory.createXPath();
+
+        String value = xpath.evaluate(
+                "/ubl:Invoice"
+                        + "/cac:InvoiceLine"
+                        + "/cbc:AccountingCost",
+                document
+        );
+
+        assertEquals("COST-CENTER-100", value);
+    }
+
+    @Test
+    public void shouldWriteInvoiceLineQuantityAndUnitCode() throws Exception {
+        InvoiceLine line = InvoiceLine.builder()
+                .id("1")
+                .itemName("Notebook")
+                .quantity(new BigDecimal("2.50"))
+                .unitCode(UnitCode.ONE)
+                .netPrice(CalculationUtils.createEUMoney("100.00"))
+                .taxCategory(TaxCategoryCode.STANDARD)
+                .taxRate(new BigDecimal("19"))
+                .build();
+
+        Invoice invoice = Invoice.builder()
+                .invoiceNumber("INV-2026-0001")
+                .documentTypeCode(DocumentTypeCode.COMMERCIAL_INVOICE)
+                .issueDate(LocalDate.of(2026, 1, 1))
+                .currency(CurrencyCode.EUR)
+                .seller(TestPartyFactory.createSeller())
+                .buyer(TestPartyFactory.createBuyer())
+                .delivery(TestDeliveryFactory.createDelivery())
+                .paymentMeans(TestPaymentFactory.createPaymentMeans())
+                .paymentTerms(TestPaymentFactory.createPaymentTerms())
+                .invoicePeriod(TestPartyFactory.createInvoicePeriod())
+                .allowanceCharges(List.of())
+                .lines(List.of(line))
+                .taxes(List.of(TestTaxFactory.createTax()))
+                .monetarySummation(
+                        TestMonetarySummationFactory.createMonetarySummation()
+                )
+                .build();
+
+        Document document = parse(SUT.writeToString(invoice));
+
+        XPath xpath = TestXPathFactory.createXPath();
+
+        String quantity = xpath.evaluate(
+                "/ubl:Invoice"
+                        + "/cac:InvoiceLine"
+                        + "/cbc:InvoicedQuantity",
+                document
+        );
+
+        String unitCode = xpath.evaluate(
+                "/ubl:Invoice"
+                        + "/cac:InvoiceLine"
+                        + "/cbc:InvoicedQuantity/@unitCode",
+                document
+        );
+
+        assertEquals("2.50", quantity);
+        assertEquals(UnitCode.ONE.getCode(), unitCode);
+    }
+
+    @Test
+    public void shouldWriteInvoiceLineItemDescription() throws Exception {
+        InvoiceLine line = InvoiceLine.builder()
+                .id("1")
+                .itemName("Notebook")
+                .description("15 inch business notebook")
+                .quantity(BigDecimal.ONE)
+                .unitCode(UnitCode.ONE)
+                .netPrice(CalculationUtils.createEUMoney("100.00"))
+                .taxCategory(TaxCategoryCode.STANDARD)
+                .taxRate(new BigDecimal("19"))
+                .build();
+
+        Invoice invoice = Invoice.builder()
+                .invoiceNumber("INV-2026-0001")
+                .documentTypeCode(DocumentTypeCode.COMMERCIAL_INVOICE)
+                .issueDate(LocalDate.of(2026, 1, 1))
+                .currency(CurrencyCode.EUR)
+                .seller(TestPartyFactory.createSeller())
+                .buyer(TestPartyFactory.createBuyer())
+                .delivery(TestDeliveryFactory.createDelivery())
+                .paymentMeans(TestPaymentFactory.createPaymentMeans())
+                .paymentTerms(TestPaymentFactory.createPaymentTerms())
+                .invoicePeriod(TestPartyFactory.createInvoicePeriod())
+                .allowanceCharges(List.of())
+                .lines(List.of(line))
+                .taxes(List.of(TestTaxFactory.createTax()))
+                .monetarySummation(
+                        TestMonetarySummationFactory.createMonetarySummation()
+                )
+                .build();
+
+        Document document = parse(SUT.writeToString(invoice));
+
+        XPath xpath = TestXPathFactory.createXPath();
+
+        String value = xpath.evaluate(
+                "/ubl:Invoice"
+                        + "/cac:InvoiceLine"
+                        + "/cac:Item"
+                        + "/cbc:Description",
+                document
+        );
+
+        assertEquals("15 inch business notebook", value);
+    }
+
+    @Test
+    public void shouldWriteCompleteInvoiceLine() throws Exception {
+        InvoiceLine line = InvoiceLine.builder()
+                .id("42")
+                .note("Special handling required")
+                .buyerAccountingReference("COST-CENTER-100")
+                .itemName("Notebook")
+                .description("15 inch business notebook")
+                .sellerAssignedIdentifier("SELLER-123")
+                .buyerAssignedIdentifier("BUYER-456")
+                .itemClassificationIdentifier("12345678")
+                .quantity(new BigDecimal("2.50"))
+                .unitCode(UnitCode.ONE)
+                .netPrice(CalculationUtils.createEUMoney("100.00"))
+                .priceDiscount(new BigDecimal("15.00"))
+                .grossPrice(CalculationUtils.createEUMoney("115.00"))
+                .baseQuantity(new BigDecimal("10"))
+                .lineExtensionAmount(
+                        CalculationUtils.createEUMoney("250.00")
+                )
+                .taxCategory(TaxCategoryCode.STANDARD)
+                .taxRate(new BigDecimal("19"))
+                .build();
+
+        Invoice invoice = Invoice.builder()
+                .invoiceNumber("INV-2026-0001")
+                .documentTypeCode(DocumentTypeCode.COMMERCIAL_INVOICE)
+                .issueDate(LocalDate.of(2026, 1, 1))
+                .currency(CurrencyCode.EUR)
+                .seller(TestPartyFactory.createSeller())
+                .buyer(TestPartyFactory.createBuyer())
+                .delivery(TestDeliveryFactory.createDelivery())
+                .paymentMeans(TestPaymentFactory.createPaymentMeans())
+                .paymentTerms(TestPaymentFactory.createPaymentTerms())
+                .invoicePeriod(TestPartyFactory.createInvoicePeriod())
+                .allowanceCharges(List.of())
+                .lines(List.of(line))
+                .taxes(List.of(TestTaxFactory.createTax()))
+                .monetarySummation(
+                        TestMonetarySummationFactory.createMonetarySummation()
+                )
+                .build();
+
+        Document document = parse(SUT.writeToString(invoice));
+
+        XPath xpath = TestXPathFactory.createXPath();
+
+        // BT-126 — Invoice line ID
+        assertEquals("42", xpath.evaluate("/ubl:Invoice/cac:InvoiceLine/cbc:ID", document));
+        // BT-127 — Invoice line note
+        assertEquals("Special handling required", xpath.evaluate("/ubl:Invoice/cac:InvoiceLine/cbc:Note",
+                document));
+        // BT-133 — Accounting reference
+        assertEquals("COST-CENTER-100", xpath.evaluate(
+                "/ubl:Invoice/cac:InvoiceLine/cbc:AccountingCost", document));
+        // BT-129 / BT-130 — Quantity / unit
+        assertEquals("2.50", xpath.evaluate("/ubl:Invoice/cac:InvoiceLine/cbc:InvoicedQuantity", document));
+
+        assertEquals(
+                UnitCode.ONE.getCode(),
+                xpath.evaluate(
+                        "/ubl:Invoice/cac:InvoiceLine/cbc:InvoicedQuantity/@unitCode",
+                        document
+                )
+        );
+
+        // BT-131 — Line extension amount
+        assertEquals(
+                "250.00",
+                xpath.evaluate(
+                        "/ubl:Invoice/cac:InvoiceLine/cbc:LineExtensionAmount",
+                        document
+                )
+        );
+
+        // BT-154 — Item description
+        assertEquals(
+                "15 inch business notebook",
+                xpath.evaluate(
+                        "/ubl:Invoice/cac:InvoiceLine/cac:Item/cbc:Description",
+                        document
+                )
+        );
+
+        // BT-153 — Item name
+        assertEquals(
+                "Notebook",
+                xpath.evaluate(
+                        "/ubl:Invoice/cac:InvoiceLine/cac:Item/cbc:Name",
+                        document
+                )
+        );
+
+        // BT-155 — Seller item identifier
+        assertEquals(
+                "SELLER-123",
+                xpath.evaluate(
+                        "/ubl:Invoice/cac:InvoiceLine"
+                                + "/cac:Item"
+                                + "/cac:SellersItemIdentification"
+                                + "/cbc:ID",
+                        document
+                )
+        );
+
+        // BT-156 — Buyer item identifier
+        assertEquals(
+                "BUYER-456",
+                xpath.evaluate(
+                        "/ubl:Invoice/cac:InvoiceLine"
+                                + "/cac:Item"
+                                + "/cac:BuyersItemIdentification"
+                                + "/cbc:ID",
+                        document
+                )
+        );
+
+        // BT-158 — Item classification
+        assertEquals(
+                "12345678",
+                xpath.evaluate(
+                        "/ubl:Invoice/cac:InvoiceLine"
+                                + "/cac:Item"
+                                + "/cac:CommodityClassification"
+                                + "/cbc:ItemClassificationCode",
+                        document
+                )
+        );
+
+        // BT-151 / BT-152 — VAT category / rate
+        assertEquals(
+                TaxCategoryCode.STANDARD.getCode(),
+                xpath.evaluate(
+                        "/ubl:Invoice/cac:InvoiceLine"
+                                + "/cac:Item"
+                                + "/cac:ClassifiedTaxCategory"
+                                + "/cbc:ID",
+                        document
+                )
+        );
+
+        assertEquals(
+                "19",
+                xpath.evaluate(
+                        "/ubl:Invoice/cac:InvoiceLine"
+                                + "/cac:Item"
+                                + "/cac:ClassifiedTaxCategory"
+                                + "/cbc:Percent",
+                        document
+                )
+        );
+
+        // BT-146 — Net price
+        assertEquals(
+                "100.00",
+                xpath.evaluate(
+                        "/ubl:Invoice/cac:InvoiceLine"
+                                + "/cac:Price"
+                                + "/cbc:PriceAmount",
+                        document
+                )
+        );
+
+        // BT-147 — Price discount
+        assertEquals(
+                "15.00",
+                xpath.evaluate(
+                        "/ubl:Invoice/cac:InvoiceLine"
+                                + "/cac:Price"
+                                + "/cac:AllowanceCharge"
+                                + "/cbc:Amount",
+                        document
+                )
+        );
+
+        // BT-148 — Gross price
+        assertEquals(
+                "115.00",
+                xpath.evaluate(
+                        "/ubl:Invoice/cac:InvoiceLine"
+                                + "/cac:Price"
+                                + "/cac:AllowanceCharge"
+                                + "/cbc:BaseAmount",
+                        document
+                )
+        );
+
+        assertEquals(
+                "false",
+                xpath.evaluate(
+                        "/ubl:Invoice/cac:InvoiceLine"
+                                + "/cac:Price"
+                                + "/cac:AllowanceCharge"
+                                + "/cbc:ChargeIndicator",
+                        document
+                )
+        );
+
+        // BT-149 / BT-150 — Base quantity / unit
+        assertEquals(
+                "10",
+                xpath.evaluate(
+                        "/ubl:Invoice/cac:InvoiceLine"
+                                + "/cac:Price"
+                                + "/cbc:BaseQuantity",
+                        document
+                )
+        );
+
+        assertEquals(
+                UnitCode.ONE.getCode(),
+                xpath.evaluate(
+                        "/ubl:Invoice/cac:InvoiceLine"
+                                + "/cac:Price"
+                                + "/cbc:BaseQuantity/@unitCode",
+                        document
+                )
+        );
+    }
+
     private Document parse(String xml) throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
