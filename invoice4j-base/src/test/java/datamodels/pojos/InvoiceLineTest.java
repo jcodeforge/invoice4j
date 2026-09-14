@@ -24,6 +24,8 @@ public class InvoiceLineTest {
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
                 .lineExtensionAmount(CalculationUtils.createEUMoney("100.00"))
+                .priceDiscount(new BigDecimal("5.00"))
+                .grossPrice(CalculationUtils.createEUMoney("105.00"))
                 .build();
 
         assertEquals("1", line.getId());
@@ -34,6 +36,8 @@ public class InvoiceLineTest {
         assertEquals(TaxCategoryCode.STANDARD, line.getTaxCategory());
         assertEquals(new BigDecimal("19"), line.getTaxRate());
         assertEquals(new BigDecimal("100.00"), line.getLineExtensionAmount().getAmount());
+        assertEquals(new BigDecimal("5.00"), line.getPriceDiscount());
+        assertEquals(new BigDecimal("105.00"), line.getGrossPrice().getAmount());
     }
 
     @Test(expected = InvoiceValidationException.class)
@@ -214,50 +218,40 @@ public class InvoiceLineTest {
     }
 
     @Test(expected = InvoiceValidationException.class)
-    public void shouldRejectNegativePriceDiscountPercentage() {
+    public void shouldRejectNegativeGrossPrice() {
         InvoiceLine.builder()
                 .id("1")
                 .itemName("Notebook")
                 .quantity(BigDecimal.ONE)
                 .unitCode(UnitCode.ONE)
-                .netPrice(CalculationUtils.createEUMoney("100.00"))
-                .priceDiscountPercentage(new BigDecimal("-1"))
-                .baseQuantity(BigDecimal.ONE)
+                .netPrice(CalculationUtils.createEUMoney("95.00"))
+                .grossPrice(CalculationUtils.createEUMoney("-100.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
-                .lineExtensionAmount(CalculationUtils.createEUMoney("100.00"))
+                .lineExtensionAmount(
+                        CalculationUtils.createEUMoney("95.00"))
                 .build();
     }
 
-    @Test(expected = InvoiceValidationException.class)
-    public void shouldRejectPriceDiscountPercentageGreaterThan100() {
-        InvoiceLine.builder()
+    @Test
+    public void shouldCreateInvoiceLineWithPriceDiscountAndGrossPrice() {
+        InvoiceLine line = InvoiceLine.builder()
                 .id("1")
                 .itemName("Notebook")
                 .quantity(BigDecimal.ONE)
                 .unitCode(UnitCode.ONE)
-                .netPrice(CalculationUtils.createEUMoney("100.00"))
-                .priceDiscountPercentage(new BigDecimal("101"))
-                .baseQuantity(BigDecimal.ONE)
+                .netPrice(CalculationUtils.createEUMoney("95.00"))
+                .priceDiscount(new BigDecimal("5.00"))
+                .grossPrice(CalculationUtils.createEUMoney("100.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
-                .lineExtensionAmount(CalculationUtils.createEUMoney("100.00"))
+                .lineExtensionAmount(
+                        CalculationUtils.createEUMoney("95.00"))
                 .build();
-    }
 
-    @Test(expected = InvoiceValidationException.class)
-    public void shouldRejectMissingBaseQuantityWhenDiscountPercentageIsSpecified() {
-        InvoiceLine.builder()
-                .id("1")
-                .itemName("Notebook")
-                .quantity(BigDecimal.ONE)
-                .unitCode(UnitCode.ONE)
-                .netPrice(CalculationUtils.createEUMoney("100.00"))
-                .priceDiscountPercentage(new BigDecimal("10"))
-                .taxCategory(TaxCategoryCode.STANDARD)
-                .taxRate(new BigDecimal("19"))
-                .lineExtensionAmount(CalculationUtils.createEUMoney("90.00"))
-                .build();
+        assertEquals(new BigDecimal("95.00"), line.getNetPrice().getAmount());
+        assertEquals(new BigDecimal("5.00"), line.getPriceDiscount());
+        assertEquals(new BigDecimal("100.00"), line.getGrossPrice().getAmount());
     }
 
     @Test(expected = InvoiceValidationException.class)
@@ -291,17 +285,18 @@ public class InvoiceLineTest {
     }
 
     @Test(expected = InvoiceValidationException.class)
-    public void shouldRejectBlankObjectIdentifier() {
+    public void shouldRejectBlankNote() {
         InvoiceLine.builder()
                 .id("1")
-                .objectIdentifier("   ")
+                .note("   ")
                 .itemName("Notebook")
                 .quantity(BigDecimal.ONE)
                 .unitCode(UnitCode.ONE)
                 .netPrice(CalculationUtils.createEUMoney("100.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
-                .lineExtensionAmount(CalculationUtils.createEUMoney("100.00"))
+                .lineExtensionAmount(
+                        CalculationUtils.createEUMoney("100.00"))
                 .build();
     }
 

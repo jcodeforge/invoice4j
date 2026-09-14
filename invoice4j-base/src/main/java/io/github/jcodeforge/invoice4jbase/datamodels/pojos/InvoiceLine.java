@@ -22,9 +22,9 @@ public class InvoiceLine {
 
     /**
      * BT-127
-     * Line object identifier.
+     * Invoice line note.
      */
-    private String objectIdentifier;
+    private String note;
 
     /**
      * BT-155
@@ -84,9 +84,9 @@ public class InvoiceLine {
 
     /**
      * BT-148
-     * Price discount percentage.
+     * Item gross price.
      */
-    private BigDecimal priceDiscountPercentage;
+    private MonetaryAmount grossPrice;
 
     /**
      * BT-149
@@ -127,8 +127,8 @@ public class InvoiceLine {
         return id;
     }
 
-    public String getObjectIdentifier() {
-        return objectIdentifier;
+    public String getNote() {
+        return note;
     }
 
     public String getBuyerAccountingReference() {
@@ -171,8 +171,8 @@ public class InvoiceLine {
         return priceDiscount;
     }
 
-    public BigDecimal getPriceDiscountPercentage() {
-        return priceDiscountPercentage;
+    public MonetaryAmount  getGrossPrice() {
+        return grossPrice;
     }
 
     public BigDecimal getBaseQuantity() {
@@ -216,8 +216,8 @@ public class InvoiceLine {
             return this;
         }
 
-        public Builder objectIdentifier(String objectIdentifier) {
-            line.objectIdentifier = objectIdentifier;
+        public Builder note(String note) {
+            line.note = note;
             return this;
         }
 
@@ -271,8 +271,8 @@ public class InvoiceLine {
             return this;
         }
 
-        public Builder priceDiscountPercentage(BigDecimal priceDiscountPercentage) {
-            line.priceDiscountPercentage = priceDiscountPercentage;
+        public Builder grossPrice(MonetaryAmount amount) {
+            line.grossPrice = amount;
             return this;
         }
 
@@ -351,8 +351,8 @@ public class InvoiceLine {
                 throw new InvoiceValidationException("VAT rate must not exceed 100."
                 );
             }
-            if (line.objectIdentifier != null && line.objectIdentifier.isBlank()) {
-                throw new InvoiceValidationException("BT-127 Object identifier must not be blank.");
+            if (line.note != null && line.note.isBlank()) {
+                throw new InvoiceValidationException("BT-127 Invoice line note must not be blank.");
             }
             if (line.buyerAccountingReference != null && line.buyerAccountingReference.isBlank()) {
                 throw new InvoiceValidationException("BT-155 Buyer accounting reference must not be blank.");
@@ -372,20 +372,11 @@ public class InvoiceLine {
             if (line.priceDiscount != null && line.priceDiscount.compareTo(BigDecimal.ZERO) < 0) {
                 throw new InvoiceValidationException("Price discount must not be negative.");
             }
-            if (line.priceDiscountPercentage != null) {
-                if (line.priceDiscountPercentage.compareTo(BigDecimal.ZERO) < 0) {
-                    throw new InvoiceValidationException("Price discount percentage must not be negative.");
-                }
-                if (line.priceDiscountPercentage.compareTo(new BigDecimal("100")) > 0) {
-                    throw new InvoiceValidationException("Price discount percentage must not exceed 100.");
-                }
-            }
             if (line.baseQuantity != null && line.baseQuantity.compareTo(BigDecimal.ZERO) <= 0) {
                 throw new InvoiceValidationException("BT-149 Base quantity must be greater than zero.");
             }
-            if (line.priceDiscountPercentage != null && line.baseQuantity == null) {
-                throw new InvoiceValidationException(
-                        "BT-149 Base quantity is required when a discount percentage is specified.");
+            if (line.grossPrice != null && line.grossPrice.getAmount().compareTo(BigDecimal.ZERO) < 0) {
+                throw new InvoiceValidationException("BT-148 Gross price must not be negative.");
             }
             if (line.lineExtensionAmount != null && line.lineExtensionAmount.getAmount().compareTo(BigDecimal.ZERO) < 0) {
                 throw new InvoiceValidationException("Line extension amount must not be negative.");

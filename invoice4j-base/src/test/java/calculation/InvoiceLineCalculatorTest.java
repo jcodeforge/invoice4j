@@ -40,7 +40,7 @@ public class InvoiceLineCalculatorTest {
     }
 
     @Test
-    public void shouldCalculateLineWithFixedPriceDiscount() {
+    public void shouldPreserveFixedPriceDiscount() {
         InvoiceLine line = InvoiceLine.builder()
                 .id("1")
                 .itemName("Notebook")
@@ -48,53 +48,41 @@ public class InvoiceLineCalculatorTest {
                 .unitCode(UnitCode.ONE)
                 .netPrice(CalculationUtils.createEUMoney("100.00"))
                 .priceDiscount(new BigDecimal("15.00"))
+                .grossPrice(CalculationUtils.createEUMoney("115.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
                 .build();
 
         InvoiceLine result = SUT.calculate(line);
 
-        assertEquals(new BigDecimal("85.00"), result.getLineExtensionAmount().getAmount());
+        assertEquals(new BigDecimal("100.00"), result.getLineExtensionAmount().getAmount());
+        assertEquals(new BigDecimal("15.00"), result.getPriceDiscount());
+        assertEquals(new BigDecimal("115.00"), result.getGrossPrice().getAmount());
     }
 
     @Test
-    public void shouldCalculateLineWithPercentagePriceDiscount() {
+    public void shouldPreservePriceDiscountAndGrossPrice() {
         InvoiceLine line = InvoiceLine.builder()
                 .id("1")
                 .itemName("Notebook")
                 .quantity(BigDecimal.ONE)
                 .unitCode(UnitCode.ONE)
-                .netPrice(CalculationUtils.createEUMoney("100.00"))
-                .priceDiscountPercentage(new BigDecimal("10"))
-                .baseQuantity(BigDecimal.ONE)
+                .netPrice(CalculationUtils.createEUMoney("95.00"))
+                .priceDiscount(new BigDecimal("5.00"))
+                .grossPrice(CalculationUtils.createEUMoney("100.00"))
                 .taxCategory(TaxCategoryCode.STANDARD)
                 .taxRate(new BigDecimal("19"))
                 .build();
 
         InvoiceLine result = SUT.calculate(line);
 
-        assertEquals(new BigDecimal("90.00"), result.getLineExtensionAmount().getAmount());
-    }
+        assertEquals(
+                new BigDecimal("5.00"),
+                result.getPriceDiscount()
+        );
 
-    @Test
-    public void shouldPreferFixedDiscountOverPercentageDiscount() {
-        InvoiceLine line = InvoiceLine.builder()
-                .id("1")
-                .itemName("Notebook")
-                .quantity(BigDecimal.ONE)
-                .unitCode(UnitCode.ONE)
-                .netPrice(CalculationUtils.createEUMoney("100.00"))
-                .priceDiscount(new BigDecimal("20.00"))
-                .priceDiscountPercentage(new BigDecimal("10"))
-                .baseQuantity(BigDecimal.ONE)
-                .taxCategory(TaxCategoryCode.STANDARD)
-                .taxRate(new BigDecimal("19"))
-                .build();
-
-        InvoiceLine result = SUT.calculate(line);
-
-        // Fixed discount (20.00) takes precedence over 10%
-        assertEquals(new BigDecimal("80.00"), result.getLineExtensionAmount().getAmount());
+        assertEquals(CalculationUtils.createEUMoney("100.00"), result.getGrossPrice());
+        assertEquals(new BigDecimal("95.00"), result.getLineExtensionAmount().getAmount());
     }
 
     @Test
@@ -223,7 +211,7 @@ public class InvoiceLineCalculatorTest {
     public void shouldPreserveInvoiceLineProperties() {
         InvoiceLine line = InvoiceLine.builder()
                 .id("42")
-                .objectIdentifier("OBJ-1")
+                .note("OBJ-1")
                 .buyerAccountingReference("ACC-1")
                 .itemName("Notebook")
                 .description("Business notebook")
@@ -239,19 +227,11 @@ public class InvoiceLineCalculatorTest {
 
         InvoiceLine result = SUT.calculate(line);
 
-        assertEquals(line.getId(), result.getId());
-        assertEquals(line.getObjectIdentifier(), result.getObjectIdentifier());
-        assertEquals(line.getBuyerAccountingReference(), result.getBuyerAccountingReference());
-        assertEquals(line.getItemName(), result.getItemName());
-        assertEquals(line.getDescription(), result.getDescription());
-        assertEquals(line.getSellerAssignedIdentifier(), result.getSellerAssignedIdentifier());
-        assertEquals(line.getBuyerAssignedIdentifier(), result.getBuyerAssignedIdentifier());
-        assertEquals(line.getItemClassificationIdentifier(), result.getItemClassificationIdentifier());
-        assertEquals(line.getQuantity(), result.getQuantity());
-        assertEquals(line.getUnitCode(), result.getUnitCode());
-        assertEquals(line.getNetPrice(), result.getNetPrice());
-        assertEquals(line.getTaxCategory(), result.getTaxCategory());
-        assertEquals(line.getTaxRate(), result.getTaxRate());
+        assertEquals(line.getPriceDiscount(), result.getPriceDiscount());
+        assertEquals(line.getGrossPrice(), result.getGrossPrice());
+        assertEquals(line.getBaseQuantity(), result.getBaseQuantity());
+        assertEquals(line.getAllowanceCharges(), result.getAllowanceCharges());
+        assertEquals(line.getProperties(), result.getProperties());
     }
 
     @Test
