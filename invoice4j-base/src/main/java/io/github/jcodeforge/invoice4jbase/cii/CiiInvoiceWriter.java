@@ -86,7 +86,7 @@ public final class CiiInvoiceWriter {
     private void write(Invoice invoice, OutputStream outputStream) {
         Objects.requireNonNull(invoice, "invoice must not be null");
 
-        try (XmlWriter writer = XmlWriterFactory.create(outputStream)) {
+        try (XmlWriter writer = XmlWriterFactory.createForCii(outputStream)) {
             invoiceSerializer.serialize(writer, invoice);
             writer.flush();
 

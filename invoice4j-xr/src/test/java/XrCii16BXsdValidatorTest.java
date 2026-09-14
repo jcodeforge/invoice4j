@@ -18,6 +18,7 @@ public class XrCii16BXsdValidatorTest {
 
         String xml = XrCiiInvoiceWriter.builder()
                 .profile(XrProfile.XRECHNUNG)
+                .validate(false)
                 .prettyPrint(true)
                 .build()
                 .writeToString(invoice);
