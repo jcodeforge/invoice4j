@@ -2,19 +2,23 @@ package io.github.jcodeforge.invoice4jbase.xml;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import io.github.jcodeforge.invoice4jbase.invoice4jBaseConstants;
+import io.github.jcodeforge.invoice4jbase.Invoice4jBaseConstants;
 
 public class XmlWriter implements AutoCloseable {
 
     private final XMLStreamWriter writer;
 
     public XmlWriter(XMLStreamWriter writer) {
+        if (writer == null) {
+            throw new IllegalArgumentException("XMLStreamWriter must not be null.");
+        }
+
         this.writer = writer;
     }
 
     public void startDocument() {
         try {
-            writer.writeStartDocument(invoice4jBaseConstants.STANDARD_ENCODING_UTF_8, "1.0");
+            writer.writeStartDocument(Invoice4jBaseConstants.STANDARD_ENCODING_UTF_8, "1.0");
         } catch (XMLStreamException e) {
             throw new XmlException("Unable to start XML document.", e);
         }
@@ -31,6 +35,14 @@ public class XmlWriter implements AutoCloseable {
     public void startElement(String namespace, String localName) {
         try {
             writer.writeStartElement(namespace, localName);
+        } catch (XMLStreamException e) {
+            throw new XmlException("Unable to write start element.", e);
+        }
+    }
+
+    public void startElement(String prefix, String namespace, String localName) {
+        try {
+            writer.writeStartElement(prefix, localName, namespace);
         } catch (XMLStreamException e) {
             throw new XmlException("Unable to write start element.", e);
         }
@@ -60,6 +72,16 @@ public class XmlWriter implements AutoCloseable {
         endElement();
     }
 
+    public void writeElement(String prefix, String namespace, String localName, String value) {
+        if (value == null || value.isBlank()) {
+            return;
+        }
+
+        startElement(prefix, namespace, localName);
+        writeCharacters(value);
+        endElement();
+    }
+
     public void writeAttribute(String name, String value) {
         if (value == null || value.isBlank()) {
             return;
@@ -72,7 +94,27 @@ public class XmlWriter implements AutoCloseable {
         }
     }
 
+    public void writeAttribute(String prefix, String namespace, String localName, String value) {
+        if (value == null || value.isBlank()) {
+            return;
+        }
+
+        try {
+            writer.writeAttribute(prefix, namespace, localName, value);
+        } catch (XMLStreamException e) {
+            throw new XmlException("Unable to write attribute.", e);
+        }
+    }
+
     public void writeNamespace(String prefix, String uri) {
+        if (prefix == null) {
+            prefix = "";
+        }
+
+        if (uri == null) {
+            uri = "";
+        }
+
         try {
             writer.writeNamespace(prefix, uri);
         } catch (XMLStreamException e) {
@@ -100,9 +142,25 @@ public class XmlWriter implements AutoCloseable {
         writeElement(namespace, localName, value);
     }
 
+    public void writeOptionalElement(String prefix, String namespace, String localName, String value) {
+        if (value == null || value.isBlank()) {
+            return;
+        }
+
+        writeElement(prefix, namespace, localName, value);
+    }
+
     public void writeEmptyElement(String namespace, String localName) {
         try {
             writer.writeEmptyElement(namespace, localName);
+        } catch (XMLStreamException e) {
+            throw new XmlException("Unable to write empty element.", e);
+        }
+    }
+
+    public void writeEmptyElement(String prefix, String namespace, String localName) {
+        try {
+            writer.writeEmptyElement(prefix, localName, namespace);
         } catch (XMLStreamException e) {
             throw new XmlException("Unable to write empty element.", e);
         }
