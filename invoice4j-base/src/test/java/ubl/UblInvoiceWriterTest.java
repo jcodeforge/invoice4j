@@ -60,6 +60,72 @@ public class UblInvoiceWriterTest {
     }
 
     @Test
+    public void shouldWriteCompleteInvoiceStructure() throws Exception {
+        Invoice invoice = TestInvoiceFactory.createCompleteInvoice();
+
+        Document document = parse(SUT.writeToString(invoice));
+
+        XPath xpath = TestXPathFactory.createXPath();
+
+        assertFalse(
+                xpath.evaluate(
+                        "/ubl:Invoice/cac:AccountingSupplierParty",
+                        document
+                ).isBlank()
+        );
+
+        assertFalse(
+                xpath.evaluate(
+                        "/ubl:Invoice/cac:AccountingCustomerParty",
+                        document
+                ).isBlank()
+        );
+
+        assertFalse(
+                xpath.evaluate(
+                        "/ubl:Invoice/cac:Delivery",
+                        document
+                ).isBlank()
+        );
+
+        assertFalse(
+                xpath.evaluate(
+                        "/ubl:Invoice/cac:PaymentMeans",
+                        document
+                ).isBlank()
+        );
+
+        assertFalse(
+                xpath.evaluate(
+                        "/ubl:Invoice/cac:PaymentTerms",
+                        document
+                ).isBlank()
+        );
+
+        assertFalse(
+                xpath.evaluate(
+                        "/ubl:Invoice/cac:TaxTotal",
+                        document
+                ).isBlank()
+        );
+
+        assertFalse(
+                xpath.evaluate(
+                        "/ubl:Invoice/cac:LegalMonetaryTotal",
+                        document
+                ).isBlank()
+        );
+
+        assertEquals(
+                "2",
+                xpath.evaluate(
+                        "count(/ubl:Invoice/cac:InvoiceLine)",
+                        document
+                )
+        );
+    }
+
+    @Test
     public void shouldWriteInvoiceToFile() throws Exception {
         Invoice invoice = TestInvoiceFactory.createMinimalInvoice();
 
