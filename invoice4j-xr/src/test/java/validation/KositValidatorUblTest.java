@@ -40,20 +40,6 @@ public class KositValidatorUblTest {
 
         ValidationResult result = SUT.validate(xml);
 
-        System.out.println("valid = " + result.isValid());
-
-        result.getMessages().forEach(message ->
-                System.out.println(
-                        message.getSeverity()
-                                + ": "
-                                + message.getMessage()
-                                + " | rule="
-                                + message.getRuleId()
-                                + " | location="
-                                + message.getLocation()
-                )
-        );
-
-        assertTrue(result.isValid());
+        assertTrue("UBL XRechnung should be valid: " + result, result.isValid());
     }
 }
