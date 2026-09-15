@@ -153,17 +153,9 @@ public final class SellerSerializer implements XmlSerializer<Seller> {
         taxIdentifierSerializer.serialize(writer, seller.getVatIdentifier());
     }
 
-    /**
-     * BT-30
-     *
-     * Seller legal registration identifier.
-     */
-    private void writeLegalEntity(
-            XmlWriter writer,
-            Seller seller) {
-
-        if (seller.getLegalRegistrationIdentifier() == null
-                && seller.getLegalInformation() == null) {
+    private void writeLegalEntity(XmlWriter writer, Seller seller) {
+        if (seller.getLegalRegistrationIdentifier() == null && seller.getLegalInformation() == null
+                && (seller.getName() == null || seller.getName().isBlank())) {
             return;
         }
 
@@ -174,10 +166,22 @@ public final class SellerSerializer implements XmlSerializer<Seller> {
         );
 
         /*
-         * Seller legal name / registration name.
+         * BT-27
          *
-         * The exact legal-information getter will be added
-         * once the LegalInformation model is mapped.
+         * XRechnung requires the seller's legal name
+         * as PartyLegalEntity/RegistrationName.
+         */
+        writer.writeOptionalElement(
+                "cbc",
+                XmlNamespaces.UBL_CBC,
+                "RegistrationName",
+                seller.getName()
+        );
+
+        /*
+         * BT-30
+         *
+         * Seller legal registration identifier.
          */
         writer.writeOptionalElement(
                 "cbc",
@@ -186,7 +190,7 @@ public final class SellerSerializer implements XmlSerializer<Seller> {
                 seller.getLegalRegistrationIdentifier()
         );
 
-        writer.endElement();
+        writer.endElement(); // PartyLegalEntity
     }
 
     /**

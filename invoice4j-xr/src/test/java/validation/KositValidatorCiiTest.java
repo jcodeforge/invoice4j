@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class KositValidatorTest {
+public class KositValidatorCiiTest {
 
     private final KositValidator SUT = new KositValidator();
 

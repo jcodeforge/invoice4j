@@ -81,11 +81,17 @@ public final class DocumentReferenceSerializer implements XmlSerializer<Document
             return;
         }
 
+        String code = reference.getTypeCode().getCode();
+
+        if (!"130".equals(code) && !"50".equals(code)) {
+            return;
+        }
+
         writer.writeElement(
                 "cbc",
                 XmlNamespaces.UBL_CBC,
                 "DocumentTypeCode",
-                reference.getTypeCode().getCode()
+                code
         );
     }
 

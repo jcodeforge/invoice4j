@@ -3,6 +3,7 @@ package io.github.jcodeforge.invoice4jbase.ubl.serializer;
 import io.github.jcodeforge.invoice4jbase.XmlSerializer;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.PartyIdentifier;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Payee;
+import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Seller;
 import io.github.jcodeforge.invoice4jbase.xml.XmlNamespaces;
 import io.github.jcodeforge.invoice4jbase.xml.XmlWriter;
 
@@ -11,14 +12,21 @@ public final class PayeeSerializer implements XmlSerializer<Payee> {
     private final PartyIdentifierSerializer partyIdentifierSerializer =
             new PartyIdentifierSerializer();
 
-    private final AddressSerializer addressSerializer =
-            new AddressSerializer();
-
-    private final ElectronicAddressSerializer electronicAddressSerializer =
-            new ElectronicAddressSerializer();
-
     @Override
     public void serialize(XmlWriter writer, Payee payee) {
+        serialize(writer, payee, null);
+    }
+
+    /**
+     * Serializes the payee with optional seller context.
+     *
+     * <p>For XRechnung, a payee identifier that is identical to a seller
+     * identifier must not be written when the payee is otherwise identified
+     * by a different name.</p>
+     *
+     *  todo introduce serialization context for this in the future ??
+     */
+    public void serialize(XmlWriter writer, Payee payee, Seller seller) {
         if (payee == null) {
             return;
         }
@@ -29,13 +37,9 @@ public final class PayeeSerializer implements XmlSerializer<Payee> {
                 "PayeeParty"
         );
 
-        writeEndpoint(writer, payee);
-
-        writePartyIdentifiers(writer, payee);
+        writePartyIdentifiers(writer, payee, seller);
 
         writePartyName(writer, payee);
-
-        writeAddress(writer, payee);
 
         writer.endElement();
     }
@@ -45,8 +49,7 @@ public final class PayeeSerializer implements XmlSerializer<Payee> {
      *
      * Payee identifiers.
      */
-    private void writePartyIdentifiers(XmlWriter writer, Payee payee) {
-
+    private void writePartyIdentifiers(XmlWriter writer, Payee payee, Seller seller) {
         if (payee.getIdentifiers() == null) {
             return;
         }
@@ -56,8 +59,34 @@ public final class PayeeSerializer implements XmlSerializer<Payee> {
                 continue;
             }
 
+            if (isSameAsSellerIdentifier(identifier, seller)) {
+                continue;
+            }
+
             partyIdentifierSerializer.serialize(writer, identifier);
         }
+    }
+
+    private boolean isSameAsSellerIdentifier(PartyIdentifier payeeIdentifier, Seller seller) {
+        if (seller == null || seller.getIdentifiers() == null) {
+            return false;
+        }
+
+        for (PartyIdentifier sellerIdentifier : seller.getIdentifiers()) {
+            if (sellerIdentifier == null) {
+                continue;
+            }
+
+            if (isSameIdentifier(payeeIdentifier, sellerIdentifier)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isSameIdentifier(PartyIdentifier first, PartyIdentifier second) {
+        return first.getValue().equals(second.getValue()) && first.getScheme() == second.getScheme();
     }
 
     /**
@@ -84,27 +113,5 @@ public final class PayeeSerializer implements XmlSerializer<Payee> {
         );
 
         writer.endElement();
-    }
-
-    /**
-     * Payee postal address.
-     */
-    private void writeAddress(XmlWriter writer, Payee payee) {
-        if (payee.getAddress() == null) {
-            return;
-        }
-
-        addressSerializer.serialize(writer, payee.getAddress());
-    }
-
-    /**
-     * Payee electronic address.
-     */
-    private void writeEndpoint(XmlWriter writer, Payee payee) {
-        if (payee.getElectronicAddress() == null) {
-            return;
-        }
-
-        electronicAddressSerializer.serialize(writer, payee.getElectronicAddress());
     }
 }

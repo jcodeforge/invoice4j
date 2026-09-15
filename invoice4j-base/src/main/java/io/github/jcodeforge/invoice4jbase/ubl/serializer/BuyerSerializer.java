@@ -167,16 +167,8 @@ public final class BuyerSerializer implements XmlSerializer<Buyer> {
         );
     }
 
-    /**
-     * BT-47
-     *
-     * Buyer legal registration identifier.
-     */
-    private void writeLegalEntity(
-            XmlWriter writer,
-            Buyer buyer) {
-
-        if (buyer.getLegalRegistrationIdentifier() == null) {
+    private void writeLegalEntity(XmlWriter writer, Buyer buyer) {
+        if (buyer.getName() == null || buyer.getName().isBlank()) {
             return;
         }
 
@@ -186,13 +178,30 @@ public final class BuyerSerializer implements XmlSerializer<Buyer> {
                 "PartyLegalEntity"
         );
 
+        /*
+         * BT-44
+         *
+         * Buyer legal name.
+         */
         writer.writeElement(
+                "cbc",
+                XmlNamespaces.UBL_CBC,
+                "RegistrationName",
+                buyer.getName()
+        );
+
+        /*
+         * BT-47
+         *
+         * Buyer legal registration identifier.
+         */
+        writer.writeOptionalElement(
                 "cbc",
                 XmlNamespaces.UBL_CBC,
                 "CompanyID",
                 buyer.getLegalRegistrationIdentifier()
         );
 
-        writer.endElement();
+        writer.endElement(); // PartyLegalEntity
     }
 }

@@ -284,7 +284,7 @@ public final class InvoiceSerializer implements XmlSerializer<Invoice> {
         buyerSerializer.serialize(writer, invoice.getBuyer());
 
         if (invoice.getPayee() != null) {
-            payeeSerializer.serialize(writer, invoice.getPayee());
+            payeeSerializer.serialize(writer, invoice.getPayee(), invoice.getSeller());
         }
     }
 
