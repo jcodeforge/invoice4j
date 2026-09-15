@@ -27,7 +27,7 @@ public final class ZugferdExtendedXsdValidator implements XsdValidator {
             // Prevent loading external DTDs.
             factory.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");
             // BASIC XSD imports its accompanying local schemas.
-            factory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "file");
+            factory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "file,jar");
 
             URL schemaUrl = Objects.requireNonNull(getClass().getResource(SCHEMA_LOCATION),
                     "Unable to locate schema: " + SCHEMA_LOCATION);

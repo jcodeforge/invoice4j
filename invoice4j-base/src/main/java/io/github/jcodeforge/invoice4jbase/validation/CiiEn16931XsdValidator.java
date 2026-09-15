@@ -28,7 +28,7 @@ public final class CiiEn16931XsdValidator implements XsdValidator {
             // Prevent loading schemas from arbitrary external locations.
             factory.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");
             // local imports only
-            factory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "file");
+            factory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "file,jar");
 
             URL schemaUrl = Objects.requireNonNull(getClass().getResource(SCHEMA_LOCATION),
                     "Unable to locate schema: " + SCHEMA_LOCATION);

@@ -1,3 +1,5 @@
+package validation;
+
 import io.github.jcodeforge.invoice4jbase.exceptions.XsdValidationException;
 import io.github.jcodeforge.invoice4jbase.validation.Cii16BXsdValidator;
 import io.github.jcodeforge.invoice4jbase.testfactory.TestInvoiceFactory;
