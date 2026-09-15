@@ -5,6 +5,7 @@ import io.github.jcodeforge.invoice4jbase.ubl.UblInvoiceWriter;
 import io.github.jcodeforge.invoice4jbase.ubl.UblProfile;
 import io.github.jcodeforge.invoice4jxr.exceptions.KositValidationException;
 import io.github.jcodeforge.invoice4jxr.validation.KositValidator;
+import io.github.jcodeforge.invoice4jxr.validation.Ubl21XsdValidator;
 import io.github.jcodeforge.invoice4jxr.validation.ValidationResult;
 import java.io.File;
 import java.util.Objects;
@@ -103,7 +104,9 @@ public final class XrUblInvoiceWriter {
     }
 
     private void validateXml(String xml) {
-        // todo
+        switch (profile) {
+            case XRECHNUNG -> new Ubl21XsdValidator().validate(xml);
+        }
     }
 
     /**
