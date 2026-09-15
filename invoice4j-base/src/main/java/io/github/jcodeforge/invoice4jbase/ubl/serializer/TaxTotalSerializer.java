@@ -30,12 +30,29 @@ public final class TaxTotalSerializer implements XmlSerializer<List<Tax>> {
          * Individual Tax objects contain the VAT amount for
          * their respective tax category.
          */
-        writer.writeElement(
-                "cbc",
-                XmlNamespaces.UBL_CBC,
-                "TaxAmount",
-                calculateTotalTaxAmount(taxes)
-        );
+        Tax firstTax = taxes.stream()
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
+
+        if (firstTax != null) {
+            writer.startElement(
+                    "cbc",
+                    XmlNamespaces.UBL_CBC,
+                    "TaxAmount"
+            );
+
+            writer.writeAttribute(
+                    "currencyID",
+                    firstTax.getTaxAmount().getCurrency().getCode()
+            );
+
+            writer.writeCharacters(
+                    calculateTotalTaxAmount(taxes)
+            );
+
+            writer.endElement();
+        }
 
         for (Tax tax : taxes) {
             if (tax == null) {

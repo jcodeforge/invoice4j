@@ -19,24 +19,37 @@ public final class TaxSerializer implements XmlSerializer<Tax> {
                 "TaxSubtotal"
         );
 
-        writer.writeElement(
+        // TaxableAmount
+        writer.startElement(
                 "cbc",
                 XmlNamespaces.UBL_CBC,
-                "TaxableAmount",
-                tax.getTaxableAmount()
-                        .getAmount()
-                        .toPlainString()
+                "TaxableAmount"
         );
+        writer.writeAttribute(
+                "currencyID",
+                tax.getTaxableAmount().getCurrency().getCode()
+        );
+        writer.writeCharacters(
+                tax.getTaxableAmount().getAmount().toPlainString()
+        );
+        writer.endElement();
 
-        writer.writeElement(
+        // TaxAmount
+        writer.startElement(
                 "cbc",
                 XmlNamespaces.UBL_CBC,
-                "TaxAmount",
-                tax.getTaxAmount()
-                        .getAmount()
-                        .toPlainString()
+                "TaxAmount"
         );
+        writer.writeAttribute(
+                "currencyID",
+                tax.getTaxAmount().getCurrency().getCode()
+        );
+        writer.writeCharacters(
+                tax.getTaxAmount().getAmount().toPlainString()
+        );
+        writer.endElement();
 
+        // TaxCategory
         writer.startElement(
                 "cac",
                 XmlNamespaces.UBL_CAC,
@@ -64,6 +77,7 @@ public final class TaxSerializer implements XmlSerializer<Tax> {
                 tax.getExemptionReason()
         );
 
+        // TaxScheme
         writer.startElement(
                 "cac",
                 XmlNamespaces.UBL_CAC,

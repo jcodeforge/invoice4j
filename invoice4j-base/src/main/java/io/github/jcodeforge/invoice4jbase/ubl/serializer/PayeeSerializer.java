@@ -29,13 +29,13 @@ public final class PayeeSerializer implements XmlSerializer<Payee> {
                 "PayeeParty"
         );
 
+        writeEndpoint(writer, payee);
+
         writePartyIdentifiers(writer, payee);
 
         writePartyName(writer, payee);
 
         writeAddress(writer, payee);
-
-        writeEndpoint(writer, payee);
 
         writer.endElement();
     }

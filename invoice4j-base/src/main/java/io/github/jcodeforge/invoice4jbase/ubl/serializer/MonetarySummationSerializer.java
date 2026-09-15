@@ -28,18 +28,6 @@ public final class MonetarySummationSerializer implements XmlSerializer<Monetary
 
         writeAmount(
                 writer,
-                "AllowanceTotalAmount",
-                monetarySummation.getAllowanceTotalAmount()
-        );
-
-        writeAmount(
-                writer,
-                "ChargeTotalAmount",
-                monetarySummation.getChargeTotalAmount()
-        );
-
-        writeAmount(
-                writer,
                 "TaxExclusiveAmount",
                 monetarySummation.getTaxExclusiveAmount()
         );
@@ -48,6 +36,18 @@ public final class MonetarySummationSerializer implements XmlSerializer<Monetary
                 writer,
                 "TaxInclusiveAmount",
                 monetarySummation.getTaxInclusiveAmount()
+        );
+
+        writeAmount(
+                writer,
+                "AllowanceTotalAmount",
+                monetarySummation.getAllowanceTotalAmount()
+        );
+
+        writeAmount(
+                writer,
+                "ChargeTotalAmount",
+                monetarySummation.getChargeTotalAmount()
         );
 
         writeAmount(

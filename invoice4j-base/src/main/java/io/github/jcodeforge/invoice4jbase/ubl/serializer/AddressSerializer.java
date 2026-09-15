@@ -19,14 +19,6 @@ public final class AddressSerializer implements XmlSerializer<Address> {
                 "PostalAddress"
         );
 
-        // BT-38 / BT-53 / BT-64 / BT-78
-        writer.writeOptionalElement(
-                "cbc",
-                XmlNamespaces.UBL_CBC,
-                "PostalZone",
-                address.getPostcode()
-        );
-
         // BT-35 / BT-50 / BT-61 / BT-75
         writer.writeOptionalElement(
                 "cbc",
@@ -41,6 +33,14 @@ public final class AddressSerializer implements XmlSerializer<Address> {
                 XmlNamespaces.UBL_CBC,
                 "CityName",
                 address.getCity()
+        );
+
+        // BT-38 / BT-53 / BT-64 / BT-78
+        writer.writeOptionalElement(
+                "cbc",
+                XmlNamespaces.UBL_CBC,
+                "PostalZone",
+                address.getPostcode()
         );
 
         // BT-39 / BT-54 / BT-65 / BT-79

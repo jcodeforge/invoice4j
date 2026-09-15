@@ -24,8 +24,6 @@ public final class DeliverySerializer implements XmlSerializer<Delivery> {
                 "Delivery"
         );
 
-        shipToSerializer.serialize(writer, delivery.getShipTo());
-
         if (delivery.getActualDeliveryDate() != null) {
             writer.writeElement(
                     "cbc",
@@ -34,6 +32,8 @@ public final class DeliverySerializer implements XmlSerializer<Delivery> {
                     delivery.getActualDeliveryDate().format(DATE_FORMAT)
             );
         }
+
+        shipToSerializer.serialize(writer, delivery.getShipTo());
 
         writer.endElement();
     }

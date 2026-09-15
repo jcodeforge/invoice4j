@@ -52,18 +52,10 @@ public final class ShipToSerializer implements XmlSerializer<ShipTo> {
                 "DeliveryParty"
         );
 
-        writer.startElement(
-                "cac",
-                XmlNamespaces.UBL_CAC,
-                "Party"
-        );
-
         writePartyIdentifiers(writer, shipTo);
-
         writePartyName(writer, shipTo);
 
-        writer.endElement(); // Party
-        writer.endElement(); // DeliveryParty
+        writer.endElement();
     }
 
     /**

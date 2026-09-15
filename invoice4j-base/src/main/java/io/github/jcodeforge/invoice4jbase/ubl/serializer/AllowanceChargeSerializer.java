@@ -19,7 +19,7 @@ public final class AllowanceChargeSerializer implements XmlSerializer<AllowanceC
                 "AllowanceCharge"
         );
 
-        // true = charge, false = allowance
+        // ChargeIndicator
         writer.writeElement(
                 "cbc",
                 XmlNamespaces.UBL_CBC,
@@ -27,7 +27,23 @@ public final class AllowanceChargeSerializer implements XmlSerializer<AllowanceC
                 Boolean.toString(allowanceCharge.isCharge())
         );
 
-        // Calculation percentage
+        // AllowanceChargeReasonCode
+        writer.writeOptionalElement(
+                "cbc",
+                XmlNamespaces.UBL_CBC,
+                "AllowanceChargeReasonCode",
+                allowanceCharge.getReasonCode()
+        );
+
+        // AllowanceChargeReason
+        writer.writeOptionalElement(
+                "cbc",
+                XmlNamespaces.UBL_CBC,
+                "AllowanceChargeReason",
+                allowanceCharge.getReason()
+        );
+
+        // MultiplierFactorNumeric
         if (allowanceCharge.getPercentage() != null) {
             writer.writeElement(
                     "cbc",
@@ -37,66 +53,93 @@ public final class AllowanceChargeSerializer implements XmlSerializer<AllowanceC
             );
         }
 
-        // Basis amount
-        if (allowanceCharge.getBaseAmount() != null) {
-            writer.writeElement(
-                    "cbc",
-                    XmlNamespaces.UBL_CBC,
-                    "BaseAmount",
-                    allowanceCharge.getBaseAmount()
-                            .getAmount()
-                            .toPlainString()
-            );
-        }
-
-        // Actual amount
-        writer.writeElement(
+        // Amount
+        writer.startElement(
                 "cbc",
                 XmlNamespaces.UBL_CBC,
-                "Amount",
+                "Amount"
+        );
+
+        writer.writeAttribute(
+                "currencyID",
+                allowanceCharge.getAmount()
+                        .getCurrency()
+                        .getCode()
+        );
+
+        writer.writeCharacters(
                 allowanceCharge.getAmount()
                         .getAmount()
                         .toPlainString()
         );
 
-        // Reason
-        writer.writeOptionalElement(
-                "cbc",
-                XmlNamespaces.UBL_CBC,
-                "AllowanceChargeReason",
-                allowanceCharge.getReason()
-        );
+        writer.endElement();
 
-        // Reason code
-        writer.writeOptionalElement(
-                "cbc",
-                XmlNamespaces.UBL_CBC,
-                "AllowanceChargeReasonCode",
-                allowanceCharge.getReasonCode()
-        );
+        // BaseAmount
+        if (allowanceCharge.getBaseAmount() != null) {
+            writer.startElement(
+                    "cbc",
+                    XmlNamespaces.UBL_CBC,
+                    "BaseAmount"
+            );
 
-        // VAT category
-        writer.startElement(
-                "cac",
-                XmlNamespaces.UBL_CAC,
-                "TaxCategory"
-        );
+            writer.writeAttribute(
+                    "currencyID",
+                    allowanceCharge.getBaseAmount()
+                            .getCurrency()
+                            .getCode()
+            );
 
-        writer.writeElement(
-                "cbc",
-                XmlNamespaces.UBL_CBC,
-                "ID",
-                allowanceCharge.getTaxCategory().getCode()
-        );
+            writer.writeCharacters(
+                    allowanceCharge.getBaseAmount()
+                            .getAmount()
+                            .toPlainString()
+            );
 
-        writer.writeElement(
-                "cbc",
-                XmlNamespaces.UBL_CBC,
-                "Percent",
-                allowanceCharge.getTaxRate().toPlainString()
-        );
+            writer.endElement();
+        }
 
-        writer.endElement(); // TaxCategory
+        // TaxCategory
+        if (allowanceCharge.getTaxCategory() != null) {
+            writer.startElement(
+                    "cac",
+                    XmlNamespaces.UBL_CAC,
+                    "TaxCategory"
+            );
+
+            writer.writeElement(
+                    "cbc",
+                    XmlNamespaces.UBL_CBC,
+                    "ID",
+                    allowanceCharge.getTaxCategory().getCode()
+            );
+
+            if (allowanceCharge.getTaxRate() != null) {
+                writer.writeElement(
+                        "cbc",
+                        XmlNamespaces.UBL_CBC,
+                        "Percent",
+                        allowanceCharge.getTaxRate().toPlainString()
+                );
+            }
+
+            // TaxScheme - required by UBL TaxCategory
+            writer.startElement(
+                    "cac",
+                    XmlNamespaces.UBL_CAC,
+                    "TaxScheme"
+            );
+
+            writer.writeElement(
+                    "cbc",
+                    XmlNamespaces.UBL_CBC,
+                    "ID",
+                    "VAT"
+            );
+
+            writer.endElement(); // TaxScheme
+            writer.endElement(); // TaxCategory
+        }
 
         writer.endElement(); // AllowanceCharge
     }
