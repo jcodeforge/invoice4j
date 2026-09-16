@@ -1,13 +1,13 @@
 import io.github.jcodeforge.invoice4jbase.exceptions.DeserializationException;
 import io.github.jcodeforge.invoice4jxr.XrProfile;
-import io.github.jcodeforge.invoice4jxr.XrProfileDetector;
+import io.github.jcodeforge.invoice4jxr.XrCiiProfileDetector;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class XrProfileDetectorTest {
+public class XrCiiProfileDetectorTest {
 
-    private final XrProfileDetector SUT = new XrProfileDetector();
+    private final XrCiiProfileDetector SUT = new XrCiiProfileDetector();
 
     @Test
     public void shouldDetectXRechnungProfile() {

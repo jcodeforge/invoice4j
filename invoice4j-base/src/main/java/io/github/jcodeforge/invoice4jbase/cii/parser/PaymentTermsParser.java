@@ -1,6 +1,8 @@
 package io.github.jcodeforge.invoice4jbase.cii.parser;
 
+import io.github.jcodeforge.invoice4jbase.cii.CiiDateFormats;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.PaymentTerms;
+import io.github.jcodeforge.invoice4jbase.xml.XmlParser;
 import io.github.jcodeforge.invoice4jbase.xml.XmlReader;
 
 public final class PaymentTermsParser implements XmlParser<PaymentTerms> {
@@ -16,7 +18,7 @@ public final class PaymentTermsParser implements XmlParser<PaymentTerms> {
                 .dueDate(reader.readDate(
                         basePath
                                 + "/ram:DueDateDateTime"
-                                + "/udt:DateTimeString"))
+                                + "/udt:DateTimeString", CiiDateFormats.DATE))
                 .build();
     }
 }

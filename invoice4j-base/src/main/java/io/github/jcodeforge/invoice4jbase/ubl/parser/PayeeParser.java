@@ -1,7 +1,7 @@
-package io.github.jcodeforge.invoice4jbase.cii.parser;
+package io.github.jcodeforge.invoice4jbase.ubl.parser;
 
-import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Payee;
 import io.github.jcodeforge.invoice4jbase.xml.XmlParser;
+import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Payee;
 import io.github.jcodeforge.invoice4jbase.xml.XmlReader;
 
 public final class PayeeParser implements XmlParser<Payee> {
@@ -10,7 +10,8 @@ public final class PayeeParser implements XmlParser<Payee> {
 
     private final ContactParser contactParser = new ContactParser();
 
-    private final ElectronicAddressParser electronicAddressParser = new ElectronicAddressParser();
+    private final ElectronicAddressParser electronicAddressParser =
+            new ElectronicAddressParser();
 
     @Override
     public Payee parse(XmlReader reader, String basePath) {
@@ -19,17 +20,19 @@ public final class PayeeParser implements XmlParser<Payee> {
         }
 
         return Payee.builder()
-                .name(reader.readString(basePath + "/ram:Name"))
-                .tradingName(reader.readString(basePath + "/ram:Description"))
+                .name(reader.readString(
+                        basePath + "/cac:PartyName/cbc:Name"))
+                .tradingName(reader.readString(
+                        basePath + "/cac:PartyName/cbc:Name"))
                 .address(addressParser.parse(
                         reader,
-                        basePath + "/ram:PostalTradeAddress"))
+                        basePath + "/cac:PostalAddress"))
                 .contact(contactParser.parse(
                         reader,
-                        basePath + "/ram:DefinedTradeContact"))
+                        basePath + "/cac:Contact"))
                 .electronicAddress(electronicAddressParser.parse(
                         reader,
-                        basePath + "/ram:URIUniversalCommunication"))
+                        basePath + "/cbc:EndpointID"))
                 .build();
     }
 }

@@ -3,6 +3,7 @@ package io.github.jcodeforge.invoice4jbase.cii.parser;
 import io.github.jcodeforge.invoice4jbase.datamodels.enums.CurrencyCode;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.MonetaryAmount;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.MonetarySummation;
+import io.github.jcodeforge.invoice4jbase.xml.XmlParser;
 import io.github.jcodeforge.invoice4jbase.xml.XmlReader;
 
 public final class MonetarySummationParser implements XmlParser<MonetarySummation> {

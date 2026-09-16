@@ -1,8 +1,10 @@
 package io.github.jcodeforge.invoice4jbase.cii.parser;
 
+import io.github.jcodeforge.invoice4jbase.cii.CiiDateFormats;
 import io.github.jcodeforge.invoice4jbase.datamodels.enums.CurrencyCode;
 import io.github.jcodeforge.invoice4jbase.datamodels.enums.DocumentTypeCode;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.*;
+import io.github.jcodeforge.invoice4jbase.xml.XmlParser;
 import io.github.jcodeforge.invoice4jbase.xml.XmlReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +62,7 @@ public final class InvoiceParser implements XmlParser<Invoice> {
                         basePath
                                 + "/rsm:ExchangedDocument"
                                 + "/ram:IssueDateTime"
-                                + "/udt:DateTimeString"))
+                                + "/udt:DateTimeString", CiiDateFormats.DATE))
                 .notes(readNotes(reader, basePath))
                 // Agreement
                 .buyerReference(reader.readString(

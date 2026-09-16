@@ -1,7 +1,7 @@
-package io.github.jcodeforge.invoice4jbase.cii.parser;
+package io.github.jcodeforge.invoice4jbase.ubl.parser;
 
-import io.github.jcodeforge.invoice4jbase.datamodels.pojos.ShipTo;
 import io.github.jcodeforge.invoice4jbase.xml.XmlParser;
+import io.github.jcodeforge.invoice4jbase.datamodels.pojos.ShipTo;
 import io.github.jcodeforge.invoice4jbase.xml.XmlReader;
 
 public final class ShipToParser implements XmlParser<ShipTo> {
@@ -15,10 +15,11 @@ public final class ShipToParser implements XmlParser<ShipTo> {
         }
 
         return ShipTo.builder()
-                .name(reader.readString(basePath + "/ram:Name"))
+                .name(reader.readString(
+                        basePath + "/cac:PartyName/cbc:Name"))
                 .address(addressParser.parse(
                         reader,
-                        basePath + "/ram:PostalTradeAddress"))
+                        basePath + "/cac:PostalAddress"))
                 .build();
     }
 }

@@ -1,8 +1,8 @@
-package io.github.jcodeforge.invoice4jbase.cii.parser;
+package io.github.jcodeforge.invoice4jbase.ubl.parser;
 
-import io.github.jcodeforge.invoice4jbase.cii.CiiDateFormats;
-import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Delivery;
+import io.github.jcodeforge.invoice4jbase.ubl.UblDateFormats;
 import io.github.jcodeforge.invoice4jbase.xml.XmlParser;
+import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Delivery;
 import io.github.jcodeforge.invoice4jbase.xml.XmlReader;
 
 public final class DeliveryParser implements XmlParser<Delivery> {
@@ -18,12 +18,9 @@ public final class DeliveryParser implements XmlParser<Delivery> {
         return Delivery.builder()
                 .shipTo(shipToParser.parse(
                         reader,
-                        basePath + "/ram:ShipToTradeParty"))
+                        basePath + "/cac:DeliveryParty/cac:Party"))
                 .actualDeliveryDate(reader.readDate(
-                        basePath
-                                + "/ram:ActualDeliverySupplyChainEvent"
-                                + "/ram:OccurrenceDateTime"
-                                + "/udt:DateTimeString", CiiDateFormats.DATE))
+                        basePath + "/cbc:ActualDeliveryDate", UblDateFormats.DATE))
                 .build();
     }
 }

@@ -1,10 +1,10 @@
-package io.github.jcodeforge.invoice4jbase.cii.parser;
+package io.github.jcodeforge.invoice4jbase.ubl.parser;
 
+import io.github.jcodeforge.invoice4jbase.xml.XmlParser;
 import io.github.jcodeforge.invoice4jbase.datamodels.enums.CurrencyCode;
 import io.github.jcodeforge.invoice4jbase.datamodels.enums.TaxCategoryCode;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.AllowanceCharge;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.MonetaryAmount;
-import io.github.jcodeforge.invoice4jbase.xml.XmlParser;
 import io.github.jcodeforge.invoice4jbase.xml.XmlReader;
 
 public final class AllowanceChargeParser implements XmlParser<AllowanceCharge> {
@@ -16,41 +16,53 @@ public final class AllowanceChargeParser implements XmlParser<AllowanceCharge> {
         }
 
         Boolean charge = reader.readBoolean(
-                basePath
-                        + "/ram:ChargeIndicator"
-                        + "/udt:Indicator");
+                basePath + "/cbc:ChargeIndicator");
 
         return AllowanceCharge.builder()
                 .charge(Boolean.TRUE.equals(charge))
-                .reason(reader.readString(basePath + "/ram:Reason"))
-                .reasonCode(reader.readString(basePath + "/ram:ReasonCode"))
+                .reason(reader.readString(
+                        basePath + "/cbc:AllowanceChargeReason"))
+                .reasonCode(reader.readString(
+                        basePath + "/cbc:AllowanceChargeReasonCode"))
                 .amount(readAmount(reader, basePath))
                 .taxCategory(readCategoryCode(reader, basePath))
                 .taxRate(reader.readDecimal(
                         basePath
-                                + "/ram:CategoryTradeTax"
-                                + "/ram:RateApplicablePercent"))
+                                + "/cac:TaxCategory"
+                                + "/cbc:Percent"))
                 .build();
     }
 
-    private MonetaryAmount readAmount(XmlReader reader, String basePath) {
-        String expression = basePath + "/ram:ActualAmount";
+    private MonetaryAmount readAmount(
+            XmlReader reader,
+            String basePath) {
+
+        String expression = basePath + "/cbc:Amount";
 
         if (reader.isEmpty(expression)) {
             return null;
         }
 
+        String currencyCode = reader.readAttribute(
+                expression,
+                "currencyID");
+
         return MonetaryAmount.builder()
                 .amount(reader.readDecimal(expression))
-                .currency(CurrencyCode.EUR)
+                .currency(currencyCode == null
+                        ? null
+                        : CurrencyCode.fromCode(currencyCode))
                 .build();
     }
 
-    private TaxCategoryCode readCategoryCode(XmlReader reader, String basePath) {
+    private TaxCategoryCode readCategoryCode(
+            XmlReader reader,
+            String basePath) {
+
         String code = reader.readString(
                 basePath
-                        + "/ram:CategoryTradeTax"
-                        + "/ram:CategoryCode");
+                        + "/cac:TaxCategory"
+                        + "/cbc:ID");
 
         return code == null ? null : TaxCategoryCode.fromCode(code);
     }

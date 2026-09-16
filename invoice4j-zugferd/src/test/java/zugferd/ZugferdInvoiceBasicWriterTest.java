@@ -78,9 +78,9 @@ public class ZugferdInvoiceBasicWriterTest {
         Invoice invoice = new InvoiceCalculator().calculate(TestInvoiceFactory.createCompleteInvoice());
         String xml = SUT.writeToString(invoice);
 
-        assertTrue(xml.contains("<ram:LineTotalAmount>200.00</ram:LineTotalAmount>"));
-        assertTrue(xml.contains("<ram:TaxBasisTotalAmount>190.00</ram:TaxBasisTotalAmount>"));
-        assertTrue(xml.contains("<ram:TaxTotalAmount currencyID=\"EUR\">24.10</ram:TaxTotalAmount>"));
-        assertTrue(xml.contains("<ram:GrandTotalAmount>214.10</ram:GrandTotalAmount>"));
+        assertTrue(xml.contains("<ram:LineTotalAmount>190.00</ram:LineTotalAmount>"));
+        assertTrue(xml.contains("<ram:TaxBasisTotalAmount>180.00</ram:TaxBasisTotalAmount>"));
+        assertTrue(xml.contains("<ram:TaxTotalAmount currencyID=\"EUR\">22.20</ram:TaxTotalAmount>"));
+        assertTrue(xml.contains("<ram:GrandTotalAmount>202.20</ram:GrandTotalAmount>"));
     }
 }

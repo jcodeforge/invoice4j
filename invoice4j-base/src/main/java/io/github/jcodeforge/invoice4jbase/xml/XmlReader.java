@@ -14,8 +14,6 @@ import java.util.function.Function;
 
 public final class XmlReader {
 
-    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.BASIC_ISO_DATE;
-
     private final Document document;
 
     private final XPath xpath;
@@ -55,9 +53,9 @@ public final class XmlReader {
         return value == null ? null : Boolean.valueOf(value);
     }
 
-    public LocalDate readDate(String expression) {
+    public LocalDate readDate(String expression, DateTimeFormatter formatter) {
         String value = readString(expression);
-        return value == null ? null : LocalDate.parse(value, DATE_FORMAT);
+        return value == null ? null : LocalDate.parse(value, formatter);
     }
 
     public Node readNode(String expression) {

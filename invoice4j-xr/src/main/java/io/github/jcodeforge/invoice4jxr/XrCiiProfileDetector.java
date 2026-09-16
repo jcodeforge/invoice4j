@@ -5,7 +5,7 @@ import io.github.jcodeforge.invoice4jbase.xml.XmlReader;
 import io.github.jcodeforge.invoice4jbase.xml.XmlReaderFactory;
 import java.util.Objects;
 
-public class XrProfileDetector {
+public class XrCiiProfileDetector {
 
     public XrProfile detect(String xml) {
         Objects.requireNonNull(xml, "xml must not be null");
@@ -31,6 +31,6 @@ public class XrProfileDetector {
             }
         }
 
-        throw new DeserializationException("Unsupported XRechnung profile: " + guidelineId);
+        throw new DeserializationException("Unsupported XRechnung Cii profile: " + guidelineId);
     }
 }

@@ -1,9 +1,9 @@
-package io.github.jcodeforge.invoice4jbase.cii.parser;
+package io.github.jcodeforge.invoice4jbase.ubl.parser;
 
-import io.github.jcodeforge.invoice4jbase.cii.CiiDateFormats;
+import io.github.jcodeforge.invoice4jbase.ubl.UblDateFormats;
+import io.github.jcodeforge.invoice4jbase.xml.XmlParser;
 import io.github.jcodeforge.invoice4jbase.datamodels.enums.DocumentTypeCode;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.DocumentReference;
-import io.github.jcodeforge.invoice4jbase.xml.XmlParser;
 import io.github.jcodeforge.invoice4jbase.xml.XmlReader;
 
 public final class DocumentReferenceParser implements XmlParser<DocumentReference> {
@@ -16,19 +16,16 @@ public final class DocumentReferenceParser implements XmlParser<DocumentReferenc
 
         return DocumentReference.builder()
                 .id(reader.readString(
-                        basePath + "/ram:IssuerAssignedID"))
+                        basePath + "/cbc:ID"))
                 .typeCode(readTypeCode(reader, basePath))
                 .name(reader.readString(
-                        basePath + "/ram:Name"))
-                .issueDate(reader.readDate(
-                        basePath
-                                + "/ram:FormattedIssueDateTime"
-                                + "/udt:DateTimeString", CiiDateFormats.DATE))
+                        basePath + "/cbc:DocumentDescription"))
+                .issueDate(reader.readDate(basePath + "/cbc:IssueDate", UblDateFormats.DATE))
                 .build();
     }
 
     private DocumentTypeCode readTypeCode(XmlReader reader, String basePath) {
-        String code = reader.readString(basePath + "/ram:TypeCode");
+        String code = reader.readString(basePath + "/cbc:DocumentTypeCode");
 
         return code == null ? null : DocumentTypeCode.fromCode(code);
     }

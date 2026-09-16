@@ -1,11 +1,11 @@
 package io.github.jcodeforge.invoice4jxr;
 
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
-import io.github.jcodeforge.invoice4jbase.cii.CiiInvoiceReader;
 import io.github.jcodeforge.invoice4jbase.exceptions.DeserializationException;
-import io.github.jcodeforge.invoice4jbase.validation.Cii16BXsdValidator;
+import io.github.jcodeforge.invoice4jbase.ubl.UblInvoiceReader;
 import io.github.jcodeforge.invoice4jxr.exceptions.KositValidationException;
 import io.github.jcodeforge.invoice4jxr.validation.KositValidator;
+import io.github.jcodeforge.invoice4jxr.validation.Ubl21XsdValidator;
 import io.github.jcodeforge.invoice4jxr.validation.ValidationResult;
 import java.io.File;
 import java.io.IOException;
@@ -14,19 +14,19 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Objects;
 
-public class XrCiiInvoiceReader {
+public class XrUblInvoiceReader {
 
-    private final CiiInvoiceReader ciiReader;
+    private final UblInvoiceReader ublReader;
 
-    private final XrCiiProfileDetector profileDetector = new XrCiiProfileDetector();
+    private final XrUblProfileDetector profileDetector = new XrUblProfileDetector();
 
     private final KositValidator kositValidator = new KositValidator();
 
     private final boolean validate;
 
-    private XrCiiInvoiceReader(Builder builder) {
+    private XrUblInvoiceReader(Builder builder) {
         this.validate = builder.validate;
-        this.ciiReader = CiiInvoiceReader.builder().build();
+        this.ublReader = UblInvoiceReader.builder().build();
     }
 
     public static Builder builder() {
@@ -41,7 +41,7 @@ public class XrCiiInvoiceReader {
          * Enables or disables XRechnung XML validation.
          *
          * @param validate whether the XML should be validated against the
-         *                 XRechnung CII schema
+         *                 XRechnung UBL schema and KoSIT rules
          * @return this builder
          */
         public Builder validate(boolean validate) {
@@ -49,20 +49,21 @@ public class XrCiiInvoiceReader {
             return this;
         }
 
-        public XrCiiInvoiceReader build() {
-            return new XrCiiInvoiceReader(this);
+        public XrUblInvoiceReader build() {
+            return new XrUblInvoiceReader(this);
         }
     }
 
     /**
-     * Reads a Xrechnung invoice from an XML input stream.
+     * Reads a XRechnung invoice from an XML input stream.
      *
-     * @param inputStream the Xrechnung CII XML input stream
+     * @param inputStream the XRechnung UBL XML input stream
      * @return the parsed invoice
      * @throws DeserializationException if the invoice cannot be read
      */
     public Invoice read(InputStream inputStream) {
         Objects.requireNonNull(inputStream, "inputStream must not be null");
+
         try {
             String xml = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
 
@@ -73,14 +74,14 @@ public class XrCiiInvoiceReader {
                 throw (DeserializationException) e;
             }
 
-            throw new DeserializationException("Unable to read Xrechnung invoice from input stream.", e);
+            throw new DeserializationException("Unable to read XRechnung invoice from input stream.", e);
         }
     }
 
     /**
-     * Reads a Xrechnung invoice from a file.
+     * Reads a XRechnung invoice from a file.
      *
-     * @param file the Xrechnung XML file
+     * @param file the XRechnung XML file
      * @return the parsed invoice
      */
     public Invoice readFromFile(File file) {
@@ -92,14 +93,14 @@ public class XrCiiInvoiceReader {
             return readFromString(xml);
 
         } catch (IOException e) {
-            throw new DeserializationException("Unable to read Xrechnung invoice from file.", e);
+            throw new DeserializationException("Unable to read XRechnung invoice from file.", e);
         }
     }
 
     /**
-     * Reads a Xrechnung invoice from an XML string.
+     * Reads a XRechnung invoice from an XML string.
      *
-     * @param xml the Xrechnung CII XML document
+     * @param xml the XRechnung UBL XML document
      * @return the parsed invoice
      */
     public Invoice readFromString(String xml) {
@@ -116,7 +117,7 @@ public class XrCiiInvoiceReader {
             validateInvoice(xml);
         }
 
-        return ciiReader.readFromString(xml);
+        return ublReader.readFromString(xml);
     }
 
     public XrProfile detectProfile(String xml) {
@@ -127,7 +128,7 @@ public class XrCiiInvoiceReader {
 
     private void validateXml(XrProfile profile, String xml) {
         switch (profile) {
-            case XRECHNUNG -> new Cii16BXsdValidator().validate(xml);
+            case XRECHNUNG -> new Ubl21XsdValidator().validate(xml);
         }
     }
 
@@ -139,4 +140,3 @@ public class XrCiiInvoiceReader {
         }
     }
 }
-

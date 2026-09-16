@@ -1,6 +1,7 @@
 package io.github.jcodeforge.invoice4jbase.cii.parser;
 
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Contact;
+import io.github.jcodeforge.invoice4jbase.xml.XmlParser;
 import io.github.jcodeforge.invoice4jbase.xml.XmlReader;
 
 public final class ContactParser implements XmlParser<Contact> {

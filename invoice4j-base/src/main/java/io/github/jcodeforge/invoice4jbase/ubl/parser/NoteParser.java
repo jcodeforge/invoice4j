@@ -1,7 +1,7 @@
-package io.github.jcodeforge.invoice4jbase.cii.parser;
+package io.github.jcodeforge.invoice4jbase.ubl.parser;
 
-import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Note;
 import io.github.jcodeforge.invoice4jbase.xml.XmlParser;
+import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Note;
 import io.github.jcodeforge.invoice4jbase.xml.XmlReader;
 
 public final class NoteParser implements XmlParser<Note> {
@@ -14,9 +14,7 @@ public final class NoteParser implements XmlParser<Note> {
 
         return Note.builder()
                 .text(reader.readString(
-                        basePath + "/ram:Content"))
-                .subjectCode(reader.readString(
-                        basePath + "/ram:SubjectCode"))
+                        basePath))
                 .build();
     }
 }

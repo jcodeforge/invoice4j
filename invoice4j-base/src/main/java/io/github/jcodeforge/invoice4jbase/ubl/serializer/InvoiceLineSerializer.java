@@ -275,8 +275,8 @@ public final class InvoiceLineSerializer implements XmlSerializer<InvoiceLine> {
         );
 
         writePriceAmount(writer, line);
-        writePriceDiscount(writer, line);
         writeBaseQuantity(writer, line);
+        writePriceDiscount(writer, line);
 
         writer.endElement();
     }

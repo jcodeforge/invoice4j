@@ -1,8 +1,8 @@
-package io.github.jcodeforge.invoice4jbase.cii.parser;
+package io.github.jcodeforge.invoice4jbase.ubl.parser;
 
+import io.github.jcodeforge.invoice4jbase.xml.XmlParser;
 import io.github.jcodeforge.invoice4jbase.datamodels.enums.PaymentMeansCode;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.PaymentMeans;
-import io.github.jcodeforge.invoice4jbase.xml.XmlParser;
 import io.github.jcodeforge.invoice4jbase.xml.XmlReader;
 
 public final class PaymentMeansParser implements XmlParser<PaymentMeans> {
@@ -17,15 +17,19 @@ public final class PaymentMeansParser implements XmlParser<PaymentMeans> {
 
         return PaymentMeans.builder()
                 .meansCode(readMeansCode(reader, basePath))
-                .meansDescription(reader.readString(basePath + "/ram:Information"))
-                .remittanceInformation(reader.readString(basePath + "/ram:PaymentReference"))
-                .bankAccount(bankAccountParser.parse(reader,
-                        basePath + "/ram:PayeePartyCreditorFinancialAccount"))
+                .meansDescription(reader.readString(
+                        basePath + "/cac:InstructionNote"))
+                .remittanceInformation(reader.readString(
+                        basePath + "/cbc:InstructionID"))
+                .bankAccount(bankAccountParser.parse(
+                        reader,
+                        basePath + "/cac:PayeeFinancialAccount"))
                 .build();
     }
 
     private PaymentMeansCode readMeansCode(XmlReader reader, String basePath) {
-        String code = reader.readString(basePath + "/ram:TypeCode");
+        String code = reader.readString(
+                basePath + "/cbc:PaymentMeansCode");
 
         return code == null ? null : PaymentMeansCode.fromCode(code);
     }

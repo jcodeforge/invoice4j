@@ -5,6 +5,7 @@ import io.github.jcodeforge.invoice4jbase.datamodels.enums.TaxCategoryCode;
 import io.github.jcodeforge.invoice4jbase.datamodels.enums.UnitCode;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.InvoiceLine;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.MonetaryAmount;
+import io.github.jcodeforge.invoice4jbase.xml.XmlParser;
 import io.github.jcodeforge.invoice4jbase.xml.XmlReader;
 
 public final class InvoiceLineParser implements XmlParser<InvoiceLine> {
