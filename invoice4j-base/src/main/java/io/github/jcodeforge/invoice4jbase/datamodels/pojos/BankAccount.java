@@ -50,17 +50,38 @@ public class BankAccount {
         }
 
         public Builder iban(String iban) {
-            bankAccount.iban = iban == null ? null : iban.replace(" ", "").trim().toUpperCase();
+            if (iban == null) {
+                bankAccount.iban = null;
+                return this;
+            }
+
+            String normalized = iban .replaceAll("\\s+", "") .toUpperCase();
+            bankAccount.iban = normalized.isBlank() ? null : normalized;
+
             return this;
         }
 
         public Builder bic(String bic) {
-            bankAccount.bic = bic == null ? null : bic.trim().toUpperCase();
+            if (bic == null) {
+                bankAccount.bic = null;
+                return this;
+            }
+
+            String normalized = bic.replaceAll("\\s+", "").trim().toUpperCase();
+            bankAccount.bic = normalized.isBlank() ? null : normalized;
+
             return this;
         }
 
         public Builder accountName(String accountName) {
-            bankAccount.accountName = accountName == null ? null : accountName.trim();
+            if (accountName == null) {
+                bankAccount.accountName = null;
+                return this;
+            }
+
+            String normalized = accountName.trim();
+            bankAccount.accountName = normalized.isBlank() ? null : normalized;
+
             return this;
         }
 
@@ -77,17 +98,6 @@ public class BankAccount {
                 }
                 if (!bankAccount.iban.matches("[A-Z0-9]+")) {
                     throw new InvoiceValidationException("IBAN contains invalid characters.");
-                }
-            }
-            if (bankAccount.bic != null) {
-                if (bankAccount.bic.isBlank()) {
-                    throw new InvoiceValidationException("BIC must not be blank.");
-                }
-                if (bankAccount.bic.length() != 8 && bankAccount.bic.length() != 11) {
-                    throw new InvoiceValidationException("BIC must contain 8 or 11 characters.");
-                }
-                if (!bankAccount.bic.matches("[A-Z0-9]+")) {
-                    throw new InvoiceValidationException("BIC contains invalid characters.");
                 }
             }
             if (bankAccount.accountName != null && bankAccount.accountName.isBlank()) {
