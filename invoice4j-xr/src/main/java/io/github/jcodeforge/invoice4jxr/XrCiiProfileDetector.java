@@ -5,7 +5,7 @@ import io.github.jcodeforge.invoice4jbase.xml.XmlReader;
 import io.github.jcodeforge.invoice4jbase.xml.XmlReaderFactory;
 import java.util.Objects;
 
-public class XrCiiProfileDetector {
+public final class XrCiiProfileDetector {
 
     public XrProfile detect(String xml) {
         Objects.requireNonNull(xml, "xml must not be null");
