@@ -15,7 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Objects;
 
-public final class XrUblInvoiceReader {
+final class XrUblInvoiceReader {
 
     private final UblInvoiceReader ublReader;
 

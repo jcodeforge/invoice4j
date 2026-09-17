@@ -1,10 +1,9 @@
+package io.github.jcodeforge.invoice4jxr;
+
 import io.github.jcodeforge.invoice4jbase.calculation.InvoiceCalculator;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jbase.exceptions.DeserializationException;
 import io.github.jcodeforge.invoice4jbase.testfactory.TestInvoiceFactory;
-import io.github.jcodeforge.invoice4jxr.XrProfile;
-import io.github.jcodeforge.invoice4jxr.XrUblInvoiceReader;
-import io.github.jcodeforge.invoice4jxr.XrUblInvoiceWriter;
 import io.github.jcodeforge.invoice4jxr.exceptions.KositValidationException;
 import org.junit.Test;
 import java.io.InputStream;

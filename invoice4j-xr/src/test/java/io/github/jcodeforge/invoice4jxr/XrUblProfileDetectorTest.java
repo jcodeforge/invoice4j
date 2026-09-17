@@ -1,6 +1,6 @@
+package io.github.jcodeforge.invoice4jxr;
+
 import io.github.jcodeforge.invoice4jbase.exceptions.DeserializationException;
-import io.github.jcodeforge.invoice4jxr.XrProfile;
-import io.github.jcodeforge.invoice4jxr.XrUblProfileDetector;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

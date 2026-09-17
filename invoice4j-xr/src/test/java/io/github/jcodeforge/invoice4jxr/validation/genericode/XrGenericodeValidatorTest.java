@@ -1,9 +1,8 @@
-package validation.genericode;
+package io.github.jcodeforge.invoice4jxr.validation.genericode;
 
 import io.github.jcodeforge.invoice4jbase.datamodels.enums.CurrencyCode;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jbase.testfactory.TestInvoiceFactory;
-import io.github.jcodeforge.invoice4jxr.validation.genericode.XrGenericodeValidator;
 import org.junit.Test;
 
 public class XrGenericodeValidatorTest {

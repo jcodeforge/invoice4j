@@ -1,7 +1,5 @@
-package validation.genericode;
+package io.github.jcodeforge.invoice4jxr.validation.genericode;
 
-import io.github.jcodeforge.invoice4jxr.validation.genericode.GenericodeCodeList;
-import io.github.jcodeforge.invoice4jxr.validation.genericode.GenericodeReader;
 import org.junit.Test;
 import java.io.InputStream;
 

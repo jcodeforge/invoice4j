@@ -1,11 +1,9 @@
-package validation;
+package io.github.jcodeforge.invoice4jxr.validation;
 
 import io.github.jcodeforge.invoice4jbase.calculation.InvoiceCalculator;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jbase.testfactory.TestInvoiceFactory;
 import io.github.jcodeforge.invoice4jxr.XrCiiInvoiceWriter;
-import io.github.jcodeforge.invoice4jxr.validation.KositValidator;
-import io.github.jcodeforge.invoice4jxr.validation.ValidationResult;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

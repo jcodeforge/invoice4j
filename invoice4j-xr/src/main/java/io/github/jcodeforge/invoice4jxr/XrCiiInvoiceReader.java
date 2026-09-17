@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Objects;
 
-public final class XrCiiInvoiceReader {
+final class XrCiiInvoiceReader {
 
     private final CiiInvoiceReader ciiReader;
 

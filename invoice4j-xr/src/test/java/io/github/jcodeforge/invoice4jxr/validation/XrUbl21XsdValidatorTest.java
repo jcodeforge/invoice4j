@@ -1,11 +1,10 @@
-package validation;
+package io.github.jcodeforge.invoice4jxr.validation;
 
 import io.github.jcodeforge.invoice4jbase.calculation.InvoiceCalculator;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jbase.exceptions.XsdValidationException;
 import io.github.jcodeforge.invoice4jbase.testfactory.TestInvoiceFactory;
 import io.github.jcodeforge.invoice4jxr.XrUblInvoiceWriter;
-import io.github.jcodeforge.invoice4jxr.validation.Ubl21XsdValidator;
 import org.junit.Test;
 import java.io.ByteArrayInputStream;
 import java.io.File;
