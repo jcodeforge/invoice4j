@@ -38,7 +38,7 @@ public final class XRechnungCiiExample {
          * If validation fails, a validation exception is thrown.
          */
 
-        File file = new File("xrechnung.xml");
+        File file = new File("complete-xrechnung-invoice-cii.xml");
 
         writer.writeToFile(invoice, file);
 
