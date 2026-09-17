@@ -7,6 +7,8 @@ import io.github.jcodeforge.invoice4jxr.exceptions.KositValidationException;
 import io.github.jcodeforge.invoice4jxr.validation.KositValidator;
 import io.github.jcodeforge.invoice4jxr.validation.Ubl21XsdValidator;
 import io.github.jcodeforge.invoice4jxr.validation.ValidationResult;
+import io.github.jcodeforge.invoice4jxr.validation.genericode.XrGenericodeValidator;
+
 import java.io.File;
 import java.util.Objects;
 
@@ -17,6 +19,8 @@ public final class XrUblInvoiceWriter {
     private final UblInvoiceWriter ublWriter;
 
     private final KositValidator kositValidator = new KositValidator();
+
+    private final XrGenericodeValidator genericodeValidator = new XrGenericodeValidator();
 
     private final boolean validate;
 
@@ -52,8 +56,7 @@ public final class XrUblInvoiceWriter {
         String xml = ublWriter.writeToString(invoice);
 
         if (validate) {
-            validateXml(xml);
-            validateInvoice(xml);
+            validate(invoice, xml);
         }
 
         ublWriter.writeToFile(xml, file);
@@ -71,8 +74,7 @@ public final class XrUblInvoiceWriter {
         String xml = ublWriter.writeToString(invoice);
 
         if (validate) {
-            validateXml(xml);
-            validateInvoice(xml);
+            validate(invoice, xml);
         }
 
         return xml;
@@ -95,6 +97,12 @@ public final class XrUblInvoiceWriter {
         };
     }
 
+    private void validate(Invoice invoice, String xml) {
+        validateXml(xml);
+        validateInvoice(xml);
+        validateGenericode(invoice);
+    }
+
     private void validateInvoice(String xml) {
         ValidationResult result = kositValidator.validate(xml);
 
@@ -107,6 +115,10 @@ public final class XrUblInvoiceWriter {
         switch (profile) {
             case XRECHNUNG -> new Ubl21XsdValidator().validate(xml);
         }
+    }
+
+    private void validateGenericode(Invoice invoice) {
+        genericodeValidator.validate(invoice);
     }
 
     /**
