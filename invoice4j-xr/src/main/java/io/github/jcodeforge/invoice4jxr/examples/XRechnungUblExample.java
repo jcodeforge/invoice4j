@@ -3,8 +3,8 @@ package io.github.jcodeforge.invoice4jxr.examples;
 import io.github.jcodeforge.invoice4jbase.calculation.InvoiceCalculator;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jbase.testfactory.TestInvoiceFactory;
+import io.github.jcodeforge.invoice4jxr.XrInvoiceReader;
 import io.github.jcodeforge.invoice4jxr.XrProfile;
-import io.github.jcodeforge.invoice4jxr.XrUblInvoiceReader;
 import io.github.jcodeforge.invoice4jxr.XrUblInvoiceWriter;
 import java.io.File;
 
@@ -47,7 +47,7 @@ public final class XRechnungUblExample {
         /*
          * Read the generated XRechnung UBL invoice again.
          */
-        XrUblInvoiceReader reader = XrUblInvoiceReader.builder().build();
+        XrInvoiceReader reader = XrInvoiceReader.builder().build();
 
         Invoice imported = reader.readFromFile(file);
 

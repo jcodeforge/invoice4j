@@ -3,8 +3,8 @@ package io.github.jcodeforge.invoice4jxr.examples;
 import io.github.jcodeforge.invoice4jbase.calculation.InvoiceCalculator;
 import io.github.jcodeforge.invoice4jbase.datamodels.pojos.Invoice;
 import io.github.jcodeforge.invoice4jbase.testfactory.TestInvoiceFactory;
-import io.github.jcodeforge.invoice4jxr.XrCiiInvoiceReader;
 import io.github.jcodeforge.invoice4jxr.XrCiiInvoiceWriter;
+import io.github.jcodeforge.invoice4jxr.XrInvoiceReader;
 import io.github.jcodeforge.invoice4jxr.XrProfile;
 import java.io.File;
 
@@ -44,7 +44,7 @@ public final class XRechnungCiiExample {
 
         System.out.println("XRechnung CII invoice written successfully.");
 
-        XrCiiInvoiceReader reader = XrCiiInvoiceReader.builder().build();
+        XrInvoiceReader reader = XrInvoiceReader.builder().build();
 
         Invoice imported = reader.readFromFile(file);
 
