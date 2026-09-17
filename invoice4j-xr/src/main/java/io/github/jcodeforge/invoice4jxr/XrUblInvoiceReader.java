@@ -7,6 +7,7 @@ import io.github.jcodeforge.invoice4jxr.exceptions.KositValidationException;
 import io.github.jcodeforge.invoice4jxr.validation.KositValidator;
 import io.github.jcodeforge.invoice4jxr.validation.Ubl21XsdValidator;
 import io.github.jcodeforge.invoice4jxr.validation.ValidationResult;
+import io.github.jcodeforge.invoice4jxr.validation.genericode.XrGenericodeValidator;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +22,8 @@ public final class XrUblInvoiceReader {
     private final XrUblProfileDetector profileDetector = new XrUblProfileDetector();
 
     private final KositValidator kositValidator = new KositValidator();
+
+    private final XrGenericodeValidator genericodeValidator = new XrGenericodeValidator();
 
     private final boolean validate;
 
@@ -112,12 +115,15 @@ public final class XrUblInvoiceReader {
 
         XrProfile profile = detectProfile(xml);
 
+        Invoice invoice = ublReader.readFromString(xml);
+
         if (validate) {
             validateXml(profile, xml);
             validateInvoice(xml);
+            validateGenericode(invoice);
         }
 
-        return ublReader.readFromString(xml);
+        return invoice;
     }
 
     public XrProfile detectProfile(String xml) {
@@ -138,5 +144,9 @@ public final class XrUblInvoiceReader {
         if (!result.isValid()) {
             throw new KositValidationException(result);
         }
+    }
+
+    private void validateGenericode(Invoice invoice) {
+        genericodeValidator.validate(invoice);
     }
 }
