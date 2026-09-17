@@ -50,38 +50,17 @@ public class BankAccount {
         }
 
         public Builder iban(String iban) {
-            if (iban == null) {
-                bankAccount.iban = null;
-                return this;
-            }
-
-            String normalized = iban .replaceAll("\\s+", "") .toUpperCase();
-            bankAccount.iban = normalized.isBlank() ? null : normalized;
-
+            bankAccount.iban = iban == null ? null : iban.replace(" ", "").trim().toUpperCase();
             return this;
         }
 
         public Builder bic(String bic) {
-            if (bic == null) {
-                bankAccount.bic = null;
-                return this;
-            }
-
-            String normalized = bic.replaceAll("\\s+", "").trim().toUpperCase();
-            bankAccount.bic = normalized.isBlank() ? null : normalized;
-
+            bankAccount.bic = bic == null ? null : bic.trim();
             return this;
         }
 
         public Builder accountName(String accountName) {
-            if (accountName == null) {
-                bankAccount.accountName = null;
-                return this;
-            }
-
-            String normalized = accountName.trim();
-            bankAccount.accountName = normalized.isBlank() ? null : normalized;
-
+            bankAccount.accountName = accountName == null ? null : accountName.trim();
             return this;
         }
 

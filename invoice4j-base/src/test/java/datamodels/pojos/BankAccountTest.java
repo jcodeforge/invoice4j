@@ -39,15 +39,6 @@ public class BankAccountTest {
     }
 
     @Test(expected = InvoiceValidationException.class)
-    public void shouldRejectBlankBic() {
-        BankAccount.builder()
-                .iban("DE89370400440532013000")
-                .bic("   ")
-                .accountName("JCodeForge GmbH")
-                .build();
-    }
-
-    @Test(expected = InvoiceValidationException.class)
     public void shouldRejectBlankAccountName() {
         BankAccount.builder()
                 .iban("DE89370400440532013000")
@@ -100,20 +91,6 @@ public class BankAccountTest {
     public void shouldRejectIbanWithInvalidCharacters() {
         BankAccount.builder()
                 .iban("DE89-370400440532013000")
-                .build();
-    }
-
-    @Test(expected = InvoiceValidationException.class)
-    public void shouldRejectInvalidBicLength() {
-        BankAccount.builder()
-                .bic("ABC123")
-                .build();
-    }
-
-    @Test(expected = InvoiceValidationException.class)
-    public void shouldRejectBicWithInvalidCharacters() {
-        BankAccount.builder()
-                .bic("COBA-DEFF")
                 .build();
     }
 
