@@ -15,9 +15,12 @@ The project provides support for multiple e-invoicing standards, including **ZUG
 
 - EN 16931 compliant domain model
 - ZUGFeRD / Factur-X support
-- XRechnung support
+- XRechnung CII and UBL support
+- Automatic XRechnung format detection
 - Built-in invoice calculation engine
-- XML validation
+- XSD validation
+- KoSIT XRechnung validation
+- Genericode code list validation
 - Pure Java, no external services
 
 ---
@@ -26,7 +29,7 @@ The project provides support for multiple e-invoicing standards, including **ZUG
 - UN/CEFACT CII
 - ZUGFeRD
 - XRechnung
-- UBL (planned)
+- UBL
 - PEPPOL (planned)
 
 ---
@@ -57,13 +60,13 @@ The project provides support for multiple e-invoicing standards, including **ZUG
 <dependency>
     <groupId>io.github.jcodeforge</groupId>
     <artifactId>invoice4j-zugferd</artifactId>
-    <version>0.4.0</version>
+    <version>0.5.0</version>
 </dependency>
 
 <dependency>
     <groupId>io.github.jcodeforge</groupId>
     <artifactId>invoice4j-xr</artifactId>
-    <version>0.4.0</version>
+    <version>0.5.0</version>
 </dependency>
 ```
 
@@ -72,15 +75,15 @@ Only add the module(s) you need. Both modules automatically include the shared i
 ### Gradle (Kotlin DSL)
 
 ```kotlin
-implementation("io.github.jcodeforge:invoice4j-zugferd:0.4.0")
-implementation("io.github.jcodeforge:invoice4j-xr:0.4.0")
+implementation("io.github.jcodeforge:invoice4j-zugferd:0.5.0")
+implementation("io.github.jcodeforge:invoice4j-xr:0.5.0")
 ```
 
 ### Gradle (Groovy)
 
 ```groovy
-implementation 'io.github.jcodeforge:invoice4j-zugferd:0.4.0'
-implementation 'io.github.jcodeforge:invoice4j-xr:0.4.0'
+implementation 'io.github.jcodeforge:invoice4j-zugferd:0.5.0'
+implementation 'io.github.jcodeforge:invoice4j-xr:0.5.0'
 ```
 
 invoice4j-zugferd supports ZUGFeRD and Factur-X documents. invoice4j-xr supports XRechnung. Both modules automatically
@@ -95,12 +98,16 @@ Complete runnable examples are available here:
 ```text
 invoice4j-base/src/main/java/io/github/jcodeforge/invoice4jbase/examples/QuickStart.java
 invoice4j-zugferd/src/main/java/io/github/jcodeforge/invoice4jzugferd/examples/QuickStart.java
+invoice4j-xr/src/main/java/io/github/jcodeforge/invoice4jxr/examples/XRechnungCiiExample.java
+invoice4j-xr/src/main/java/io/github/jcodeforge/invoice4jxr/examples/XRechnungUblExample.java
 ```
 
 Run the example to see how to create an invoice and calculate its totals using the `InvoiceCalculator`.
 
 ---
 ## Examples
+
+### ZUGFeRD
 
 ```java
 // Create and calculate an invoice
@@ -138,14 +145,23 @@ System.out.println("Invoice number: " + parsedInvoice.getInvoiceNumber());
         
 ```
 
----
+### XRechnung
 
-## Running Tests
+```java
+Invoice invoice = new InvoiceCalculator().calculate(TestInvoiceFactory.createMinimalInvoice());
 
-Clone the repository and execute:
+XrUblInvoiceWriter writer = XrUblInvoiceWriter.builder()
+        .prettyPrint(true)
+        .build();
 
-```bash
-mvn test
+File file = new File("xrechnung.xml");
+
+writer.writeToFile(invoice, file);
+
+XrInvoiceReader reader = XrInvoiceReader.builder()
+        .build();
+
+Invoice imported = reader.readFromFile(file);
 ```
 
 To run the complete verification including integration tests:
@@ -164,8 +180,8 @@ mvn verify
 | v0.2.0  | CII XML                                 | Finished    |
 | v0.3.0  | ZUGFeRD                                 | Finished    |
 | v0.4.0  | XRechnung CII                           | Finished    |
-| v0.5.0  | XRechnung UBL                           | In Progress |
-| v1.0.0  | Public Release                          | Planned     |
+| v0.5.0  | XRechnung UBL                           | Finished    |
+| v1.0.0  | Major Release                           | In Progress |
 | v1.1.0  | PEPPOL Support                          | Planned     |
 | v1.2.0  | Additional European e-Invoice Formats   | Planned     |
 | v1.3.0  | Streaming APIs                          | Planned     |
@@ -214,7 +230,7 @@ At this stage:
 - The API may still change.
 - Some features are not implemented yet.
 - Documentation is actively being improved.
-- Production usage is not recommended until a stable release is available
+- Production usage is not recommended until the API and supported standards have reached a stable release.
 
 Feedback is highly appreciated:
 - Feature requests

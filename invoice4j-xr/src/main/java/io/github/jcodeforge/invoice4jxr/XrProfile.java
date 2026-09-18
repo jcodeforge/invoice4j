@@ -1,6 +1,6 @@
 package io.github.jcodeforge.invoice4jxr;
 
-enum XrProfile {
+public enum XrProfile {
 
     XRECHNUNG(
             "urn:cen.eu:en16931:2017"
