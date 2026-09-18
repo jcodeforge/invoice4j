@@ -4,6 +4,72 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [0.4.0] - 2026-08-16
+
+### Added
+
+#### XRechnung CII Support
+
+- XRechnung CII writer
+- XRechnung CII reader
+- Automatic XRechnung profile detection
+- CII 16B XSD validation
+- KoSIT XRechnung validation
+- Integrated validation into XRechnung reading and writing
+- Validation enabled by default
+- Optional validation disabling via the builder API
+
+#### Testing
+
+- Valid XRechnung integration tests
+- Invalid XRechnung integration tests
+- Official/KoSIT XRechnung test documents
+- XRechnung CII read/write round-trip tests
+
+#### Examples
+
+- XRechnung CII example demonstrating:
+  - Invoice creation
+  - Invoice calculation
+  - XRechnung CII serialization
+  - XRechnung CII deserialization
+  - Read/write round trip
+
+---
+
+## [0.3.0] - 2026-08-13
+
+### Added
+
+#### ZUGFeRD Support
+
+- Support for all ZUGFeRD profiles:
+  - MINIMUM
+  - BASIC WL
+  - BASIC
+  - EN 16931
+  - EXTENDED
+- ZUGFeRD CII XML reading and writing
+- Automatic ZUGFeRD profile detection
+- ZUGFeRD validation
+- XSD validation
+- High-level `ZugferdPdfWriter` API
+- Hybrid ZUGFeRD PDF document creation
+- Embedded `factur-x.xml` associated file
+- ZUGFeRD XMP metadata
+- High-level `ZugferdPdfReader` API
+- Reading ZUGFeRD PDFs back into `Invoice` objects
+- Expanded document type and unit code support
+
+#### Testing
+
+- XML round-trip tests
+- PDF round-trip tests
+- Real ZUGFeRD sample documents for interoperability testing
+- Comprehensive reader, writer, validation, and PDF test coverage
+
+---
+
 ## [0.2.0] - 2026-08-07
 
 ### Added
@@ -53,7 +119,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-#### Core domain model
+#### Core Domain Model
 
 - Immutable invoice domain model
 - Builder pattern for all domain objects
