@@ -4,6 +4,48 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [0.5.0] - 2026-09-18
+
+### Added
+
+#### XRechnung UBL Support
+
+- XRechnung UBL writer
+- XRechnung UBL reader
+- Automatic UBL/CII format detection
+- Unified `XrInvoiceReader` API
+- UBL 2.1 XSD validation
+- KoSIT XRechnung validation for UBL
+- Genericode code list validation
+- Validation enabled by default
+- Optional validation disabling via the builder API
+
+#### Testing
+
+- Valid XRechnung UBL integration tests
+- Invalid XRechnung UBL integration tests
+- Real XRechnung UBL test document
+- XRechnung UBL read/write round-trip tests
+- Automatic UBL/CII reader tests
+
+#### Examples
+
+- XRechnung UBL example demonstrating:
+  - Invoice creation
+  - Invoice calculation
+  - XRechnung UBL serialization
+  - Automatic XRechnung format detection
+  - XRechnung deserialization
+  - Read/write round trip
+
+#### Documentation
+
+- Added comprehensive Javadocs for the public XRechnung API
+- Updated README with XRechnung UBL support
+- Updated installation and usage documentation
+
+---
+
 ## [0.4.0] - 2026-08-16
 
 ### Added
