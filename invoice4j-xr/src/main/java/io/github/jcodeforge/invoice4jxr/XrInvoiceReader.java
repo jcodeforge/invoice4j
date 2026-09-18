@@ -14,6 +14,26 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Objects;
 
+/**
+ * High-level reader for XRechnung invoices.
+ *
+ * <p>The reader automatically detects whether the input document uses
+ * the UBL or CII syntax and delegates deserialization to the
+ * corresponding reader.</p>
+ *
+ * <p>Validation is enabled by default. It can be disabled using
+ * {@link Builder#validate(boolean)}.</p>
+ *
+ * <p>Example:</p>
+ *
+ * <pre>{@code
+ * XrInvoiceReader reader = XrInvoiceReader.builder().build();
+ *
+ * Invoice invoice = reader.readFromFile(
+ *         new File("xrechnung.xml")
+ * );
+ * }</pre>
+ */
 public final class XrInvoiceReader {
 
     private final XrUblInvoiceReader ublReader;
@@ -33,6 +53,19 @@ public final class XrInvoiceReader {
         return new Builder();
     }
 
+    /**
+     * Reads an XRechnung invoice from an XML file.
+     *
+     * <p>The XML format is detected automatically and the document
+     * is delegated to the corresponding UBL or CII reader.</p>
+     *
+     * @param file XML file containing an XRechnung invoice
+     * @return deserialized invoice
+     * @throws NullPointerException if {@code file} is {@code null}
+     * @throws DeserializationException if the file cannot be read,
+     *                                  the XML format cannot be detected,
+     *                                  or deserialization fails
+     */
     public Invoice readFromFile(File file) {
         Objects.requireNonNull(file, "file must not be null");
 
@@ -46,6 +79,19 @@ public final class XrInvoiceReader {
         }
     }
 
+    /**
+     * Reads an XRechnung invoice from an XML string.
+     *
+     * <p>The XML format is detected automatically and the document
+     * is delegated to the corresponding UBL or CII reader.</p>
+     *
+     * @param xml XML document containing an XRechnung invoice
+     * @return deserialized invoice
+     * @throws NullPointerException if {@code xml} is {@code null}
+     * @throws DeserializationException if the XML is empty, invalid,
+     *                                  uses an unsupported format,
+     *                                  or deserialization fails
+     */
     public Invoice readFromString(String xml) {
         Objects.requireNonNull(xml, "xml must not be null");
 
@@ -61,6 +107,17 @@ public final class XrInvoiceReader {
         };
     }
 
+    /**
+     * Detects the syntax of an XRechnung XML document.
+     *
+     * <p>The detection is based on the root element and its namespace.
+     * Supported formats are UBL and CII.</p>
+     *
+     * @param xml XML document to inspect
+     * @return detected XRechnung format
+     * @throws DeserializationException if the XML is invalid or
+     *                                  uses an unsupported format
+     */
     private XrFormat detectFormat(String xml) {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

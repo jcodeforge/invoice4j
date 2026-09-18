@@ -12,6 +12,30 @@ import io.github.jcodeforge.invoice4jxr.validation.genericode.XrGenericodeValida
 import java.io.File;
 import java.util.Objects;
 
+/**
+ * Writer for XRechnung invoices using the UBL syntax.
+ *
+ * <p>The writer serializes an {@link Invoice} to an XRechnung
+ * UBL 2.1 XML document.</p>
+ *
+ * <p>Validation is enabled by default. Generated XML is validated
+ * against the UBL 2.1 XML schema and the KoSIT XRechnung validation
+ * rules. Present code list values are additionally checked against
+ * the supported XRechnung Genericode lists.</p>
+ *
+ * <p>Example:</p>
+ *
+ * <pre>{@code
+ * XrUblInvoiceWriter writer = XrUblInvoiceWriter.builder()
+ *         .prettyPrint(true)
+ *         .build();
+ *
+ * writer.writeToFile(
+ *         invoice,
+ *         new File("xrechnung.xml")
+ * );
+ * }</pre>
+ */
 public final class XrUblInvoiceWriter {
 
     private final XrProfile profile;
@@ -44,10 +68,18 @@ public final class XrUblInvoiceWriter {
     }
 
     /**
-     * Writes an invoice as XRechnung UBL XML.
+     * Writes an invoice as XRechnung UBL XML to a file.
+     *
+     * <p>The generated XML is validated before it is written when
+     * validation is enabled.</p>
      *
      * @param invoice invoice to serialize
      * @param file destination file
+     * @throws NullPointerException if {@code invoice} or {@code file}
+     *                              is {@code null}
+     * @throws KositValidationException if KoSIT validation fails
+     * @throws IllegalArgumentException if a present code list value
+     *                                  is invalid
      */
     public void writeToFile(Invoice invoice, File file) {
         Objects.requireNonNull(invoice, "invoice must not be null");
@@ -65,8 +97,15 @@ public final class XrUblInvoiceWriter {
     /**
      * Serializes an invoice to XRechnung UBL XML.
      *
+     * <p>The generated XML is validated before it is returned when
+     * validation is enabled.</p>
+     *
      * @param invoice invoice to serialize
-     * @return generated XML
+     * @return generated XRechnung UBL XML
+     * @throws NullPointerException if {@code invoice} is {@code null}
+     * @throws KositValidationException if KoSIT validation fails
+     * @throws IllegalArgumentException if a present code list value
+     *                                  is invalid
      */
     public String writeToString(Invoice invoice) {
         Objects.requireNonNull(invoice, "invoice must not be null");
@@ -158,7 +197,12 @@ public final class XrUblInvoiceWriter {
         }
 
         /**
-         * Enables or disables validation.
+         * Enables or disables XRechnung validation.
+         *
+         * <p>Validation is enabled by default. When enabled, generated
+         * XML is validated against the UBL 2.1 XML schema, the KoSIT
+         * XRechnung validation rules, and the supported Genericode
+         * code lists.</p>
          *
          * @param validate whether generated XML should be validated
          * @return this builder

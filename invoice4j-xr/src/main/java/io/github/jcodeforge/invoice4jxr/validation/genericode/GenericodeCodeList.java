@@ -5,7 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-public final class GenericodeCodeList {
+final class GenericodeCodeList {
 
     private final String shortName;
     private final String longName;

@@ -1,6 +1,6 @@
 package io.github.jcodeforge.invoice4jxr.validation.genericode;
 
-public final class GenericodeRegistry {
+final class GenericodeRegistry {
 
     private final GenericodeCodeList codeList;
 

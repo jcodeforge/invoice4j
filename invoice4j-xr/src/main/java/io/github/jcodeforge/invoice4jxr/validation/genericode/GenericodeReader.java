@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public final class GenericodeReader {
+final class GenericodeReader {
 
     private static final String GENERICODE_NAMESPACE =
             "http://docs.oasis-open.org/codelist/ns/genericode/1.0/";

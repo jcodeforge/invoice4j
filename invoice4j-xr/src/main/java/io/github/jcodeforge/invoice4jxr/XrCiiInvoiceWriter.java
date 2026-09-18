@@ -10,6 +10,30 @@ import io.github.jcodeforge.invoice4jxr.validation.ValidationResult;
 import java.io.File;
 import java.util.Objects;
 
+
+/**
+ * Writer for XRechnung invoices using the CII syntax.
+ *
+ * <p>The writer serializes an {@link Invoice} to an XRechnung
+ * Cross Industry Invoice (CII) XML document.</p>
+ *
+ * <p>Validation is enabled by default. Generated XML is validated
+ * against the CII 16B XML schema and the KoSIT XRechnung validation
+ * rules.</p>
+ *
+ * <p>Example:</p>
+ *
+ * <pre>{@code
+ * XrCiiInvoiceWriter writer = XrCiiInvoiceWriter.builder()
+ *         .prettyPrint(true)
+ *         .build();
+ *
+ * writer.writeToFile(
+ *         invoice,
+ *         new File("xrechnung.xml")
+ * );
+ * }</pre>
+ */
 public final class XrCiiInvoiceWriter {
 
     private final XrProfile profile;
@@ -40,10 +64,16 @@ public final class XrCiiInvoiceWriter {
     }
 
     /**
-     * Writes an invoice as Xrechnung CII XML.
+     * Writes an invoice as XRechnung CII XML to a file.
+     *
+     * <p>The generated XML is validated before it is written when
+     * validation is enabled.</p>
      *
      * @param invoice invoice to serialize
      * @param file destination file
+     * @throws NullPointerException if {@code invoice} or {@code file}
+     *                              is {@code null}
+     * @throws KositValidationException if KoSIT validation fails
      */
     public void writeToFile(Invoice invoice, File file) {
         Objects.requireNonNull(invoice, "invoice must not be null");
@@ -60,10 +90,15 @@ public final class XrCiiInvoiceWriter {
     }
 
     /**
-     * Serializes an invoice to Xrechnung CII XML.
+     * Serializes an invoice to XRechnung CII XML.
+     *
+     * <p>The generated XML is validated before it is returned when
+     * validation is enabled.</p>
      *
      * @param invoice invoice to serialize
-     * @return generated XML
+     * @return generated XRechnung CII XML
+     * @throws NullPointerException if {@code invoice} is {@code null}
+     * @throws KositValidationException if KoSIT validation fails
      */
     public String writeToString(Invoice invoice) {
         Objects.requireNonNull(invoice, "invoice must not be null");
@@ -140,6 +175,16 @@ public final class XrCiiInvoiceWriter {
             return this;
         }
 
+        /**
+         * Enables or disables XRechnung validation.
+         *
+         * <p>Validation is enabled by default. When enabled, generated
+         * XML is validated against the CII 16B XML schema and the
+         * KoSIT XRechnung validation rules.</p>
+         *
+         * @param validate whether generated XML should be validated
+         * @return this builder
+         */
         public Builder validate(boolean validate) {
             this.validate = validate;
             return this;

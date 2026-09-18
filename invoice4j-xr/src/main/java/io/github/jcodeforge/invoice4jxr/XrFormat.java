@@ -1,6 +1,6 @@
 package io.github.jcodeforge.invoice4jxr;
 
-public enum XrFormat {
+enum XrFormat {
     UBL,
     CII
 }

@@ -1,6 +1,6 @@
 package io.github.jcodeforge.invoice4jxr.validation;
 
-public enum ValidationSeverity {
+enum ValidationSeverity {
     INFO,
     WARNING,
     ERROR,
